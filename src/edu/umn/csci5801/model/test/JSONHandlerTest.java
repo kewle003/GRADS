@@ -5,18 +5,34 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.junit.Test;
+
+import com.google.gson.Gson;
 
 import edu.umn.csci5801.model.*;
 
-public class JSONHandlerTest {
+public class JSONHandlerTest extends TestCase {
     private JSONHandler studentRecordJSON = new JSONHandler(
             "/Users/mark/Documents/workspace/GRADS_Materials/Data/students.txt");
-    private List<StudentRecord> studentRecords = studentRecordJSON
-            .readOutStudentRecords();
+    private List<StudentRecord> studentRecords;
     private JSONHandler userRecordJSON = new JSONHandler(
             "/Users/mark/Documents/workspace/GRADS_Materials/Data/users.txt");
-    private List<Person> userRecords = userRecordJSON.readOutUsers();
+    private List<Person> userRecords;
+    
+    @Override
+    protected void setUp() {
+        studentRecords = studentRecordJSON
+                .readOutStudentRecords();
+        try {
+            userRecords = userRecordJSON.readOutUsers();
+        } catch (InvalidUserRoleException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void testValidStudentRecords() {
@@ -233,8 +249,7 @@ public class JSONHandlerTest {
         tempStudentRecord.get(0).setStudent(tempStudent);
         tempHandle.updateStudentRecords(tempStudentRecord);
     }
-
-    // TODO: Once GPC is defined
+    
     @Test
     public void testValidUsers() {
         Person u1 = userRecords.get(0);
@@ -244,10 +259,10 @@ public class JSONHandlerTest {
         assertEquals(true, u2 instanceof Student);
 
         Person u3 = userRecords.get(2);
-        // assertNotEquals(Department.MATH, u3 instanceof );
+        assertNotEquals(true, u3 instanceof Student);
 
         Person u4 = userRecords.get(3);
-        // assertEquals(Department.MATH, u4.getDepartment());
+        assertEquals(true, u4 instanceof GPC);
 
     }
 
