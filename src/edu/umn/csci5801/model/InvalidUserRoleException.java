@@ -1,5 +1,12 @@
 package edu.umn.csci5801.model;
 
+/**
+ * Exception for when the JSON database holds 
+ * invalid user role data. This is used to let
+ * the database manager know that his database is invalid.
+ * @author mark
+ *
+ */
 public class InvalidUserRoleException extends Exception {
     
     public InvalidUserRoleException() {

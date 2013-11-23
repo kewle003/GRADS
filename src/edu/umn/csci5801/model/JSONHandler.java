@@ -82,7 +82,7 @@ public class JSONHandler {
      * 
      * @return
      */
-    public List<Person> readOutUsers() throws InvalidUserRoleException {
+    public List<Person> readOutUsers() throws Exception {
         List<UserData> listOfUsers = null;
         List<Person> listOfPeople = new ArrayList<Person>();
         try {
