@@ -3,7 +3,9 @@ package edu.umn.csci5801.model;
 public abstract class Requirement {
     private String name;
     
-    // TODO constructor
+    public Requirement(String name) {
+        this.name = name;
+    }
     
     public String getName() {
         return name;
