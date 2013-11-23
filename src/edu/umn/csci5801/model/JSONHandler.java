@@ -82,7 +82,7 @@ public class JSONHandler {
      * 
      * @return
      */
-    public List<Person> readOutUsers() throws Exception {
+    public List<Person> readOutUsers() throws InvalidUserRoleException {
         List<UserData> listOfUsers = null;
         List<Person> listOfPeople = new ArrayList<Person>();
         try {
@@ -93,6 +93,9 @@ public class JSONHandler {
             Iterator<UserData> usersIterator = listOfUsers.iterator();
             while (usersIterator.hasNext()) {
                 UserData user = usersIterator.next();
+                if (user.getRole() == null) {
+                    throw new InvalidUserRoleException("null user role");
+                }
                 if (user.getRole().equals(Role.STUDENT)) {
                     Student student = new Student(
                             user.getUser().getFirstName(), user.getUser()
@@ -100,9 +103,10 @@ public class JSONHandler {
                     listOfPeople.add(student);
                 } else if (user.getRole().equals(
                         Role.GRADUATE_PROGRAM_COORDINATOR)) {
-                    // TODO: Need GPC
+                    GPC gpc = new GPC(user.getUser().getFirstName(), user.getUser().getLastName(), user.getUser().getId());
+                    listOfPeople.add(gpc);
                 } else {
-                    // throw Exception;
+                    throw new InvalidUserRoleException("invalid role");
                 }
             }
         } catch (JsonIOException e) {
@@ -134,5 +138,4 @@ public class JSONHandler {
             e.printStackTrace();
         }
     }
-
 }
