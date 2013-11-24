@@ -12,6 +12,7 @@ import java.util.List;
  *
  */
 //TODO: WE CANNOT ALLOW MATH GPCs TO ACCESS CS STUFF
+//FIX: I skipped adding MATH gpc's  and users when reading in Users from the database
 public class GRADS implements GRADSIntf {
     private HashMap<String, Student> students;
     private HashMap<String, StudentRecord> studentRecords;
@@ -49,7 +50,6 @@ public class GRADS implements GRADSIntf {
         //Read the data from our JSON database
         try {
             users = userDatabase.readOutUsers();
-            //TODO: MARK - add exception for studentRecords?
             records = studentRecordDatabase.readOutStudentRecords();
             coursesInDatabase = courseDatabase.readOutCourses();
         } catch (Exception e) {
@@ -105,12 +105,16 @@ public class GRADS implements GRADSIntf {
     @Override
     public void setUser(String userId) throws Exception {
         //Verify if the user is a student or gpc, if not throw an exception
-        if (students.containsKey(userId)) {
-            currentUser = students.get(userId);
-        } else if (gpcs.containsKey(userId)) {
-            currentUser = gpcs.get(userId);
+        if (userId != null) {
+            if (students.containsKey(userId)) {
+                currentUser = students.get(userId);
+            } else if (gpcs.containsKey(userId)) {
+                currentUser = gpcs.get(userId);
+            } else {
+                throw new InvalidUserException("UserId: " +userId+ " does not exist in the database or is not allowed to access GRADS currently");
+            }
         } else {
-            throw new InvalidUserException("User id " +userId+ " does not exist in our database or is not allowed to access the CS database");
+            throw new InvalidDataException("null userId given!");
         }
     }
 
@@ -132,7 +136,7 @@ public class GRADS implements GRADSIntf {
             studentIds.addAll(students.keySet());
             return studentIds;
         } else {
-            throw new InvalidUserAccessException("You do not have permission to do this");
+            throw new InvalidUserAccessException("You do not have permission to retrieve studentIds");
         }
 
     }
@@ -142,55 +146,62 @@ public class GRADS implements GRADSIntf {
     @Override
     public StudentRecord getTranscript(String userId) throws Exception {
         if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
-            return studentRecords.get(userId);
+            if (studentRecords.containsKey(userId)) {
+                return studentRecords.get(userId);
+            } else {
+                throw new InvalidUserException("UserId: " +userId+ " does not exist in our database");
+            }
         } else {
-            throw new InvalidUserAccessException("You do not have permission to access student records");
+            throw new InvalidUserAccessException("You do not have permission to access " +userId+ "'s transcript");
         }
     }
 
     //TODO: We have to block a GPC from entering in invalid Grades, Milestones, Courses, etc...
     //UPDATE: Greg says we only need to worry about blocking a GPC from changing studentIds for now
+    //FIX1: Disallowed the GPC from accidentally overwriting the wrong transcript
     @Override
     public void updateTranscript(String userId, StudentRecord transcript)
             throws Exception {
-        if (userId != null) {
-            if (isGPC()) {
+        if (isGPC()) {
+            if (userId != null) {
                 if (studentRecords.containsKey(userId)) {
                     StudentRecord oldRecord = studentRecords.get(userId);
-                    System.out.println("StudentId " +oldRecord.getStudent().getId());
+                    //System.out.println("StudentId " +oldRecord.getStudent().getId());
                     //Sanity check, we can not modify a studentId
                     //TODO: Read getTranscript() todo
                     if (oldRecord.getStudent().getId().equals(transcript.getStudent().getId())) {
                         studentRecords.put(userId, transcript);
                         updateDatabase();
                     } else {
-                        throw new InvalidDataException("You can not modify a student id");
+                        throw new InvalidDataException("Wrong studentId given!");
                     }
                 } else {
-                    throw new InvalidUserException("User " +userId+ " does not exist in our database");
+                    throw new InvalidUserException("UserId: " +userId+ " does not exist in the database");
                 }
             } else {
-                throw new InvalidUserAccessException("You do not have permission to do this");
+                throw new InvalidDataException("null userId given!");
             }
-        }
+         } else {
+             throw new InvalidUserAccessException("You do not have permission to update " +userId+ "'s transcript");
+         }
 
     }
 
     @Override
     public void addNote(String userId, String note) throws Exception {
-        if (userId != null) {
-            if (isGPC()) {
+        if (isGPC()) {
+            if (userId != null) {
                 if (studentRecords.containsKey(userId)) {
                     studentRecords.get(userId).getNotes().add(note);
                     updateDatabase();
                 } else {
-                    throw new InvalidUserException("User " +userId+ " does not exist in the database");
+                    throw new InvalidUserException("UserId: " +userId+ " does not exist in the database");
                 }
             } else {
-                throw new InvalidUserAccessException("You do not have permission to add a note to " +userId+ "'s student record");
+                throw new InvalidDataException("null userId given!");
             }
         } else {
-            throw new InvalidDataException("null userId given!");
+            throw new InvalidUserAccessException("You do not have permission to add a note to " +userId+ "'s transcript");
         }
     }
 
@@ -198,15 +209,14 @@ public class GRADS implements GRADSIntf {
     public ProgressSummary generateProgressSummary(String userId)
             throws Exception {
         if (userId != null) {
-            StudentRecord recordToProcess = null;
             //If the user is GPC good, otherwise we just need to check that a student is accessing his/her's student record
             if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
-                recordToProcess = studentRecords.get(userId);
-                if (recordToProcess == null) {
-                    throw new InvalidUserException("User " +userId+ " does not have a student record");
+                if (studentRecords.containsKey(userId)) {
+                    ProgressSummary summary = builder.generateProgressSummary(studentRecords.get(userId));
+                    return summary;
+                } else {
+                    throw new InvalidUserException("UserId: " +userId+ " does not exist in the database");
                 }
-                ProgressSummary summary = builder.generateProgressSummary(recordToProcess);
-                return summary;
             } else {
                 throw new InvalidUserAccessException("You do not have permission to generate " +userId+"'s progress summary");
             }
@@ -278,13 +288,18 @@ public class GRADS implements GRADSIntf {
     }
     
     //TODO: How do we just return a copy of StudentRecord?
+    //REMOVE WHEN FINISHED
     public static void main(String[] args) {
         GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/Data/users.txt", "/Users/mark/Documents/workspace/GRADS_Materials/Data/students.txt", "/Users/mark/Documents/workspace/GRADS_Materials/Data/courses.txt");
         try {
             g.setUser("tolas9999");
-            //StudentRecord r = g.getTranscript("gayxx067");
+           // g.addNote("kewle003", "Meet me tonight at 3'oclock");
+            StudentRecord r = g.getTranscript("gayxx067");
+            //r.getCommittee().clear();
+            g.updateTranscript("nguy0621", r);
+            //StudentRecord r = g.getTranscript("nguy0621");
            // r.getStudent().setId("gayxx070");
-            //g.updateTranscript("gayxx067", r);
+           // g.updateTranscript("gayxx067", r);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
