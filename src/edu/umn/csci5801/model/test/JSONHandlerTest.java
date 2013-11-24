@@ -23,10 +23,10 @@ public class JSONHandlerTest extends TestCase {
     
     @Override
     protected void setUp() {
-        studentRecords = studentRecordJSON
-                .readOutStudentRecords();
         try {
             userRecords = userRecordJSON.readOutUsers();
+            studentRecords = studentRecordJSON
+                    .readOutStudentRecords();
         } catch (InvalidUserRoleException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -216,7 +216,13 @@ public class JSONHandlerTest extends TestCase {
         studentRecords.add(record);
         tempHandle.updateStudentRecords(studentRecords);
 
-        List<StudentRecord> updatedRecords = tempHandle.readOutStudentRecords();
+        List<StudentRecord> updatedRecords = new ArrayList<StudentRecord>();
+        try {
+            updatedRecords = tempHandle.readOutStudentRecords();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         StudentRecord newestRecord = updatedRecords.get(2);
         assertNotEquals(null, newestRecord);
         assertEquals(newStudent, newestRecord.getStudent());
@@ -236,14 +242,25 @@ public class JSONHandlerTest extends TestCase {
     @Test
     public void testValidUpdateStudentRecord() {
         JSONHandler tempHandle = new JSONHandler("tempStudents.txt");
-        List<StudentRecord> tempStudentRecord = tempHandle
-                .readOutStudentRecords();
+        List<StudentRecord> tempStudentRecord = new ArrayList<StudentRecord>();
+        try {
+            tempStudentRecord = tempHandle
+                    .readOutStudentRecords();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         Student tempStudent = tempStudentRecord.get(0).getStudent();
         Student updateStudent = new Student("Mark", "Kewley", "Kewle003");
         tempStudentRecord.get(0).setStudent(updateStudent);
         tempHandle.updateStudentRecords(tempStudentRecord);
 
-        tempStudentRecord = tempHandle.readOutStudentRecords();
+        try {
+            tempStudentRecord = tempHandle.readOutStudentRecords();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         assertEquals(updateStudent, tempStudentRecord.get(0).getStudent());
 
         tempStudentRecord.get(0).setStudent(tempStudent);

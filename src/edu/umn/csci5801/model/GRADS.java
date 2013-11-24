@@ -11,39 +11,53 @@ import java.util.List;
  * @author mark
  *
  */
+//TODO: WE CANNOT ALLOW MATH GPCs TO ACCESS CS STUFF
 public class GRADS implements GRADSIntf {
     private HashMap<String, Student> students;
     private HashMap<String, StudentRecord> studentRecords;
     private HashMap<String, GPC> gpcs;
     private Person currentUser;
     private ProgressSummaryBuilder builder;
+    
+    //TODO: Add this to our design document
+    private HashMap<String, Course> courses;
     private JSONHandler studentRecordDatabase;
     private JSONHandler userDatabase;
+    private JSONHandler courseDatabase;
     private String studentRecordFile;
     private String userDatabaseFile;
+    private String courseDatabaseFile;
     
     /**
      * Method used to initialize GRADS
      */
     public void initialize() {
-        List<Person> users = null;
-        List<StudentRecord> records = null;
+        //Initialize all of GRADS data
+        List<Person> users = new ArrayList<Person>();
+        List<StudentRecord> records = new ArrayList<StudentRecord>();
+        List<Course> coursesInDatabase = new ArrayList<Course>();
         this.studentRecordDatabase = new JSONHandler(studentRecordFile);
         this.userDatabase = new JSONHandler(userDatabaseFile);
+        this.courseDatabase = new JSONHandler(courseDatabaseFile);
         this.students = new HashMap<String, Student>();
         this.studentRecords = new HashMap<String, StudentRecord>();
         this.gpcs = new HashMap<String, GPC>();
+        this.courses = new HashMap<String, Course>();
         //TODO: KEVIN add this in when ready
         this.builder = null;
         
+        //Read the data from our JSON database
         try {
             users = userDatabase.readOutUsers();
             //TODO: MARK - add exception for studentRecords?
             records = studentRecordDatabase.readOutStudentRecords();
+            coursesInDatabase = courseDatabase.readOutCourses();
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(-1);
         }
        
+        //Populate GRADS users HashMap (students/gpcs)
         if (users != null) {
             Iterator<Person> userIterator = users.iterator();
             while (userIterator.hasNext()) {
@@ -60,6 +74,14 @@ public class GRADS implements GRADSIntf {
             }
         }
         
+        //Populate our Course HashMap
+        Iterator<Course> courseIterator = coursesInDatabase.iterator();
+        while (courseIterator.hasNext()) {
+            Course course = courseIterator.next();
+            courses.put(course.getId(), course);
+        }
+        
+        //Populate the StudentRecord HashMap
         Iterator<StudentRecord> recordIterator = records.iterator();
         while (recordIterator.hasNext()) {
             StudentRecord record = recordIterator.next();
@@ -67,20 +89,28 @@ public class GRADS implements GRADSIntf {
         }
     }
     
-    public GRADS(String userDatabaseFile, String studentRecordFile) {
+    /**
+     * Our GRADS constructor
+     * @param userDatabaseFile - The file directory where the users JSON lies
+     * @param studentRecordFile - The file directory where the student records JSON lies
+     * @param courseDatabaseFile - The file directory where the courses JSON lies
+     */
+    public GRADS(String userDatabaseFile, String studentRecordFile, String courseDatabaseFile) {
         this.userDatabaseFile = userDatabaseFile;
         this.studentRecordFile = studentRecordFile;
+        this.courseDatabaseFile = courseDatabaseFile;
         initialize();
     }
 
     @Override
     public void setUser(String userId) throws Exception {
+        //Verify if the user is a student or gpc, if not throw an exception
         if (students.containsKey(userId)) {
             currentUser = students.get(userId);
         } else if (gpcs.containsKey(userId)) {
             currentUser = gpcs.get(userId);
         } else {
-            throw new InvalidUserException("User id " +userId+ " does not exist in our database");
+            throw new InvalidUserException("User id " +userId+ " does not exist in our database or is not allowed to access the CS database");
         }
     }
 
@@ -107,6 +137,8 @@ public class GRADS implements GRADSIntf {
 
     }
 
+    //TODO: Should just return a copy so user does not
+    //directly affect the underlying StudentRecord
     @Override
     public StudentRecord getTranscript(String userId) throws Exception {
         if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
@@ -116,14 +148,24 @@ public class GRADS implements GRADSIntf {
         }
     }
 
+    //TODO: We have to block a GPC from entering in invalid Grades, Milestones, Courses, etc...
+    //UPDATE: Greg says we only need to worry about blocking a GPC from changing studentIds for now
     @Override
     public void updateTranscript(String userId, StudentRecord transcript)
             throws Exception {
         if (userId != null) {
             if (isGPC()) {
                 if (studentRecords.containsKey(userId)) {
-                    studentRecords.put(userId, transcript);
-                    updateDatabase();
+                    StudentRecord oldRecord = studentRecords.get(userId);
+                    System.out.println("StudentId " +oldRecord.getStudent().getId());
+                    //Sanity check, we can not modify a studentId
+                    //TODO: Read getTranscript() todo
+                    if (oldRecord.getStudent().getId().equals(transcript.getStudent().getId())) {
+                        studentRecords.put(userId, transcript);
+                        updateDatabase();
+                    } else {
+                        throw new InvalidDataException("You can not modify a student id");
+                    }
                 } else {
                     throw new InvalidUserException("User " +userId+ " does not exist in our database");
                 }
@@ -157,7 +199,7 @@ public class GRADS implements GRADSIntf {
             throws Exception {
         if (userId != null) {
             StudentRecord recordToProcess = null;
-            //If the user is GPC good, otherwise we just need to check that a student is accessing HIS student record
+            //If the user is GPC good, otherwise we just need to check that a student is accessing his/her's student record
             if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
                 recordToProcess = studentRecords.get(userId);
                 if (recordToProcess == null) {
@@ -181,17 +223,19 @@ public class GRADS implements GRADSIntf {
         
             if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
                 if (studentRecords.containsKey(userId)) {
+                    //TODO: This directly affects the StudentRecord of the student
+                    //We need a way of getting a copy (I tried clone(), maybe another way?)
+                    //We could just save his courses then undo our changes after generating the summary
                     StudentRecord recordCopy = studentRecords.get(userId);
-                    //TODO: Are we assuming that the new list passed in does not contain existing courses?
-                    //If so then keep this code
-                    List<CourseTaken> coursesTakenSoFar = recordCopy.getCoursesTaken();
+                    //We are assuming we are adding the courses to the student's existing courses
+                    List<CourseTaken> originalCourses = recordCopy.getCoursesTaken(); 
                     Iterator<CourseTaken> newCoursesIterator = courses.iterator();
                     while (newCoursesIterator.hasNext()) {
-                        coursesTakenSoFar.add(newCoursesIterator.next());
+                        recordCopy.getCoursesTaken().add(newCoursesIterator.next());
                     }
                 
-                    recordCopy.setCoursesTaken(coursesTakenSoFar);
                     summary = builder.generateProgressSummary(recordCopy);
+                    //Could do something like this: recordCopy.setCoursesTaken(originalCourses);
                     return summary;
                 } else {
                     throw new InvalidUserException("User " +userId+ " does not exist in our database");
@@ -231,5 +275,20 @@ public class GRADS implements GRADSIntf {
      */
     private boolean hasAccessToStudentRecord(String userId, String studentId) {
         return userId.equals(studentId);
+    }
+    
+    //TODO: How do we just return a copy of StudentRecord?
+    public static void main(String[] args) {
+        GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/Data/users.txt", "/Users/mark/Documents/workspace/GRADS_Materials/Data/students.txt", "/Users/mark/Documents/workspace/GRADS_Materials/Data/courses.txt");
+        try {
+            g.setUser("tolas9999");
+            //StudentRecord r = g.getTranscript("gayxx067");
+           // r.getStudent().setId("gayxx070");
+            //g.updateTranscript("gayxx067", r);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 }

@@ -26,7 +26,7 @@ public class GRADSTest extends TestCase {
     public void setUp() {
         tempUserData = new File("/Users/mark/Documents/workspace/GRADS_Materials/src/edu/umn/csci5801/model/test/envUsers.txt");
         tempStudentData = new File("/Users/mark/Documents/workspace/GRADS_Materials/src/edu/umn/csci5801/model/test/envStudentRecords.txt");
-        g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/edu/umn/csci5801/model/test/envUsers.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/edu/umn/csci5801/model/test/envAstudentRecords.txt");
+        g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/Data/users.txt", "/Users/mark/Documents/workspace/GRADS_Materials/Data/students.txt", "/Users/mark/Documents/workspace/GRADS_Materials/Data/courses.txt");
     }
     
     /**

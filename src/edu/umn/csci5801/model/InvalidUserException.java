@@ -6,6 +6,7 @@ package edu.umn.csci5801.model;
  * @author mark
  *
  */
+@SuppressWarnings("serial")
 public class InvalidUserException extends Exception {
     
     public InvalidUserException() {
