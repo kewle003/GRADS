@@ -287,6 +287,27 @@ public class GRADS implements GRADSIntf {
         return userId.equals(studentId);
     }
     
+    /**
+     * Method used to determine if the list of courses provided
+     * actually exist in the database
+     * @param listOfCourses - the List<Course> to be verified by GRADS
+     * @throws Exception - InvalidCourseException
+     */
+    //TODO: Add this to our design
+    private void validateCourses(List<CourseTaken> listOfCourses) throws Exception {
+        Iterator<CourseTaken> courseIterator = listOfCourses.iterator();
+        while (courseIterator.hasNext()) {
+            Course course = courseIterator.next().getCourse();
+            if (courses.containsKey(course.getId())) {
+                if (!course.equals(courses.get(course.getId()))) {
+                    throw new InvalidCourseException("CourseId: " +course.getId()+ " has invalid data");
+                } 
+            } else {
+                throw new InvalidCourseException("CourseId: " +course.getId()+ " does not exist in the database");
+            }
+        }
+    }
+    
     //TODO: How do we just return a copy of StudentRecord?
     //REMOVE WHEN FINISHED
     public static void main(String[] args) {
@@ -294,9 +315,10 @@ public class GRADS implements GRADSIntf {
         try {
             g.setUser("tolas9999");
            // g.addNote("kewle003", "Meet me tonight at 3'oclock");
-            StudentRecord r = g.getTranscript("gayxx067");
+            StudentRecord r = g.getTranscript("nguy0621");
+            g.validateCourses(r.getCoursesTaken());
             //r.getCommittee().clear();
-            g.updateTranscript("nguy0621", r);
+            //g.updateTranscript("nguy0621", r);
             //StudentRecord r = g.getTranscript("nguy0621");
            // r.getStudent().setId("gayxx070");
            // g.updateTranscript("gayxx067", r);
