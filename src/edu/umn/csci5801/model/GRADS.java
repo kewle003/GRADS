@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-//TODO: ERROR CHECKING
 /**
  * This is the main class that implements GRADSIntf 
  * in order to handle requests from the interface.
@@ -148,60 +147,61 @@ public class GRADS implements GRADSIntf {
             } else {
                 throw new InvalidUserAccessException("You do not have permission to add a note to " +userId+ "'s student record");
             }
+        } else {
+            throw new InvalidDataException("null userId given!");
         }
     }
 
     @Override
     public ProgressSummary generateProgressSummary(String userId)
             throws Exception {
-        if (userId == null) {
-            return null;
-        }
-        StudentRecord recordToProcess = null;
-        //If the user is GPC good, otherwise we just need to check that a student is accessing HIS student record
-        if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
-            recordToProcess = studentRecords.get(userId);
-            if (recordToProcess == null) {
-                throw new InvalidUserException("User " +userId+ " does not have a student record");
+        if (userId != null) {
+            StudentRecord recordToProcess = null;
+            //If the user is GPC good, otherwise we just need to check that a student is accessing HIS student record
+            if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
+                recordToProcess = studentRecords.get(userId);
+                if (recordToProcess == null) {
+                    throw new InvalidUserException("User " +userId+ " does not have a student record");
+                }
+                ProgressSummary summary = builder.generateProgressSummary(recordToProcess);
+                return summary;
+            } else {
+                throw new InvalidUserAccessException("You do not have permission to generate " +userId+"'s progress summary");
             }
-            ProgressSummary summary = builder.generateProgressSummary(recordToProcess);
-            return summary;
         } else {
-            throw new InvalidUserAccessException("You do not have permission to generate " +userId+"'s progress summary");
+            throw new InvalidDataException("null userId given!");
         }
     }
 
     @Override
     public ProgressSummary simulateCourses(String userId,
             List<CourseTaken> courses) throws Exception {
-        if (userId == null || courses == null) {
-            return null;
-        }
+        if (userId != null && courses != null) {
+            ProgressSummary summary = null;
         
-        ProgressSummary summary = null;
-        
-        if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
-            if (studentRecords.containsKey(userId)) {
-                StudentRecord recordCopy = studentRecords.get(userId);
-                //TODO: Are we assuming that the new list passed in does not contain existing courses?
-                //If so then keep this code
-                List<CourseTaken> coursesTakenSoFar = recordCopy.getCoursesTaken();
-                Iterator<CourseTaken> newCoursesIterator = courses.iterator();
-                while (newCoursesIterator.hasNext()) {
-                    coursesTakenSoFar.add(newCoursesIterator.next());
+            if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
+                if (studentRecords.containsKey(userId)) {
+                    StudentRecord recordCopy = studentRecords.get(userId);
+                    //TODO: Are we assuming that the new list passed in does not contain existing courses?
+                    //If so then keep this code
+                    List<CourseTaken> coursesTakenSoFar = recordCopy.getCoursesTaken();
+                    Iterator<CourseTaken> newCoursesIterator = courses.iterator();
+                    while (newCoursesIterator.hasNext()) {
+                        coursesTakenSoFar.add(newCoursesIterator.next());
+                    }
+                
+                    recordCopy.setCoursesTaken(coursesTakenSoFar);
+                    summary = builder.generateProgressSummary(recordCopy);
+                    return summary;
+                } else {
+                    throw new InvalidUserException("User " +userId+ " does not exist in our database");
                 }
-                
-                recordCopy.setCoursesTaken(coursesTakenSoFar);
-                summary = builder.generateProgressSummary(recordCopy);
-                
             } else {
-                throw new InvalidUserException("User " +userId+ " does not exist in our database");
+                throw new InvalidUserAccessException("You do not have permission to do this");
             }
         } else {
-            throw new InvalidUserAccessException("You do not have permission to do this");
+            throw new InvalidDataException("null userId or courses given!");
         }
-        
-        return summary;
     }
     
     /**
