@@ -29,13 +29,13 @@ public class GRADS implements GRADSIntf {
     public void initialize() {
         List<Person> users = null;
         List<StudentRecord> records = null;
-        studentRecordDatabase = new JSONHandler(studentRecordFile);
-        userDatabase = new JSONHandler(userDatabaseFile);
-        students = new HashMap<String, Student>();
-        studentRecords = new HashMap<String, StudentRecord>();
-        gpcs = new HashMap<String, GPC>();
+        this.studentRecordDatabase = new JSONHandler(studentRecordFile);
+        this.userDatabase = new JSONHandler(userDatabaseFile);
+        this.students = new HashMap<String, Student>();
+        this.studentRecords = new HashMap<String, StudentRecord>();
+        this.gpcs = new HashMap<String, GPC>();
         //TODO: KEVIN add this in when ready
-        builder = null;
+        this.builder = null;
         
         try {
             users = userDatabase.readOutUsers();
