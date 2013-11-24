@@ -6,6 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 
 //TODO: ERROR CHECKING
+/**
+ * 
+ * @author mark
+ *
+ */
 public class GRADS implements GRADSIntf {
     private HashMap<String, Student> students;
     private HashMap<String, StudentRecord> studentRecords;
@@ -14,6 +19,8 @@ public class GRADS implements GRADSIntf {
     private ProgressSummaryBuilder builder;
     private JSONHandler studentRecordDatabase;
     private JSONHandler userDatabase;
+    private String studentRecordFile;
+    private String userDatabaseFile;
     
     /**
      * Method used to initialize GRADS
@@ -21,8 +28,8 @@ public class GRADS implements GRADSIntf {
     public void initialize() {
         List<Person> users = null;
         List<StudentRecord> records = null;
-        studentRecordDatabase = new JSONHandler("/Users/mark/Documents/workspace/GRADS_Materials/Data/students.txt");
-        userDatabase = new JSONHandler("/Users/mark/Documents/workspace/GRADS_Materials/Data/users.txt");
+        studentRecordDatabase = new JSONHandler(studentRecordFile);
+        userDatabase = new JSONHandler(userDatabaseFile);
         students = new HashMap<String, Student>();
         studentRecords = new HashMap<String, StudentRecord>();
         gpcs = new HashMap<String, GPC>();
@@ -60,7 +67,9 @@ public class GRADS implements GRADSIntf {
         }
     }
     
-    public GRADS() {
+    public GRADS(String userDatabaseFile, String studentRecordFile) {
+        this.userDatabaseFile = userDatabaseFile;
+        this.studentRecordFile = studentRecordFile;
         initialize();
     }
 
@@ -226,20 +235,4 @@ public class GRADS implements GRADSIntf {
     private boolean hasAccessToStudentRecord(String userId, String studentId) {
         return userId.equals(studentId);
     }
-    
-    public static void main(String[] args) {
-        GRADS g = new GRADS();
-        try {
-            g.setUser("tolas9999");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        try {
-            g.addNote("gayxx067", "YOLOSWAG!");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

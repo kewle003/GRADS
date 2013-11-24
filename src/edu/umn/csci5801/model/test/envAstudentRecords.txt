@@ -1,0 +1,335 @@
+[
+  {
+    "student": {
+      "id": "0000010",
+      "firstName": "Kevin",
+      "lastName": "Hu"
+    },
+    "department": "COMPUTER_SCIENCE",
+    "degreeSought": "PHD",
+    "termBegan": {
+      "semester": "Fall",
+      "year": 2013
+    },
+    "advisors": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Arthur",
+        "lastName": "Visor"
+      }
+    ],
+    "committee": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Quentin",
+        "lastName": "Jones"
+      }
+    ],
+    "coursesTaken": [
+      {
+        "course": {
+          "name": "Analysis of Numerical Algorithms",
+          "id": "csci5302",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2008
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Computational Aspects of Matrix Theory",
+          "id": "csci5304",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2008
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Computational Complexity",
+          "id": "csci5403",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SUMMER",
+          "year": 2008
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Operating Systems",
+          "id": "csci5103",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "User Interface Design, Implementation and Evaluation",
+          "id": "csci5115",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Collaborative and Social Computing",
+          "id": "csci5125",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Introduction to Computer Security",
+          "id": "csci5271",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Software Engineering I",
+          "id": "csci5801",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "N"
+      },
+      {
+        "course": {
+          "name": "Artificial Intelligence I",
+          "id": "csci5511",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2009
+        },
+        "grade": "_"
+      },
+      {
+        "course": {
+          "name": "Principles of Database Systems",
+          "id": "csci5707",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2009
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Artificial Intelligence II",
+          "id": "csci5512",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2010
+        },
+        "grade": "A"
+      }
+    ],
+    "milestonesSet": [
+      {
+        "milestone": "DEFENSE_PASSED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      },
+      {
+        "milestone": "PRELIM_COMMITTEE_APPOINTED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      },
+      {
+        "milestone": "WRITTEN_PE_APPROVED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      },
+      {
+        "milestone": "ORAL_PE_PASSED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      },
+      {
+        "milestone": "DPF_APPROVED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      },
+      {
+        "milestone": "THESIS_COMMITTEE_APPOINTED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      },
+      {
+        "milestone": "PROPOSAL_PASSED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      },
+      {
+        "milestone": "GRADUATION_PACKET_REQUESTED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      },
+      {
+        "milestone": "THESIS_APPROVED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      },
+      {
+        "milestone": "PROJECT_COMMITTEE_APPOINTED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      },
+      {
+        "milestone": "TRACKING_FORM_APPROVED",
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        }
+      }
+    ],
+    "notes": [
+      "note1",
+      "note2"
+    ]
+  },
+  {
+    "student": {
+      "id": "0000040",
+      "firstName": "Charlie",
+      "lastName": "Babbage"
+    },
+    "department": "COMPUTER_SCIENCE",
+    "degreeSought": "MS_C",
+    "termBegan": {
+      "semester": "Fall",
+      "year": 2013
+    },
+    "advisors": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Patrick",
+        "lastName": "Severin"
+      }
+    ],
+    "committee": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Mark",
+        "lastName": "Kewley"
+      }
+    ],
+    "coursesTaken": [
+      {
+        "course": {
+          "name": "Analysis of Numerical Algorithms",
+          "id": "csci5302",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2008
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Operating Systems",
+          "id": "csci5103",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "User Interface Design, Implementation and Evaluation",
+          "id": "csci5115",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Collaborative and Social Computing",
+          "id": "csci5125",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "A"
+      }
+    ],
+    "milestonesSet": [
+      {
+        "milestone": "THESIS_APPROVED",
+        "term": {
+          "semester": "SPRING",
+          "year": 2010
+        }
+      }
+    ],
+    "notes": [
+      “Thisisatestnote”,
+    ]
+  }
+]

@@ -1,0 +1,155 @@
+[
+    {
+        "user": {
+            "id": "0000002",
+            "firstName": "Kate",
+            "lastName": "Murry"
+        },
+        "role": "GRADUATE_PROGRAM_COORDINATOR",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0000010",
+            "firstName": "Hu",
+            "lastName": "Kevin"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0000040",
+            "firstName": "Charlie",
+            "lastName": "Babbage"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0000001",
+            "firstName": "Alex",
+            "lastName": "Murry"
+        },
+        "role": "GRADUATE_PROGRAM_COORDINATOR",
+        "department": "MATH"
+    },
+    {
+        "user": {
+            "id": "0000100",
+            "firstName": "Missy",
+            "lastName": "Whatsit"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0000200",
+            "firstName": "Meg",
+            "lastName": "Murry"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0000400",
+            "firstName": "Richard",
+            "lastName": "Starkey"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0010000",
+            "firstName": "Paul",
+            "lastName": "Erdos"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0020000",
+            "firstName": "Richard",
+            "lastName": "Feynman"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0030000",
+            "firstName": "Albert",
+            "lastName": "Einstein"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0040000",
+            "firstName": "Kurt",
+            "lastName": "Godel"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0100000",
+            "firstName": "Ann",
+            "lastName": "Lee"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "0200000",
+            "firstName": "John",
+            "lastName": "Lee"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "1000000",
+            "firstName": "Donnie",
+            "lastName": "Wahlberg"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "4040001",
+            "firstName": "Berk",
+            "lastName": "Student"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "4040002",
+            "firstName": "Berk",
+            "lastName": "Grades"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "4040003",
+            "firstName": "Noel",
+            "lastName": "Grades"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
+    }
+]
