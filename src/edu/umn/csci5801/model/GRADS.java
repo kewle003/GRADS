@@ -7,7 +7,8 @@ import java.util.List;
 
 //TODO: ERROR CHECKING
 /**
- * 
+ * This is the main class that implements GRADSIntf 
+ * in order to handle requests from the interface.
  * @author mark
  *
  */
@@ -99,9 +100,7 @@ public class GRADS implements GRADSIntf {
     public List<String> getStudentIDs() throws Exception {
         if (isGPC()) {
             List<String> studentIds = new ArrayList<String>();
-            for (String key : students.keySet()) {
-                studentIds.add(key);
-            }
+            studentIds.addAll(students.keySet());
             return studentIds;
         } else {
             throw new InvalidUserAccessException("You do not have permission to do this");
@@ -210,9 +209,7 @@ public class GRADS implements GRADSIntf {
      */
     private void updateDatabase() {
         List<StudentRecord> newStudentRecords = new ArrayList<StudentRecord>();
-        for(StudentRecord record : studentRecords.values()) {
-            newStudentRecords.add(record);
-        }
+        newStudentRecords.addAll(studentRecords.values());
         studentRecordDatabase.updateStudentRecords(newStudentRecords);
     }
     
