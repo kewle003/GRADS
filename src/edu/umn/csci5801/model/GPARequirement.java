@@ -16,7 +16,7 @@ public class GPARequirement extends Requirement {
     }
     
     //TODO: Add in System Crash handling
-    public double calculateGPA(List<CourseTaken> courses) {
+    public static double calculateGPA(List<CourseTaken> courses) {
         double gradeSum = 0;
         int creditSum = 0;
         if (courses == null) {
@@ -57,7 +57,7 @@ public class GPARequirement extends Requirement {
             }
         } else if (name.equals("In-Program-GPA")) {
             //Loop through courses extracting only IN-PROGRAM-GPA
-            if (3.0 <= calculateGPA(courses)) {
+            if (3.25 <= calculateGPA(courses)) {
                 requirement.setPassed(true);
             } else {
                 requirement.setPassed(false);

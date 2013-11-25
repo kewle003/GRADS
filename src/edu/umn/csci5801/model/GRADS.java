@@ -170,6 +170,7 @@ public class GRADS implements GRADSIntf {
                     //Sanity check, we can not modify a studentId
                     //TODO: Read getTranscript() todo
                     if (oldRecord.getStudent().getId().equals(transcript.getStudent().getId())) {
+                        validateCourses(transcript.getCoursesTaken());
                         studentRecords.put(userId, transcript);
                         updateDatabase();
                     } else {
@@ -243,8 +244,9 @@ public class GRADS implements GRADSIntf {
                     while (newCoursesIterator.hasNext()) {
                         recordCopy.getCoursesTaken().add(newCoursesIterator.next());
                     }
-                
+                    validateCourses(recordCopy.getCoursesTaken());
                     summary = builder.generateProgressSummary(recordCopy);
+                    recordCopy.setCoursesTaken(originalCourses);
                     //Could do something like this: recordCopy.setCoursesTaken(originalCourses);
                     return summary;
                 } else {
@@ -316,9 +318,14 @@ public class GRADS implements GRADSIntf {
             g.setUser("tolas9999");
            // g.addNote("kewle003", "Meet me tonight at 3'oclock");
             StudentRecord r = g.getTranscript("nguy0621");
-            g.validateCourses(r.getCoursesTaken());
+            //g.validateCourses(r.getCoursesTaken());
             //r.getCommittee().clear();
-            //g.updateTranscript("nguy0621", r);
+            Course invalidCourse = new Course();
+            invalidCourse.setId("csci9000");
+            invalidCourse.setName("Google studies");
+            invalidCourse.setNumCredits("3");
+            r.getCoursesTaken().add(new CourseTaken(invalidCourse, new Term(Semester.FALL, new Integer(2008)), Grade.C));
+            g.updateTranscript("nguy0621", r);
             //StudentRecord r = g.getTranscript("nguy0621");
            // r.getStudent().setId("gayxx070");
            // g.updateTranscript("gayxx067", r);
