@@ -189,7 +189,7 @@ public class GRADS implements GRADSIntf {
                         studentRecords.put(userId, transcript);
                         updateDatabase();
                     } else {
-                        throw new InvalidDataException("Wrong studentId given!");
+                        throw new InvalidDataException("UserId: " +userId+ " does not match the transcript provided");
                     }
                 } else {
                     throw new InvalidUserException("UserId: " +userId+ " does not exist in the database or you can not change studentId");
@@ -250,19 +250,19 @@ public class GRADS implements GRADSIntf {
             if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
                 if (studentRecords.containsKey(userId)) {
                     //TODO: This directly affects the StudentRecord of the student
-                    //We need a way of getting a copy (I tried clone(), maybe another way?)
-                    //We could just save his courses then undo our changes after generating the summary
+                    //POTENTIAL FIX: Save the original CourseTaken list
                     StudentRecord recordCopy = studentRecords.get(userId);
-                    //We are assuming we are adding the courses to the student's existing courses
+
                     List<CourseTaken> originalCourses = recordCopy.getCoursesTaken(); 
                     Iterator<CourseTaken> newCoursesIterator = courses.iterator();
+                    //Add the new courses to the list of already completed courses
                     while (newCoursesIterator.hasNext()) {
                         recordCopy.getCoursesTaken().add(newCoursesIterator.next());
                     }
-                    //validateCourses(recordCopy.getCoursesTaken());
+                    
                     summary = builder.generateProgressSummary(recordCopy);
+                    //Reset the changes to the StudentRecord
                     recordCopy.setCoursesTaken(originalCourses);
-                    //Could do something like this: recordCopy.setCoursesTaken(originalCourses);
                     return summary;
                 } else {
                     throw new InvalidUserException("User " +userId+ " does not exist in our database");
