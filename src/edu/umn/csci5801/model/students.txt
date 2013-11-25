@@ -1,0 +1,214 @@
+[
+  {
+    "student": {
+      "id": "nguy0621",
+      "firstName": "Luan",
+      "lastName": "Nguyen"
+    },
+    "department": "COMPUTER_SCIENCE",
+    "degreeSought": "PHD",
+    "termBegan": {
+      "semester": "SPRING",
+      "year": 2008
+    },
+    "advisors": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "William",
+        "lastName": "Schuler"
+      }
+    ],
+    "committee": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Maria",
+        "lastName": "Gini"
+      },
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Daniel",
+        "lastName": "Boley"
+      },
+      {
+        "department": "MATH",
+        "firstName": "Richard",
+        "lastName": "McGehee"
+      }
+    ],
+    "coursesTaken": [
+      {
+        "course": {
+          "name": "Advanced Algorithms and Data Structures",
+          "id": "csci5421",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2008
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Machine Learning",
+          "id": "csci5525",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2008
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Operating Systems",
+          "id": "csci5103",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SUMMER",
+          "year": 2008
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Programming Languages",
+          "id": "csci5106",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        },
+        "grade": "C"
+      },
+      {
+        "course": {
+          "name": "Introduction to Distributed Systems",
+          "id": "csci5105",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        },
+        "grade": "D"
+      },
+      {
+        "course": {
+          "name": "Introduction to Compilers",
+          "id": "csci5161",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "F"
+      },
+      {
+        "course": {
+          "name": "Data Communications and Computer Networks",
+          "id": "csci5211",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "S"
+      },
+      {
+        "course": {
+          "name": "Software Engineering I",
+          "id": "csci5801",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "N"
+      },
+      {
+        "course": {
+          "name": "Artificial Intelligence I",
+          "id": "csci5511",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2009
+        },
+        "grade": "_"
+      },
+      {
+        "course": {
+          "name": "Principles of Database Systems",
+          "id": "csci5707",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2009
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Artificial Intelligence II",
+          "id": "csci5512",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2010
+        },
+        "grade": "A"
+      }
+    ],
+    "milestonesSet": [
+      {
+        "milestone": "DEFENSE_PASSED",
+        "term": {
+          "semester": "FALL",
+          "year": 2014
+        }
+      }
+    ],
+    "notes": [
+      "note1",
+      "note2"
+    ]
+  },
+  {
+    "student": {
+      "id": "gayxx067",
+      "firstName": "Greg",
+      "lastName": "Gay"
+    },
+    "advisors": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Mats",
+        "lastName": "Heimdahl"
+      }
+    ],
+    "committee": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Mark",
+        "lastName": "Kewley"
+      }
+    ],
+    "notes": [
+      "note1",
+      "note2",
+      "note3",
+      "YOLOSWAG!",
+      "Meet me tonight at 3\u0027oclock"
+    ]
+  }
+]

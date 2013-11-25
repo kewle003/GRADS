@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Test;
 
 import edu.umn.csci5801.model.GRADS;
+import edu.umn.csci5801.model.JSONHandler;
 import edu.umn.csci5801.model.ProgressSummary;
 import junit.framework.TestCase;
 
@@ -15,11 +16,15 @@ import junit.framework.TestCase;
  *
  */
 //TODO: Black box tests; Environment A, B, and C
+//Create our own JSON files
+//Create our own StudentRecords and ProgressSummaries for each person
 //We also need a cleanUp that resets the JSON database
 public class GRADSTest extends TestCase {
     private File tempUserData;
     private File tempStudentData;
     private GRADS g;
+    private JSONHandler tempUserDatabase;
+    private JSONHandler tempStudentDatabase;
     private ProgressSummary albertsStudentSummary;
     
     @Override

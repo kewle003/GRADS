@@ -5,14 +5,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+
 /**
  * This is the main class that implements GRADSIntf 
  * in order to handle requests from the interface.
+ * 
  * @author mark
  *
  */
-//TODO: WE CANNOT ALLOW MATH GPCs TO ACCESS CS STUFF
-//FIX: I skipped adding MATH gpc's  and users when reading in Users from the database
+//TODO: Currently Greg said we do not have to worry about validating courses
+//If we do we can use my validateCSCourses() method - <Kewley>
+//FIX: I skipped adding MATH gpc's  and users when reading in Users from the database <Kewley>
 public class GRADS implements GRADSIntf {
     private HashMap<String, Student> students;
     private HashMap<String, StudentRecord> studentRecords;
@@ -20,17 +23,19 @@ public class GRADS implements GRADSIntf {
     private Person currentUser;
     private ProgressSummaryBuilder builder;
     
-    //TODO: Add this to our design document
+    //TODO: Add these to our design document
     private HashMap<String, Course> courses;
     private JSONHandler studentRecordDatabase;
     private JSONHandler userDatabase;
     private JSONHandler courseDatabase;
-    private String studentRecordFile;
     private String userDatabaseFile;
+    private String studentRecordFile;
     private String courseDatabaseFile;
     
     /**
      * Method used to initialize GRADS
+     * 
+     * @author mark
      */
     public void initialize() {
         //Initialize all of GRADS data
@@ -46,8 +51,10 @@ public class GRADS implements GRADSIntf {
         this.courses = new HashMap<String, Course>();
         //TODO: KEVIN add this in when ready
         this.builder = null;
+
         
         //Read the data from our JSON database
+        //If there is no data in the files, the methods will throw an exception
         try {
             users = userDatabase.readOutUsers();
             records = studentRecordDatabase.readOutStudentRecords();
@@ -91,9 +98,11 @@ public class GRADS implements GRADSIntf {
     
     /**
      * Our GRADS constructor
+     * 
      * @param userDatabaseFile - The file directory where the users JSON lies
      * @param studentRecordFile - The file directory where the student records JSON lies
      * @param courseDatabaseFile - The file directory where the courses JSON lies
+     * @author mark
      */
     public GRADS(String userDatabaseFile, String studentRecordFile, String courseDatabaseFile) {
         this.userDatabaseFile = userDatabaseFile;
@@ -147,7 +156,18 @@ public class GRADS implements GRADSIntf {
     public StudentRecord getTranscript(String userId) throws Exception {
         if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
             if (studentRecords.containsKey(userId)) {
-                return studentRecords.get(userId);
+                StudentRecord record = studentRecords.get(userId);
+                StudentRecord recordToReturn = new StudentRecord();
+                recordToReturn.setAdvisors(record.getAdvisors());
+                recordToReturn.setCommittee(record.getCommittee());
+                recordToReturn.setCoursesTaken(record.getCoursesTaken());
+                recordToReturn.setDegreeSought(record.getDegreeSought());
+                recordToReturn.setDepartment(record.getDepartment());
+                recordToReturn.setMilestonesSet(record.getMilestonesSet());
+                recordToReturn.setNotes(record.getNotes());
+                recordToReturn.setStudent(record.getStudent());
+                recordToReturn.setTermBegan(record.getTermBegan());
+                return recordToReturn;
             } else {
                 throw new InvalidUserException("UserId: " +userId+ " does not exist in our database");
             }
@@ -156,28 +176,23 @@ public class GRADS implements GRADSIntf {
         }
     }
 
-    //TODO: We have to block a GPC from entering in invalid Grades, Milestones, Courses, etc...
-    //UPDATE: Greg says we only need to worry about blocking a GPC from changing studentIds for now
-    //FIX1: Disallowed the GPC from accidentally overwriting the wrong transcript
+    //TODO: Greg says we only have to worry about a GPC changing a studentId
+    //The validateCSCourses() method may not be necessary
     @Override
     public void updateTranscript(String userId, StudentRecord transcript)
             throws Exception {
         if (isGPC()) {
             if (userId != null) {
-                if (studentRecords.containsKey(userId)) {
-                    StudentRecord oldRecord = studentRecords.get(userId);
-                    //System.out.println("StudentId " +oldRecord.getStudent().getId());
-                    //Sanity check, we can not modify a studentId
-                    //TODO: Read getTranscript() todo
-                    if (oldRecord.getStudent().getId().equals(transcript.getStudent().getId())) {
-                        validateCourses(transcript.getCoursesTaken());
+                if (studentRecords.containsKey(transcript.getStudent().getId())) {
+                    if (transcript.getStudent().getId().equals(userId)) {
+                        validateCSCourses(transcript.getCoursesTaken());
                         studentRecords.put(userId, transcript);
                         updateDatabase();
                     } else {
                         throw new InvalidDataException("Wrong studentId given!");
                     }
                 } else {
-                    throw new InvalidUserException("UserId: " +userId+ " does not exist in the database");
+                    throw new InvalidUserException("UserId: " +userId+ " does not exist in the database or you can not change studentId");
                 }
             } else {
                 throw new InvalidDataException("null userId given!");
@@ -244,7 +259,7 @@ public class GRADS implements GRADSIntf {
                     while (newCoursesIterator.hasNext()) {
                         recordCopy.getCoursesTaken().add(newCoursesIterator.next());
                     }
-                    validateCourses(recordCopy.getCoursesTaken());
+                    //validateCourses(recordCopy.getCoursesTaken());
                     summary = builder.generateProgressSummary(recordCopy);
                     recordCopy.setCoursesTaken(originalCourses);
                     //Could do something like this: recordCopy.setCoursesTaken(originalCourses);
@@ -272,7 +287,8 @@ public class GRADS implements GRADSIntf {
     /**
      * Method used to check whether or not the userId corresponds
      * to a GPC
-     * @return
+     * 
+     * @return true if the currentUser is a GPC, false otherwise
      */
     private boolean isGPC() {
         return (currentUser instanceof GPC);
@@ -281,6 +297,7 @@ public class GRADS implements GRADSIntf {
     /**
      * Method used to determine whether or not the userId has access to
      * the StudentRecord of the Student whose id is the studentId
+     * 
      * @param userId - current user
      * @param studentId - id requested
      * @return true if the userId is equal to the studentId, false otherwise
@@ -291,21 +308,27 @@ public class GRADS implements GRADSIntf {
     
     /**
      * Method used to determine if the list of courses provided
-     * actually exist in the database
+     * actually exist in the database for Computer Science courses only.
+     * 
+     * GREG - said that we do not need to worry about course validation for this assignment
+     * 
      * @param listOfCourses - the List<Course> to be verified by GRADS
      * @throws Exception - InvalidCourseException
+     * @author mark
      */
-    //TODO: Add this to our design
-    private void validateCourses(List<CourseTaken> listOfCourses) throws Exception {
+    //TODO: Add this to our design...Maybe
+    private void validateCSCourses(List<CourseTaken> listOfCourses) throws Exception {
         Iterator<CourseTaken> courseIterator = listOfCourses.iterator();
         while (courseIterator.hasNext()) {
             Course course = courseIterator.next().getCourse();
-            if (courses.containsKey(course.getId())) {
-                if (!course.equals(courses.get(course.getId()))) {
-                    throw new InvalidCourseException("CourseId: " +course.getId()+ " has invalid data");
-                } 
-            } else {
-                throw new InvalidCourseException("CourseId: " +course.getId()+ " does not exist in the database");
+            if (course.getId().matches("csci.*")) {
+                if (courses.containsKey(course.getId())) {
+                    if (!course.equals(courses.get(course.getId()))) {
+                        throw new InvalidCourseException("CourseId: " +course.getId()+ " has invalid data");
+                    } 
+                } else {
+                    throw new InvalidCourseException("CourseId: " +course.getId()+ " does not exist in the database");
+                }
             }
         }
     }
@@ -313,18 +336,20 @@ public class GRADS implements GRADSIntf {
     //TODO: How do we just return a copy of StudentRecord?
     //REMOVE WHEN FINISHED
     public static void main(String[] args) {
-        GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/Data/users.txt", "/Users/mark/Documents/workspace/GRADS_Materials/Data/students.txt", "/Users/mark/Documents/workspace/GRADS_Materials/Data/courses.txt");
+        GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/edu/umn/csci5801/model/users.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/edu/umn/csci5801/model/students.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/edu/umn/csci5801/model/courses.txt");
+
         try {
             g.setUser("tolas9999");
            // g.addNote("kewle003", "Meet me tonight at 3'oclock");
             StudentRecord r = g.getTranscript("nguy0621");
+            //r.getStudent().setId("nguy0622");
             //g.validateCourses(r.getCoursesTaken());
             //r.getCommittee().clear();
-            Course invalidCourse = new Course();
-            invalidCourse.setId("csci9000");
-            invalidCourse.setName("Google studies");
-            invalidCourse.setNumCredits("3");
-            r.getCoursesTaken().add(new CourseTaken(invalidCourse, new Term(Semester.FALL, new Integer(2008)), Grade.C));
+            //Course invalidCourse = new Course();
+            //invalidCourse.setId("csci9000");
+            //invalidCourse.setName("Google studies");
+            //invalidCourse.setNumCredits("3");
+            //r.getCoursesTaken().add(new CourseTaken(invalidCourse, new Term(Semester.FALL, new Integer(2008)), Grade.C));
             g.updateTranscript("nguy0621", r);
             //StudentRecord r = g.getTranscript("nguy0621");
            // r.getStudent().setId("gayxx070");

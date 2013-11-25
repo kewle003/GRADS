@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 
 /**
  * This will handle all database transactions that GRADS requests
+ * 
  * @author mark
  * 
  */
@@ -24,8 +25,7 @@ public class JSONHandler {
     private String filename;
 
     /**
-     * @param filename
-     *            - the location of the JSON file we wish to read
+     * @param filename - the location of the JSON file we wish to read
      */
     public JSONHandler(String filename) {
         this.filename = filename;
@@ -34,23 +34,28 @@ public class JSONHandler {
     /**
      * This will retrieve the list of all StudentRecord objects in the JSON
      * database. For now we do not allow MATH majors into our StudentRecords.
-     * @return List of StudentRecord objects
+     * @return List<StudentRecord> objects
      */
+    //TODO: Instead of throwing an Exception should we just skip adding the MATH majors?
     public List<StudentRecord> readOutStudentRecords() throws Exception {
         List<StudentRecord> studentRecords = null;
         try {
-            studentRecords = new Gson().fromJson(new FileReader(new File(
-                    filename)), new TypeToken<List<StudentRecord>>() {
-            }.getType());
-            Iterator<StudentRecord> iterator = studentRecords.iterator();
-            while (iterator.hasNext()) {
-                StudentRecord r = iterator.next();
-                if (r.getDepartment() != null) {
-                    //Sanity check, we can not allow MATH majors in our student records
-                    if(r.getDepartment().equals(Department.MATH)) {
-                        throw new InvalidUserException("Math majors are not allowed in student records");
+            if (filename != null) {
+                studentRecords = new Gson().fromJson(new FileReader(new File(
+                        filename)), new TypeToken<List<StudentRecord>>() {
+                }.getType());
+                Iterator<StudentRecord> iterator = studentRecords.iterator();
+                while (iterator.hasNext()) {
+                    StudentRecord r = iterator.next();
+                    if (r.getDepartment() != null) {
+                        //Sanity check, we can not allow MATH majors in our student records
+                        if(r.getDepartment().equals(Department.MATH)) {
+                            throw new InvalidUserException("Math majors are not allowed in student records");
+                        }
                     }
                 }
+            } else {
+                throw new InvalidDataException("filename: " +filename+ " is invalid");
             }
         } catch (JsonIOException e) {
             e.printStackTrace();
@@ -66,18 +71,23 @@ public class JSONHandler {
     }
 
     /**
-     * This will retrieve a list of all Course objects in the JSON database
+     * This will retrieve a list of all Computer Science 
+     * Course objects in the JSON database.
      * 
      * @return List of Course objects
      */
     public List<Course> readOutCourses() throws Exception {
         List<Course> listOfCourses = null;
         try {
-            listOfCourses = new Gson().fromJson(new FileReader(new File(
-                    filename)), new TypeToken<List<Course>>() {
-            }.getType());
-            if (listOfCourses == null) {
-                throw new NoDataFoundException("No data found in JSON file " +filename);
+            if (filename != null) {
+                listOfCourses = new Gson().fromJson(new FileReader(new File(
+                        filename)), new TypeToken<List<Course>>() {
+                }.getType());
+                if (listOfCourses == null) {
+                    throw new NoDataFoundException("No data found in JSON file " +filename);
+                }
+            } else {
+                throw new InvalidDataException("filename: " +filename+ " is invalid");
             }
         } catch (JsonIOException e) {
             e.printStackTrace();
@@ -96,41 +106,46 @@ public class JSONHandler {
     /**
      * This will retrieve a list of all User objects in the JSON database.
      * For now we only allow COMPUTER_SCIENCE users into GRADS.
+     * 
      * @return - a List of Person objects that are either GPCs or Students
      */
     public List<Person> readOutUsers() throws Exception {
         List<UserData> listOfUsers = null;
         List<Person> listOfPeople = new ArrayList<Person>();
         try {
-            listOfUsers = new Gson().fromJson(
-                    new FileReader(new File(filename)),
-                    new TypeToken<List<UserData>>() {
-                    }.getType());
-            if (listOfUsers != null) {
-                Iterator<UserData> usersIterator = listOfUsers.iterator();
-                while (usersIterator.hasNext()) {
-                    UserData user = usersIterator.next();
-                    if (user.getRole() == null) {
-                        throw new InvalidUserRoleException("null user role");
-                    }
-                    if (user.getRole().equals(Role.STUDENT)) {
-                        //Only allow COMPUTER_SCIENCE Student's into GRADS
-                        if (user.getDepartment().equals(Department.COMPUTER_SCIENCE)) {
-                            Student student = new Student(
-                                    user.getUser().getFirstName(), user.getUser()
-                                            .getLastName(), user.getUser().getId());
-                            listOfPeople.add(student);
+            if (filename != null) {
+                listOfUsers = new Gson().fromJson(
+                        new FileReader(new File(filename)),
+                        new TypeToken<List<UserData>>() {
+                        }.getType());
+                if (listOfUsers != null) {
+                    Iterator<UserData> usersIterator = listOfUsers.iterator();
+                    while (usersIterator.hasNext()) {
+                        UserData user = usersIterator.next();
+                        if (user.getRole() == null) {
+                            throw new InvalidUserRoleException("null user role");
                         }
-                    } else if (user.getRole().equals(
-                            Role.GRADUATE_PROGRAM_COORDINATOR)) {
-                        //Only allow COMPUTER_SCIENCE GPC's into GRADS
-                        if (user.getDepartment().equals(Department.COMPUTER_SCIENCE)) {
-                            GPC gpc = new GPC(user.getUser().getFirstName(), user.getUser().getLastName(), user.getUser().getId());
-                            listOfPeople.add(gpc);
+                        if (user.getRole().equals(Role.STUDENT)) {
+                            //Only allow COMPUTER_SCIENCE Student's into GRADS
+                            if (user.getDepartment().equals(Department.COMPUTER_SCIENCE)) {
+                                Student student = new Student(
+                                        user.getUser().getFirstName(), user.getUser()
+                                                .getLastName(), user.getUser().getId());
+                                listOfPeople.add(student);
+                            }
+                        } else if (user.getRole().equals(
+                                Role.GRADUATE_PROGRAM_COORDINATOR)) {
+                            //Only allow COMPUTER_SCIENCE GPC's into GRADS
+                            if (user.getDepartment().equals(Department.COMPUTER_SCIENCE)) {
+                                GPC gpc = new GPC(user.getUser().getFirstName(), user.getUser().getLastName(), user.getUser().getId());
+                                listOfPeople.add(gpc);
+                            }
+                        } else {
+                            throw new InvalidUserRoleException("invalid role");
                         }
-                    } else {
-                        throw new InvalidUserRoleException("invalid role");
                     }
+                } else {
+                    throw new InvalidDataException("filename: " +filename+ " is invalid");
                 }
             } else {
                 throw new NoDataFoundException("No data found in JSON file " +filename);
@@ -152,8 +167,7 @@ public class JSONHandler {
     /**
      * This will update the student records in the JSON
      * 
-     * @param records
-     *            a list of StudentRecord objects
+     * @param records - a list of StudentRecord objects
      */
     public void updateStudentRecords(List<StudentRecord> records) {
         String fileToWrite = new GsonBuilder().setPrettyPrinting().create()
