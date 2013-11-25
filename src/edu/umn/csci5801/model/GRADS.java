@@ -336,7 +336,7 @@ public class GRADS implements GRADSIntf {
     //TODO: How do we just return a copy of StudentRecord?
     //REMOVE WHEN FINISHED
     public static void main(String[] args) {
-        GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/edu/umn/csci5801/model/users.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/edu/umn/csci5801/model/students.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/edu/umn/csci5801/model/courses.txt");
+        GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/users.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/students.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt");
 
         try {
             g.setUser("tolas9999");
