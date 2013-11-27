@@ -151,5 +151,14 @@
         },
         "role": "STUDENT",
         "department": "COMPUTER_SCIENCE"
+    },
+    {
+        "user": {
+            "id": "4040004",
+            "firstName": "Berk",
+            "lastName": "Colloq"
+        },
+        "role": "STUDENT",
+        "department": "COMPUTER_SCIENCE"
     }
 ]

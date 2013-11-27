@@ -1,0 +1,454 @@
+[
+  {
+    "student": {
+      "id": "0040000",
+      "firstName": "Kurt",
+      "lastName": "Godel"
+    },
+    "department": "COMPUTER_SCIENCE",
+    "degreeSought": "MS_C",
+    "termBegan": {
+      "year": 2008
+    },
+    "advisors": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Patrick",
+        "lastName": "Severin"
+      }
+    ],
+    "committee": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "John",
+        "lastName": "Freeman"
+      }
+    ],
+    "coursesTaken": [
+      {
+        "course": {
+          "name": "Analysis of Numerical Algorithms",
+          "id": "csci5302",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2008
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Operating Systems",
+          "id": "csci5103",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "User Interface Design, Implementation and Evaluation",
+          "id": "csci5115",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Collaborative and Social Computing",
+          "id": "csci5125",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Computer Science Colloquium",
+          "id": "csci8970",
+          "numCredits": "1"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2011
+        },
+        "grade": "S"
+      },
+      {
+        "course": {
+          "name": "Advanced Operating Systems",
+          "id": "csci8101",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2011
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Understanding the Social Web",
+          "id": "csci8117",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2011
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Applied Fourier Analysis",
+          "id": "math4248",
+          "numCredits": "4"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2011
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Theory Of Probability And Statistics I",
+          "id": "math5651",
+          "numCredits": "4"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2011
+        },
+        "grade": "A"
+      }
+    ],
+    "milestonesSet": [
+      {
+        "milestone": "DPF_SUBMITTED",
+        "term": {
+          "semester": "SPRING",
+          "year": 2010
+        }
+      },
+      {
+        "milestone": "DPF_APPROVED",
+        "term": {
+          "semester": "FALL",
+          "year": 2010
+        }
+      },
+      {
+        "milestone": "TRACKING_FORM_SUBMITTED",
+        "term": {
+          "semester": "FALL",
+          "year": 2010
+        }
+      }
+    ],
+    "notes": [
+      "“Thisisatestnote”",
+      null
+    ]
+  },
+  {
+    "student": {
+      "id": "0000100",
+      "firstName": "Missy",
+      "lastName": "Whatsit"
+    },
+    "department": "COMPUTER_SCIENCE",
+    "degreeSought": "PHD",
+    "termBegan": {
+      "semester": "SPRING",
+      "year": 2008
+    },
+    "advisors": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "William",
+        "lastName": "Schuler"
+      }
+    ],
+    "committee": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Maria",
+        "lastName": "Gini"
+      },
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Daniel",
+        "lastName": "Boley"
+      },
+      {
+        "department": "MATH",
+        "firstName": "Richard",
+        "lastName": "McGehee"
+      }
+    ],
+    "coursesTaken": [
+      {
+        "course": {
+          "name": "Operating Systems",
+          "id": "csci5103",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2008
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "User Interface Design, Implementation, and Evaluation",
+          "id": "csci5115",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2009
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Collaborative and Social Computing",
+          "id": "csci5125",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2010
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Introduction to Computer Security",
+          "id": "csci5271",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2011
+        },
+        "grade": "A"
+      }
+    ],
+    "milestonesSet": [
+      {
+        "milestone": "DEFENSE_PASSED",
+        "term": {
+          "semester": "FALL",
+          "year": 2014
+        }
+      }
+    ],
+    "notes": [
+      "note1",
+      "note2"
+    ]
+  },
+  {
+    "student": {
+      "id": "1000000",
+      "firstName": "Donnie",
+      "lastName": "Wahlberrg"
+    },
+    "committee": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Lou",
+        "lastName": "Pearlman"
+      }
+    ]
+  },
+  {
+    "student": {
+      "id": "0030000",
+      "firstName": "Albert",
+      "lastName": "Einstein"
+    },
+    "department": "COMPUTER_SCIENCE",
+    "degreeSought": "MS_B",
+    "termBegan": {
+      "semester": "FALL",
+      "year": 2009
+    },
+    "advisors": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Hien",
+        "lastName": "Tran"
+      }
+    ],
+    "committee": [
+      {
+        "department": "COMPUTER_SCIENCE",
+        "firstName": "Mark",
+        "lastName": "Kewley"
+      }
+    ],
+    "coursesTaken": [
+      {
+        "course": {
+          "name": "Analysis of Numerical Algorithms",
+          "id": "csci5302",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2008
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Operating Systems",
+          "id": "csci5103",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2008
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Computer Science Colloquium",
+          "id": "csci8970",
+          "numCredits": "1"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2011
+        },
+        "grade": "S"
+      },
+      {
+        "course": {
+          "name": "Plan B Project",
+          "id": "csci8760",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2009
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Advanced Operating Systems",
+          "id": "csci8101",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2011
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Understanding the Social Web",
+          "id": "csci8117",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2011
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Software Engineering I",
+          "id": "csci5801",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2011
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Software Engineering II",
+          "id": "csci5802",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "FALL",
+          "year": 2011
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Applied Fourier Analysis",
+          "id": "math4248",
+          "numCredits": "4"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2011
+        },
+        "grade": "A"
+      },
+      {
+        "course": {
+          "name": "Theory Of Probability And Statistics I",
+          "id": "math5651",
+          "numCredits": "4"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2011
+        },
+        "grade": "A"
+      }
+    ],
+    "milestonesSet": [
+      {
+        "milestone": "DPF_SUBMITTED",
+        "term": {
+          "semester": "SPRING",
+          "year": 2010
+        }
+      },
+      {
+        "milestone": "DPF_APPROVED",
+        "term": {
+          "semester": "FALL",
+          "year": 2010
+        }
+      },
+      {
+        "milestone": "PROJECT_COMMITTEE_APPOINTED",
+        "term": {
+          "semester": "FALL",
+          "year": 2010
+        }
+      }
+    ],
+    "notes": [
+      "note1"
+    ]
+  }
+]

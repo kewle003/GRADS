@@ -1,0 +1,18 @@
+package edu.umn.csci5801.model;
+
+public enum OtherCourseRequirements {
+    THESIS_PHD,
+    COLLOQUIUM,
+    OUT_OF_DEPARTMENT,
+    INTRO_TO_RESEARCH,
+    TOTAL_CREDITS,
+    OVERALL_GPA_PHD,
+    IN_PROGRAM_GPA_PHD,
+    THESIS_MS,
+    PHD_LEVEL_COURSES,
+    COURSE_CREDITS,
+    OVERALL_GPA_MS,
+    IN_PROGRAM_GPA_MS,
+    PLAN_B_PROJECT,
+    PHD_LEVEL_COURSES_PLANC
+}

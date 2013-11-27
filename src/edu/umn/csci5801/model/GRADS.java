@@ -99,12 +99,12 @@ public class GRADS implements GRADSIntf {
     /**
      * Our GRADS constructor
      * 
-     * @param userDatabaseFile - The file directory where the users JSON lies
      * @param studentRecordFile - The file directory where the student records JSON lies
      * @param courseDatabaseFile - The file directory where the courses JSON lies
+     * @param userDatabaseFile - The file directory where the users JSON lies
      * @author mark
      */
-    public GRADS(String userDatabaseFile, String studentRecordFile, String courseDatabaseFile) {
+    public GRADS(String studentRecordFile, String courseDatabaseFile, String userDatabaseFile) {
         this.userDatabaseFile = userDatabaseFile;
         this.studentRecordFile = studentRecordFile;
         this.courseDatabaseFile = courseDatabaseFile;
@@ -185,7 +185,9 @@ public class GRADS implements GRADSIntf {
             if (userId != null) {
                 if (studentRecords.containsKey(transcript.getStudent().getId())) {
                     if (transcript.getStudent().getId().equals(userId)) {
-                        validateCSCourses(transcript.getCoursesTaken());
+                        if (transcript.getCoursesTaken() != null) {
+                            validateCSCourses(transcript.getCoursesTaken());
+                        }
                         studentRecords.put(userId, transcript);
                         updateDatabase();
                     } else {
@@ -208,6 +210,9 @@ public class GRADS implements GRADSIntf {
         if (isGPC()) {
             if (userId != null) {
                 if (studentRecords.containsKey(userId)) {
+                    if (studentRecords.get(userId).getNotes() == null) {
+                        studentRecords.get(userId).setNotes(new ArrayList<String>());
+                    }
                     studentRecords.get(userId).getNotes().add(note);
                     updateDatabase();
                 } else {
@@ -231,7 +236,7 @@ public class GRADS implements GRADSIntf {
                     ProgressSummary summary = builder.generateProgressSummary(studentRecords.get(userId));
                     return summary;
                 } else {
-                    throw new InvalidUserException("UserId: " +userId+ " does not exist in the database");
+                    throw new InvalidUserException("UserId: " +userId+ " does not have a student record");
                 }
             } else {
                 throw new InvalidUserAccessException("You do not have permission to generate " +userId+"'s progress summary");
@@ -336,7 +341,7 @@ public class GRADS implements GRADSIntf {
     //TODO: How do we just return a copy of StudentRecord?
     //REMOVE WHEN FINISHED
     public static void main(String[] args) {
-        GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/users.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/students.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt");
+        GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/students.txt","/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/users.txt");
 
         try {
             g.setUser("tolas9999");
