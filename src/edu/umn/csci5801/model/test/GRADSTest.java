@@ -1,12 +1,10 @@
 package edu.umn.csci5801.model.test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import edu.umn.csci5801.model.Course;
 import edu.umn.csci5801.model.CourseTaken;
@@ -14,7 +12,6 @@ import edu.umn.csci5801.model.Degree;
 import edu.umn.csci5801.model.Department;
 import edu.umn.csci5801.model.GRADS;
 import edu.umn.csci5801.model.Grade;
-import edu.umn.csci5801.model.InvalidUserException;
 import edu.umn.csci5801.model.JSONHandler;
 import edu.umn.csci5801.model.Milestone;
 import edu.umn.csci5801.model.MilestoneSet;
@@ -32,10 +29,8 @@ import junit.framework.TestCase;
  * @author mark
  *
  */
-//TODO: Black box tests; Environment A, B, and C
-//Create our own JSON files
-//Create our own StudentRecords and ProgressSummaries for each person
-//We also need a cleanUp that resets the JSON database
+//TODO: Finish writing the rest of our BlackBox test
+//80% EMMA code coverage
 public class GRADSTest extends TestCase {
     private GRADS g;
     private GRADS tempg;
@@ -43,7 +38,6 @@ public class GRADSTest extends TestCase {
     private JSONHandler tempStudentDatabase;
     private ProgressSummary albertsProgressSummary;
     private StudentRecord albertsStudentRecord;
-    private ExpectedException exception = ExpectedException.none();
     
     @Override
     public void setUp() {
@@ -53,15 +47,14 @@ public class GRADSTest extends TestCase {
         try {
             originalRecords = tempStudentDatabase.readOutStudentRecords();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
             fail("Exception was not expected");
         }
         albertsProgressSummary = new ProgressSummary();
         albertsStudentRecord = new StudentRecord();
-        //Setup albertsProgressSummary
         
-        //Setup albertsStudentRecord, just follow the envStudentRecord.txt to set up your own
+        //TODO: Set up albertsProgressSummary
+        
+        //Set up albertsStudentRecord, just follow the envStudentRecord.txt to set up your own
         albertsStudentRecord.setStudent(new Student("Albert", "Einstein", "0030000"));
         albertsStudentRecord.setDepartment(Department.COMPUTER_SCIENCE);
         albertsStudentRecord.setDegreeSought(Degree.MS_B);
@@ -136,6 +129,37 @@ public class GRADSTest extends TestCase {
     }
     
     /**
+     * The purpose of this test case is to verify
+     * that when a user id that does not exists in
+     * the database logs in, they will be blocked
+     */
+    @Test
+    public void testInvalidLogin() {
+        try {
+            //Verify invalid user logging in
+            g.setUser("0000000");
+            fail("Expected InvalidUserException");
+        } catch (Exception e) {
+            
+        }
+    }
+    
+    /**
+     * The purpose of this test case is to verify that
+     * when a null user logs in they will be blocked
+     */
+    @Test
+    public void testNullLogin() {
+        try {
+            //Verify null user trying to log in
+            g.setUser(null);
+            fail("Excepted InvalidDataException");
+        } catch (Exception e) {
+            
+        }
+    }
+    
+    /**
      * The purpose of the Test Case is to verify
      * that when a student or gpc requests to view
      * a student transcript appropriate actions will
@@ -162,14 +186,44 @@ public class GRADSTest extends TestCase {
             g.setUser("0030000");
             alberts = g.getTranscript("0030000");
             assertEquals(albertsStudentRecord, alberts);
+
+        } catch (Exception e) {
+        }
+    }
+    
+    /**
+     * The purpose of this test is to verify that
+     * when a student tries to retrieve another student's
+     * transcript they will be blocked
+     */
+    @Test
+    public void testStudentTranscriptRetrievalInvalidUserAccess() {
+        try {
             
             //Verify Kurt can not retrieve Albert's record
             g.setUser("0040000");
-            alberts = g.getTranscript("0030000");
-            fail("Expected an InvalidUserAccessException to be thrown");
+            StudentRecord alberts = g.getTranscript("0030000");
+            fail("Expected an InvalidUserAccessException");
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
+            
+        }
+    }
+    
+    /**
+     * The purpose of this test is to verify that
+     * when an invalid student id is given to retrieve
+     * a transcript an exception will be thrown notifying
+     * the user
+     */
+    @Test
+    public void testStudentTranscriptRetrievalInvalidUser() {
+        try {
+            //Verify invalid user id given
+            g.setUser("0000002");
+            StudentRecord alberts = g.getTranscript("0000000");
+            fail("Expected InvalidUserException");
+        } catch (Exception e) {
+            
         }
     }
     
@@ -188,7 +242,6 @@ public class GRADSTest extends TestCase {
             //summary = g.generateProgressSummary("0030000");
             //assertEquals(albertsProgressSummary, summary);
         } catch (Exception e) {
-            //e.printStackTrace();
         }
     }
     
@@ -278,17 +331,16 @@ public class GRADSTest extends TestCase {
      * GPC makes a change to a student record the student 
      * record will reflect this change.
      */
+    //TODO: This might not be a necessary test anymore
     @Test
     public void testAmendingStudentRecord() {
         try {
             //Set Kate Murry
-            tempg.setUser("0000002");
+           // tempg.setUser("0000002");
             
             //Reset the database
-            tempStudentDatabase.updateStudentRecords(originalRecords);
+           // tempStudentDatabase.updateStudentRecords(originalRecords);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }       
     }
     
@@ -302,30 +354,83 @@ public class GRADSTest extends TestCase {
             //Set Kate Murry
             tempg.setUser("0000002");
             
-            //Retrieve Donnie Wahlberg's transcript, he does not have a Notes section
-            StudentRecord donnie = tempg.getTranscript("1000000");
+            //Add a note to Donnie's transcript who does not have notes
             tempg.addNote("1000000", "He likes coffee");
             
             //Verify it was modified
-            donnie = tempg.getTranscript("1000000");
+            StudentRecord donnie = tempg.getTranscript("1000000");
             assertEquals("He likes coffee", donnie.getNotes().get(0));
             
-            //Retrieve Albert's transcript, he does have a Notes section
-            StudentRecord albert = tempg.getTranscript("0030000");
+            //Add a note to Albert's transcript who does have notes
             tempg.addNote("0030000", "Smart chap");
             
             //Verify it was modified
-            albert = tempg.getTranscript("0030000");
+            StudentRecord albert = tempg.getTranscript("0030000");
             assertEquals(true, albert.getNotes().contains("Smart chap"));
             
             //Reset the database
             tempStudentDatabase.updateStudentRecords(originalRecords);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
             fail("Was not expecting an exception");
         }
 
+    }
+    
+    /**
+     * The purpose of this test case is to verify
+     * that when a student tries to add a note
+     * to their record, they will be blocked
+     */
+    @Test
+    public void testaddNoteInvalidUser() {
+        try {
+            //Set Albert Einstein
+            g.setUser("0030000");
+            
+            //Verify he is blocked from adding a note
+            g.addNote("Set all class grades to A", "0030000");
+            fail("Expected InvalidUserAccessException");
+        } catch (Exception e) {
+        }
+    }
+    
+    /**
+     * The purpose of this test is to verify that when
+     * a GPC provides an invalid user to add notes too
+     * GRADS will alert the GPC that this user does not
+     * exist
+     */
+    @Test
+    public void testAddNoteInvalidUserId() {
+        try {
+            //Set Kate Murry
+            tempg.setUser("0000002");
+            
+            //Add a note to Donnie's transcript who does not have notes
+            tempg.addNote("0000000", "He likes coffee");
+            fail("Excepted InvalidUserException");
+        } catch (Exception e) {
+            
+        }
+    }
+    
+    /**
+     * The purpose of this test is to verify that when
+     * a GPC provides a null user GRADS will alert
+     * the GPC the user is null
+     */
+    @Test
+    public void testAddNoteNullId() {
+        try {
+            //Set Kate Murry
+            tempg.setUser("0000002");
+            
+            //Add a note to Donnie's transcript who does not have notes
+            tempg.addNote(null, "He likes coffee");
+            fail("Excepted InvalidDataException");
+        } catch (Exception e) {
+            
+        }
     }
     
     /**
@@ -339,11 +444,55 @@ public class GRADSTest extends TestCase {
             //Set Kate Murry
             tempg.setUser("0000002");
             
+            //Retrieve Albert's student transcript
+            StudentRecord albert = tempg.getTranscript("0030000");
+            
+            //Modify Albert's courses to add a course
+            Course newc = new Course();
+            newc.setName("e-Public Health: Online Intervention Design");
+            newc.setId("csci5129");
+            newc.setNumCredits("3");
+            albert.getCoursesTaken().add(new CourseTaken(newc, new Term(Semester.SPRING, new Integer(2010)), Grade.A));
+            tempg.updateTranscript("0030000", albert);
+            
+            //Verify the change was made
+            albert = tempg.getTranscript("0030000");
+            assertEquals(true, albert.getCoursesTaken().contains(new CourseTaken(newc, new Term(Semester.SPRING, new Integer(2010)), Grade.A)));
+            
             //Reset the database
             tempStudentDatabase.updateStudentRecords(originalRecords);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            fail("Exception was not expected");
+        }
+    }
+    
+    /**
+     * The purpose of this test is to verify
+     * that when a GPC accidentally gives an invalid
+     * credit to a class, GRADS will block this change
+     * from happening
+     */
+    @Test
+    public void testInvalidCourseCreditAdded() {
+        try {
+            //Set Kate Murry
+            g.setUser("0000002");
+            
+            //Retrieve Albert's student transcript
+            StudentRecord albert = g.getTranscript("0030000");
+            
+            //Modify Albert's courses to add a course
+            Course newc = new Course();
+            newc.setName("e-Public Health: Online Intervention Design");
+            newc.setId("csci5129");
+            newc.setNumCredits("2");
+            albert.getCoursesTaken().add(new CourseTaken(newc, new Term(Semester.SPRING, new Integer(2010)), Grade.A));
+            
+            //Verify that the update is blocked
+            g.updateTranscript("0030000", albert);
+            fail("InvalidCourseException expected");
+        } catch (Exception e) {
+            
         }
     }
     
@@ -358,12 +507,21 @@ public class GRADSTest extends TestCase {
         try {
             //Set Kate Murry
             tempg.setUser("0000002");
+            MilestoneSet m = new MilestoneSet(Milestone.THESIS_APPROVED, new Term(Semester.SPRING, new Integer(2010)));
+            
+            //Modify Missy's transcript to add THESIS_APPROVED milestone
+            StudentRecord missy = tempg.getTranscript("0000100");
+            missy.getMilestonesSet().add(m);
+            tempg.updateTranscript("0000100", missy);
+            
+            //Verify the update happened
+            missy = tempg.getTranscript("0000100");
+            assertEquals(true, missy.getMilestonesSet().contains(m));
             
             //Reset the database
             tempStudentDatabase.updateStudentRecords(originalRecords);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            fail("Exception not expected");
         }        
     }
     
@@ -436,13 +594,90 @@ public class GRADSTest extends TestCase {
           
             //Reset the database
             tempStudentDatabase.updateStudentRecords(originalRecords);
+        } catch (Exception e) {
+            fail("Exception was not expected");
+        }
+    }
+    
+    /**
+     * The purpose of this test is to verify that when a GPC
+     * tries to modify a studentId on their transcript an
+     * InvalidUserException will be thrown
+     */
+    @Test
+    public void testUpdateTranscriptStudentIdBlock() {
+        try {
+            //Set Kate Murry
+            g.setUser("0000002");
+            StudentRecord donnie = g.getTranscript("1000000");
             
             //Test Kate can not modify Donnie's studentId
             donnie.getStudent().setId("YOLO");
-            tempg.updateTranscript("1000000", donnie);
+            g.updateTranscript("1000000", donnie);
             fail("Exepected InvalidUserException");
+        } catch (Exception e){
+            
+        }
+    }
+    
+    /**
+     * The purpose of this test is to verify that when
+     * a GPC accidentally puts in another studentId
+     * when updating the transcript, an InvalidDataException
+     * will be thrown
+     */
+    @Test
+    public void testUpdateTranscriptInvalidId() {
+        try {
+            //Set Kate Murry
+            g.setUser("0000002");
+            StudentRecord donnie = g.getTranscript("1000000");
+            
+            //Block Kate from replacing Albert's transcript with Donnie's
+            g.updateTranscript("0030000", donnie);
+            fail("Exepected InvalidDataException");
+        } catch (Exception e){
+            
+        }
+    }
+    
+    /**
+     * The purpose of this test is to verify that when
+     * a GPC enters a null user id an InvalidDataException
+     * will be thrown
+     */
+    @Test
+    public void testUpdateTranscriptNullId() {
+        try {
+            //Set Kate Murry
+            g.setUser("0000002");
+            StudentRecord donnie = g.getTranscript("1000000");
+            
+            //Block Kate from replacing Albert's transcript with Donnie's
+            g.updateTranscript(null, donnie);
+            fail("Exepected InvalidDataException");
+        } catch (Exception e){
+            
+        }
+    }
+    
+    /**
+     * The purpose of this test is to verify that
+     * a student will not be allowed to modify their
+     * transcript
+     */
+    @Test
+    public void testUpdateTranscriptInvalidAccess() {
+        try {
+            //Set Albert Einstein
+            g.setUser("0030000");
+            StudentRecord albert = g.getTranscript("0030000");
+            
+            //Block Albert from modifying his transcript
+            g.updateTranscript("0030000", albert);
+            fail("Excpected InvalidUserAccessException");
         } catch (Exception e) {
-            // TODO Auto-generated catch block
+            
         }
     }
     
@@ -451,7 +686,7 @@ public class GRADSTest extends TestCase {
      * when a GPC through the interface makes a request 
      * to view the list of student ids.
      */
-    @Test (expected = Exception.class)
+    @Test
     public void testListOfStudentsProvision() {
         try {
             //Set up the student Ids we expect
@@ -483,14 +718,27 @@ public class GRADSTest extends TestCase {
                 assertEquals(true, studentIds.contains(idIterator.next()));
             }
             assertEquals(ids.size(), studentIds.size());
-            
+        } catch (Exception e) {
+            fail("Exception was not expected");
+        }
+    }
+    
+    /**
+     * This test will verify that when a student tries
+     * to retrieve a list of student id's an InvalidUserAccessException
+     * will be thrown
+     */
+    @Test
+    public void testGetStudentIDsInvalidUserAccess() {
+        try {
             //Albert Einstein's id
             g.setUser("0030000");
-            //throws InvalidUserAccessException
-            List<String> studentIds2 = g.getStudentIDs();
+            
+            //Block Albert from retrieving studentids
+            List<String> studentIds = g.getStudentIDs();
             fail("Expected InvalidUserAccess Exception");
         } catch (Exception e) {
-            //e.printStackTrace();
+            
         }
     }
     

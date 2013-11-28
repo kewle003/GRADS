@@ -182,7 +182,7 @@ public class GRADS implements GRADSIntf {
     public void updateTranscript(String userId, StudentRecord transcript)
             throws Exception {
         if (isGPC()) {
-            if (userId != null) {
+            if (userId != null && transcript != null) {
                 if (studentRecords.containsKey(transcript.getStudent().getId())) {
                     if (transcript.getStudent().getId().equals(userId)) {
                         if (transcript.getCoursesTaken() != null) {
@@ -335,34 +335,6 @@ public class GRADS implements GRADSIntf {
                     throw new InvalidCourseException("CourseId: " +course.getId()+ " does not exist in the database");
                 }
             }
-        }
-    }
-    
-    //TODO: How do we just return a copy of StudentRecord?
-    //REMOVE WHEN FINISHED
-    public static void main(String[] args) {
-        GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/students.txt","/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/users.txt");
-
-        try {
-            g.setUser("tolas9999");
-           // g.addNote("kewle003", "Meet me tonight at 3'oclock");
-            StudentRecord r = g.getTranscript("nguy0621");
-            //r.getStudent().setId("nguy0622");
-            //g.validateCourses(r.getCoursesTaken());
-            //r.getCommittee().clear();
-            //Course invalidCourse = new Course();
-            //invalidCourse.setId("csci9000");
-            //invalidCourse.setName("Google studies");
-            //invalidCourse.setNumCredits("3");
-            //r.getCoursesTaken().add(new CourseTaken(invalidCourse, new Term(Semester.FALL, new Integer(2008)), Grade.C));
-            g.updateTranscript("nguy0621", r);
-            //StudentRecord r = g.getTranscript("nguy0621");
-           // r.getStudent().setId("gayxx070");
-           // g.updateTranscript("gayxx067", r);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.exit(-1);
         }
     }
 }
