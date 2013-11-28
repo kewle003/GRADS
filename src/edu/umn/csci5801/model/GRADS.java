@@ -50,7 +50,7 @@ public class GRADS implements GRADSIntf {
         this.gpcs = new HashMap<String, GPC>();
         this.courses = new HashMap<String, Course>();
         //TODO: KEVIN add this in when ready
-        this.builder = null;
+        this.builder = new ProgressSummaryBuilder();
 
         
         //Read the data from our JSON database
@@ -185,6 +185,7 @@ public class GRADS implements GRADSIntf {
             if (userId != null && transcript != null) {
                 if (studentRecords.containsKey(transcript.getStudent().getId())) {
                     if (transcript.getStudent().getId().equals(userId)) {
+                        //If the student has courses, verify the CS courses
                         if (transcript.getCoursesTaken() != null) {
                             validateCSCourses(transcript.getCoursesTaken());
                         }
@@ -210,6 +211,7 @@ public class GRADS implements GRADSIntf {
         if (isGPC()) {
             if (userId != null) {
                 if (studentRecords.containsKey(userId)) {
+                    //If the student had no notes object create it
                     if (studentRecords.get(userId).getNotes() == null) {
                         studentRecords.get(userId).setNotes(new ArrayList<String>());
                     }
@@ -257,8 +259,12 @@ public class GRADS implements GRADSIntf {
                     //TODO: This directly affects the StudentRecord of the student
                     //POTENTIAL FIX: Save the original CourseTaken list
                     StudentRecord recordCopy = studentRecords.get(userId);
-
+                    
                     List<CourseTaken> originalCourses = recordCopy.getCoursesTaken(); 
+                    //If the student originally had no courses
+                    if (recordCopy.getCoursesTaken() == null) {
+                        recordCopy.setCoursesTaken(new ArrayList<CourseTaken>());
+                    }
                     Iterator<CourseTaken> newCoursesIterator = courses.iterator();
                     //Add the new courses to the list of already completed courses
                     while (newCoursesIterator.hasNext()) {

@@ -30,6 +30,7 @@ import junit.framework.TestCase;
  *
  */
 //TODO: Finish writing the rest of our BlackBox test
+//45.4% So far
 //80% EMMA code coverage
 public class GRADSTest extends TestCase {
     private GRADS g;
@@ -51,8 +52,6 @@ public class GRADSTest extends TestCase {
         }
         albertsProgressSummary = new ProgressSummary();
         albertsStudentRecord = new StudentRecord();
-        
-        //TODO: Set up albertsProgressSummary
         
         //Set up albertsStudentRecord, just follow the envStudentRecord.txt to set up your own
         albertsStudentRecord.setStudent(new Student("Albert", "Einstein", "0030000"));
@@ -124,9 +123,19 @@ public class GRADSTest extends TestCase {
         albertsStudentRecord.setMilestonesSet(albertsMilestones);
         List<String> albertsNotes = new ArrayList<String>(); 
         albertsNotes.add("note1");
-        albertsStudentRecord.setNotes(albertsNotes);    
+        albertsStudentRecord.setNotes(albertsNotes);
+        
+        //TODO: Finish setting up albert's progress summary
+        albertsProgressSummary.setStudent(albertsStudentRecord.getStudent());
+        albertsProgressSummary.setDepartment(albertsStudentRecord.getDepartment());
+        albertsProgressSummary.setDegreeSought(albertsStudentRecord.getDegreeSought());
+        albertsProgressSummary.setTermBegan(albertsStudentRecord.getTermBegan());
+        albertsProgressSummary.setAdvisors(albertsStudentRecord.getAdvisors());
+        albertsProgressSummary.setCommittee(albertsStudentRecord.getCommittee());
+        albertsProgressSummary.setNotes(albertsStudentRecord.getNotes());
         
     }
+
     
     /**
      * The purpose of this test case is to verify
@@ -236,9 +245,16 @@ public class GRADSTest extends TestCase {
     public void testStudentSummaryProvision() {
         try {
             g.setUser("0000002");
-           // ProgressSummary summary = g.generateProgressSummary("0030000");
+            ProgressSummary summary = g.generateProgressSummary("0030000");
+            assertEquals(albertsProgressSummary.getStudent(), summary.getStudent());
+            assertEquals(albertsProgressSummary.getDepartment(), summary.getDepartment());
+            assertEquals(albertsProgressSummary.getDegreeSought(), summary.getDegreeSought());
+            assertEquals(albertsProgressSummary.getAdvisors(), summary.getAdvisors());
+            assertEquals(albertsProgressSummary.getCommittee(), summary.getCommittee());
+            assertEquals(albertsProgressSummary.getNotes(), summary.getNotes());
+            assertEquals(albertsProgressSummary.getTermBegan(), summary.getTermBegan());
             //assertEquals(albertsProgressSummary, summary);
-            g.setUser("0030000");
+            //g.setUser("0030000");
             //summary = g.generateProgressSummary("0030000");
             //assertEquals(albertsProgressSummary, summary);
         } catch (Exception e) {
