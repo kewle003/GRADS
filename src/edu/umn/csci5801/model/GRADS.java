@@ -35,7 +35,6 @@ public class GRADS implements GRADSIntf {
     /**
      * Method used to initialize GRADS
      * 
-     * @author mark
      */
     public void initialize() {
         //Initialize all of GRADS data
@@ -106,7 +105,6 @@ public class GRADS implements GRADSIntf {
      * @param studentRecordFile - The file directory where the student records JSON lies
      * @param courseDatabaseFile - The file directory where the courses JSON lies
      * @param userDatabaseFile - The file directory where the users JSON lies
-     * @author mark
      */
     public GRADS(String studentRecordFile, String courseDatabaseFile, String userDatabaseFile) {
         this.userDatabaseFile = userDatabaseFile;
@@ -296,7 +294,7 @@ public class GRADS implements GRADSIntf {
     /**
      * Method used to cleanup a student record that was modified
      * by GRADS for implementation purposes.
-     * @param records
+     * @param records - a list of StudentRecord objects
      */
     //TODO: Add to design
     private void cleanForDatabaseUpdate(List<StudentRecord> records) {
@@ -335,7 +333,7 @@ public class GRADS implements GRADSIntf {
      * Method used to set default values to null values found
      * in the StudentRecord as well as set CourseAreas to each course
      * in a student record
-     * @param records
+     * @param records - a list of StudentRecord objects
      */
     //TODO: Add to design
     private void setStudentRecordDefaults(List<StudentRecord> records) {
@@ -401,7 +399,6 @@ public class GRADS implements GRADSIntf {
      * 
      * @param listOfCourses - the List<Course> to be verified by GRADS
      * @throws Exception - InvalidCourseException
-     * @author mark
      */
     //TODO: Add this to our design...Maybe
     private void validateCSCourses(List<CourseTaken> listOfCourses) throws Exception {
