@@ -88,12 +88,16 @@ public class GRADS implements GRADSIntf {
             courses.put(course.getId(), course);
         }
         
+        //Set the courseAreas for each record
+        setCourseAreas(records);
+        
         //Populate the StudentRecord HashMap
         Iterator<StudentRecord> recordIterator = records.iterator();
         while (recordIterator.hasNext()) {
             StudentRecord record = recordIterator.next();
             studentRecords.put(record.getStudent().getId(), record);
         }
+        
     }
     
     /**
@@ -292,7 +296,67 @@ public class GRADS implements GRADSIntf {
     private void updateDatabase() {
         List<StudentRecord> newStudentRecords = new ArrayList<StudentRecord>();
         newStudentRecords.addAll(studentRecords.values());
+        //Clean up anything we modified for GRADS
+        cleanForDatabaseUpdate(newStudentRecords);
         studentRecordDatabase.updateStudentRecords(newStudentRecords);
+        //Reset the courseAreas again
+        setCourseAreas(newStudentRecords);
+    }
+    
+    /**
+     * Method used to cleanup a student record that was modified
+     * by GRADS for implementation purposes.
+     * @param records
+     */
+    //TODO: Add to design
+    private void cleanForDatabaseUpdate(List<StudentRecord> records) {
+        for (StudentRecord record : records) {
+            for (CourseTaken course : record.getCoursesTaken()) {
+                //Reset courseAreas
+                if (course.getCourse() != null) {
+                    course.getCourse().setCourseArea(null);
+                }
+            }
+            /*
+            if (record.getAdvisors().isEmpty()) {
+                record.setAdvisors(null);
+            }
+            
+            if (record.getCommittee().isEmpty()) {
+                record.setAdvisors(null);
+            }
+            
+            if (record.getCoursesTaken().isEmpty()) {
+                record.setCoursesTaken(null);
+            }
+            
+            if (record.getMilestonesSet().isEmpty()) {
+                record.setMilestonesSet(null);
+            }
+            
+            if (record.getNotes().isEmpty()) {
+                record.setNotes(null);
+            }
+            */
+        }
+    }
+    
+    /**
+     * Method used to set the course areas for each course
+     * in a student record
+     * @param records
+     */
+    //TODO: Add to design
+    private void setCourseAreas(List<StudentRecord> records) {
+        for (StudentRecord record : records) {
+            if (record.getCoursesTaken() != null) {
+                for (CourseTaken course : record.getCoursesTaken()) {
+                    if (courses.containsKey(course.getCourse().getId())) {
+                            course.getCourse().setCourseArea(courses.get(course.getCourse().getId()).getCourseArea());
+                    }
+                }
+            }
+        }
     }
     
     /**
@@ -336,11 +400,27 @@ public class GRADS implements GRADSIntf {
                 if (courses.containsKey(course.getId())) {
                     if (!course.equals(courses.get(course.getId()))) {
                         throw new InvalidCourseException("CourseId: " +course.getId()+ " has invalid data");
-                    } 
+                    }
                 } else {
                     throw new InvalidCourseException("CourseId: " +course.getId()+ " does not exist in the database");
                 }
             }
+        }
+    }
+    
+    public static void main(String args[]) {
+        GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/Data/students.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envUsers.txt");
+        
+        try {
+          //Verify Kate Murry can retrieve Albert's transcript
+            g.setUser("0000002");
+            StudentRecord alberts = g.getTranscript("nguy0621");
+            System.out.println(alberts.getCoursesTaken().get(0).getCourse().getCourseArea());
+            g.addNote("nguy0621", "Test2");
+            System.out.println(alberts.getCoursesTaken().get(0).getCourse().getCourseArea());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }
