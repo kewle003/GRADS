@@ -53,30 +53,6 @@ public class JSONHandler {
                             throw new InvalidUserException("Math majors are not allowed in student records");
                         }
                     }
-                    //TODO: This works, just need to ask Greg if this is ok
-                    //One possibility is we could add this to GRADS and clean it up using cleanUpDatabase()
-               
-                    //Make sure each List is not null, if so we add a blank list
-                    if (r.getAdvisors() == null) {
-                        r.setAdvisors(new ArrayList<Professor>());
-                    }
-                    
-                    if (r.getCommittee() == null) {
-                        r.setCommittee(new ArrayList<Professor>());
-                    }
-                    
-                    if (r.getCoursesTaken() == null) {
-                        r.setCoursesTaken(new ArrayList<CourseTaken>());
-                    }
-                    
-                    if (r.getMilestonesSet() == null) {
-                        r.setMilestonesSet(new ArrayList<MilestoneSet>());
-                    }
-                    
-                    if (r.getNotes() == null) {
-                        r.setNotes(new ArrayList<String>());
-                    }
-                   
                 }
             } else {
                 throw new InvalidDataException("filename: " +filename+ " is invalid");

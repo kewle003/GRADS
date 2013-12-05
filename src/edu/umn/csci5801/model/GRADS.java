@@ -88,8 +88,8 @@ public class GRADS implements GRADSIntf {
             courses.put(course.getId(), course);
         }
         
-        //Set the courseAreas for each record
-        setCourseAreas(records);
+        //Set up our StudentRecord to have default values if needed
+        setStudentRecordDefaults(records);
         
         //Populate the StudentRecord HashMap
         Iterator<StudentRecord> recordIterator = records.iterator();
@@ -189,10 +189,7 @@ public class GRADS implements GRADSIntf {
             if (userId != null && transcript != null) {
                 if (studentRecords.containsKey(transcript.getStudent().getId())) {
                     if (transcript.getStudent().getId().equals(userId)) {
-                        //If the student has courses, verify the CS courses
-                        if (transcript.getCoursesTaken() != null) {
-                            validateCSCourses(transcript.getCoursesTaken());
-                        }
+                        validateCSCourses(transcript.getCoursesTaken());
                         studentRecords.put(userId, transcript);
                         updateDatabase();
                     } else {
@@ -214,11 +211,7 @@ public class GRADS implements GRADSIntf {
     public void addNote(String userId, String note) throws Exception {
         if (isGPC()) {
             if (userId != null) {
-                if (studentRecords.containsKey(userId)) {
-                    //If the student had no notes object create it
-                    if (studentRecords.get(userId).getNotes() == null) {
-                        studentRecords.get(userId).setNotes(new ArrayList<String>());
-                    }
+                if (studentRecords.containsKey(userId)) {                  
                     studentRecords.get(userId).getNotes().add(note);
                     updateDatabase();
                 } else {
@@ -265,10 +258,7 @@ public class GRADS implements GRADSIntf {
                     StudentRecord recordCopy = studentRecords.get(userId);
                     
                     List<CourseTaken> originalCourses = recordCopy.getCoursesTaken(); 
-                    //If the student originally had no courses
-                    if (recordCopy.getCoursesTaken() == null) {
-                        recordCopy.setCoursesTaken(new ArrayList<CourseTaken>());
-                    }
+                 
                     Iterator<CourseTaken> newCoursesIterator = courses.iterator();
                     //Add the new courses to the list of already completed courses
                     while (newCoursesIterator.hasNext()) {
@@ -299,8 +289,8 @@ public class GRADS implements GRADSIntf {
         //Clean up anything we modified for GRADS
         cleanForDatabaseUpdate(newStudentRecords);
         studentRecordDatabase.updateStudentRecords(newStudentRecords);
-        //Reset the courseAreas again
-        setCourseAreas(newStudentRecords);
+        //Reset the defaults
+        setStudentRecordDefaults(newStudentRecords);
     }
     
     /**
@@ -317,7 +307,8 @@ public class GRADS implements GRADSIntf {
                     course.getCourse().setCourseArea(null);
                 }
             }
-            /*
+            
+            //Cleanup any lists that are empty
             if (record.getAdvisors().isEmpty()) {
                 record.setAdvisors(null);
             }
@@ -337,17 +328,17 @@ public class GRADS implements GRADSIntf {
             if (record.getNotes().isEmpty()) {
                 record.setNotes(null);
             }
-            */
         }
     }
     
     /**
-     * Method used to set the course areas for each course
+     * Method used to set default values to null values found
+     * in the StudentRecord as well as set CourseAreas to each course
      * in a student record
      * @param records
      */
     //TODO: Add to design
-    private void setCourseAreas(List<StudentRecord> records) {
+    private void setStudentRecordDefaults(List<StudentRecord> records) {
         for (StudentRecord record : records) {
             if (record.getCoursesTaken() != null) {
                 for (CourseTaken course : record.getCoursesTaken()) {
@@ -355,6 +346,27 @@ public class GRADS implements GRADSIntf {
                             course.getCourse().setCourseArea(courses.get(course.getCourse().getId()).getCourseArea());
                     }
                 }
+            }
+            
+            //Assign default values to each list
+            if (record.getAdvisors() == null) {
+                record.setAdvisors(new ArrayList<Professor>());
+            }
+            
+            if (record.getCommittee() == null) {
+                record.setAdvisors(new ArrayList<Professor>());
+            }
+            
+            if (record.getCoursesTaken() == null) {
+                record.setCoursesTaken(new ArrayList<CourseTaken>());
+            }
+            
+            if (record.getMilestonesSet() == null) {
+                record.setMilestonesSet(new ArrayList<MilestoneSet>());
+            }
+            
+            if (record.getNotes() == null) {
+                record.setNotes(new ArrayList<String>());
             }
         }
     }
@@ -405,22 +417,6 @@ public class GRADS implements GRADSIntf {
                     throw new InvalidCourseException("CourseId: " +course.getId()+ " does not exist in the database");
                 }
             }
-        }
-    }
-    
-    public static void main(String args[]) {
-        GRADS g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/Data/students.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envUsers.txt");
-        
-        try {
-          //Verify Kate Murry can retrieve Albert's transcript
-            g.setUser("0000002");
-            StudentRecord alberts = g.getTranscript("nguy0621");
-            System.out.println(alberts.getCoursesTaken().get(0).getCourse().getCourseArea());
-            g.addNote("nguy0621", "Test2");
-            System.out.println(alberts.getCoursesTaken().get(0).getCourse().getCourseArea());
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
     }
 }
