@@ -33,11 +33,24 @@ public class GRADS implements GRADSIntf {
     private String courseDatabaseFile;
     
     /**
+     * Our GRADS constructor
+     * 
+     * @param studentRecordFile - The file directory where the student records JSON lies
+     * @param courseDatabaseFile - The file directory where the courses JSON lies
+     * @param userDatabaseFile - The file directory where the users JSON lies
+     */
+    public GRADS(String studentRecordFile, String courseDatabaseFile, String userDatabaseFile) {
+        this.userDatabaseFile = userDatabaseFile;
+        this.studentRecordFile = studentRecordFile;
+        this.courseDatabaseFile = courseDatabaseFile;
+        initializeGRADS();
+    }
+    
+    /**
      * Method used to initialize GRADS
      * 
-     * @author mark
      */
-    public void initialize() {
+    public void initializeGRADS() {
         //Initialize all of GRADS data
         List<Person> users = new ArrayList<Person>();
         List<StudentRecord> records = new ArrayList<StudentRecord>();
@@ -88,29 +101,18 @@ public class GRADS implements GRADSIntf {
             courses.put(course.getId(), course);
         }
         
+        //Set up our StudentRecord to have default values if needed
+        setStudentRecordDefaults(records);
+        
         //Populate the StudentRecord HashMap
         Iterator<StudentRecord> recordIterator = records.iterator();
         while (recordIterator.hasNext()) {
             StudentRecord record = recordIterator.next();
             studentRecords.put(record.getStudent().getId(), record);
         }
+        
     }
     
-    /**
-     * Our GRADS constructor
-     * 
-     * @param studentRecordFile - The file directory where the student records JSON lies
-     * @param courseDatabaseFile - The file directory where the courses JSON lies
-     * @param userDatabaseFile - The file directory where the users JSON lies
-     * @author mark
-     */
-    public GRADS(String studentRecordFile, String courseDatabaseFile, String userDatabaseFile) {
-        this.userDatabaseFile = userDatabaseFile;
-        this.studentRecordFile = studentRecordFile;
-        this.courseDatabaseFile = courseDatabaseFile;
-        initialize();
-    }
-
     @Override
     public void setUser(String userId) throws Exception {
         //Verify if the user is a student or gpc, if not throw an exception
@@ -185,10 +187,7 @@ public class GRADS implements GRADSIntf {
             if (userId != null && transcript != null) {
                 if (studentRecords.containsKey(transcript.getStudent().getId())) {
                     if (transcript.getStudent().getId().equals(userId)) {
-                        //If the student has courses, verify the CS courses
-                        if (transcript.getCoursesTaken() != null) {
-                            validateCSCourses(transcript.getCoursesTaken());
-                        }
+                        validateCSCourses(transcript.getCoursesTaken());
                         studentRecords.put(userId, transcript);
                         updateDatabase();
                     } else {
@@ -210,11 +209,7 @@ public class GRADS implements GRADSIntf {
     public void addNote(String userId, String note) throws Exception {
         if (isGPC()) {
             if (userId != null) {
-                if (studentRecords.containsKey(userId)) {
-                    //If the student had no notes object create it
-                    if (studentRecords.get(userId).getNotes() == null) {
-                        studentRecords.get(userId).setNotes(new ArrayList<String>());
-                    }
+                if (studentRecords.containsKey(userId)) {                  
                     studentRecords.get(userId).getNotes().add(note);
                     updateDatabase();
                 } else {
@@ -228,6 +223,7 @@ public class GRADS implements GRADSIntf {
         }
     }
 
+    //TODO: Add exception if ProgressSummary could not be generated
     @Override
     public ProgressSummary generateProgressSummary(String userId)
             throws Exception {
@@ -259,12 +255,7 @@ public class GRADS implements GRADSIntf {
                     //TODO: This directly affects the StudentRecord of the student
                     //POTENTIAL FIX: Save the original CourseTaken list
                     StudentRecord recordCopy = studentRecords.get(userId);
-                    
-                    List<CourseTaken> originalCourses = recordCopy.getCoursesTaken(); 
-                    //If the student originally had no courses
-                    if (recordCopy.getCoursesTaken() == null) {
-                        recordCopy.setCoursesTaken(new ArrayList<CourseTaken>());
-                    }
+                    List<CourseTaken> originalCourses = recordCopy.getCoursesTaken();              
                     Iterator<CourseTaken> newCoursesIterator = courses.iterator();
                     //Add the new courses to the list of already completed courses
                     while (newCoursesIterator.hasNext()) {
@@ -292,7 +283,87 @@ public class GRADS implements GRADSIntf {
     private void updateDatabase() {
         List<StudentRecord> newStudentRecords = new ArrayList<StudentRecord>();
         newStudentRecords.addAll(studentRecords.values());
+        //Clean up anything we modified for GRADS
+        cleanForDatabaseUpdate(newStudentRecords);
         studentRecordDatabase.updateStudentRecords(newStudentRecords);
+        //Reset the defaults
+        setStudentRecordDefaults(newStudentRecords);
+    }
+    
+    /**
+     * Method used to cleanup a student record that was modified
+     * by GRADS for implementation purposes.
+     * @param records - a list of StudentRecord objects
+     */
+    //TODO: Add to design
+    private void cleanForDatabaseUpdate(List<StudentRecord> records) {
+        for (StudentRecord record : records) {
+            for (CourseTaken course : record.getCoursesTaken()) {
+                //Reset courseAreas
+                if (course.getCourse() != null) {
+                    course.getCourse().setCourseArea(null);
+                }
+            }
+            
+            //Cleanup any lists that are empty
+            if (record.getAdvisors().isEmpty()) {
+                record.setAdvisors(null);
+            }
+            
+            if (record.getCommittee().isEmpty()) {
+                record.setAdvisors(null);
+            }
+            
+            if (record.getCoursesTaken().isEmpty()) {
+                record.setCoursesTaken(null);
+            }
+            
+            if (record.getMilestonesSet().isEmpty()) {
+                record.setMilestonesSet(null);
+            }
+            
+            if (record.getNotes().isEmpty()) {
+                record.setNotes(null);
+            }
+        }
+    }
+    
+    /**
+     * Method used to set default values to null values found
+     * in the StudentRecord as well as set CourseAreas to each course
+     * in a student record
+     * @param records - a list of StudentRecord objects
+     */
+    //TODO: Add to design
+    private void setStudentRecordDefaults(List<StudentRecord> records) {
+        for (StudentRecord record : records) {
+            if (record.getCoursesTaken() == null) {
+                record.setCoursesTaken(new ArrayList<CourseTaken>());
+            } else {
+                for (CourseTaken course : record.getCoursesTaken()) {
+                    if (courses.containsKey(course.getCourse().getId())) {
+                            course.getCourse().setCourseArea(courses.get(course.getCourse().getId()).getCourseArea());
+                    }
+                }
+            }
+            
+            //Assign default values to each list
+            if (record.getAdvisors() == null) {
+                record.setAdvisors(new ArrayList<Professor>());
+            }
+            
+            if (record.getCommittee() == null) {
+                record.setAdvisors(new ArrayList<Professor>());
+            }
+            
+            if (record.getMilestonesSet() == null) {
+                record.setMilestonesSet(new ArrayList<MilestoneSet>());
+            }
+            
+            if (record.getNotes() == null) {
+                record.setNotes(new ArrayList<String>());
+            }
+        }
     }
     
     /**
@@ -325,7 +396,6 @@ public class GRADS implements GRADSIntf {
      * 
      * @param listOfCourses - the List<Course> to be verified by GRADS
      * @throws Exception - InvalidCourseException
-     * @author mark
      */
     //TODO: Add this to our design...Maybe
     private void validateCSCourses(List<CourseTaken> listOfCourses) throws Exception {
@@ -336,7 +406,7 @@ public class GRADS implements GRADSIntf {
                 if (courses.containsKey(course.getId())) {
                     if (!course.equals(courses.get(course.getId()))) {
                         throw new InvalidCourseException("CourseId: " +course.getId()+ " has invalid data");
-                    } 
+                    }
                 } else {
                     throw new InvalidCourseException("CourseId: " +course.getId()+ " does not exist in the database");
                 }
