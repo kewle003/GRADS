@@ -33,7 +33,7 @@ public abstract class GPARequirement extends Requirement {
             Iterator<CourseTaken> courseIterator = courses.iterator();
             while (courseIterator.hasNext()) {
                 CourseTaken course = courseIterator.next();
-                gradeSum += course.getGrade().numericValue();
+                gradeSum += (course.getGrade().numericValue() * ((int) Integer.parseInt(course.getCourse().getNumCredits())));
                 creditSum += (int) Integer.parseInt(course.getCourse().getNumCredits());
             }
         }
