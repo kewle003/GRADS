@@ -33,10 +33,24 @@ public class GRADS implements GRADSIntf {
     private String courseDatabaseFile;
     
     /**
+     * Our GRADS constructor
+     * 
+     * @param studentRecordFile - The file directory where the student records JSON lies
+     * @param courseDatabaseFile - The file directory where the courses JSON lies
+     * @param userDatabaseFile - The file directory where the users JSON lies
+     */
+    public GRADS(String studentRecordFile, String courseDatabaseFile, String userDatabaseFile) {
+        this.userDatabaseFile = userDatabaseFile;
+        this.studentRecordFile = studentRecordFile;
+        this.courseDatabaseFile = courseDatabaseFile;
+        initializeGRADS();
+    }
+    
+    /**
      * Method used to initialize GRADS
      * 
      */
-    public void initialize() {
+    public void initializeGRADS() {
         //Initialize all of GRADS data
         List<Person> users = new ArrayList<Person>();
         List<StudentRecord> records = new ArrayList<StudentRecord>();
@@ -99,20 +113,6 @@ public class GRADS implements GRADSIntf {
         
     }
     
-    /**
-     * Our GRADS constructor
-     * 
-     * @param studentRecordFile - The file directory where the student records JSON lies
-     * @param courseDatabaseFile - The file directory where the courses JSON lies
-     * @param userDatabaseFile - The file directory where the users JSON lies
-     */
-    public GRADS(String studentRecordFile, String courseDatabaseFile, String userDatabaseFile) {
-        this.userDatabaseFile = userDatabaseFile;
-        this.studentRecordFile = studentRecordFile;
-        this.courseDatabaseFile = courseDatabaseFile;
-        initialize();
-    }
-
     @Override
     public void setUser(String userId) throws Exception {
         //Verify if the user is a student or gpc, if not throw an exception
@@ -223,6 +223,7 @@ public class GRADS implements GRADSIntf {
         }
     }
 
+    //TODO: Add exception if ProgressSummary could not be generated
     @Override
     public ProgressSummary generateProgressSummary(String userId)
             throws Exception {
@@ -254,9 +255,7 @@ public class GRADS implements GRADSIntf {
                     //TODO: This directly affects the StudentRecord of the student
                     //POTENTIAL FIX: Save the original CourseTaken list
                     StudentRecord recordCopy = studentRecords.get(userId);
-                    
-                    List<CourseTaken> originalCourses = recordCopy.getCoursesTaken(); 
-                 
+                    List<CourseTaken> originalCourses = recordCopy.getCoursesTaken();              
                     Iterator<CourseTaken> newCoursesIterator = courses.iterator();
                     //Add the new courses to the list of already completed courses
                     while (newCoursesIterator.hasNext()) {
@@ -338,7 +337,9 @@ public class GRADS implements GRADSIntf {
     //TODO: Add to design
     private void setStudentRecordDefaults(List<StudentRecord> records) {
         for (StudentRecord record : records) {
-            if (record.getCoursesTaken() != null) {
+            if (record.getCoursesTaken() == null) {
+                record.setCoursesTaken(new ArrayList<CourseTaken>());
+            } else {
                 for (CourseTaken course : record.getCoursesTaken()) {
                     if (courses.containsKey(course.getCourse().getId())) {
                             course.getCourse().setCourseArea(courses.get(course.getCourse().getId()).getCourseArea());
@@ -353,10 +354,6 @@ public class GRADS implements GRADSIntf {
             
             if (record.getCommittee() == null) {
                 record.setAdvisors(new ArrayList<Professor>());
-            }
-            
-            if (record.getCoursesTaken() == null) {
-                record.setCoursesTaken(new ArrayList<CourseTaken>());
             }
             
             if (record.getMilestonesSet() == null) {
