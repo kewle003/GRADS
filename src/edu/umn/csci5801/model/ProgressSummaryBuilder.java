@@ -206,5 +206,11 @@ public class ProgressSummaryBuilder {
                 return result;
             }
         });
+        
+        // Finally put programs into the programs HashMap
+        programs.put(Degree.MS_A, programMSA);
+        programs.put(Degree.MS_B, programMSB);
+        programs.put(Degree.MS_C, programMSC);
+        programs.put(Degree.PHD, programPHD);
     }
 }
