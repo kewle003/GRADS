@@ -195,8 +195,7 @@ public class ProgressSummaryBuilder {
                 ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
                 int credits = 0;
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
-                	// Kevin, does outofdepartment mean we want !inCSDepartment(course.getCourse()) instead?
-                    if ( isPassingGrade(course.getGrade()) && inCSDepartment(course.getCourse()) && isGraduateLevel(course.getCourse()) ) {
+                    if ( isPassingGrade(course.getGrade()) && !inCSDepartment(course.getCourse()) && isGraduateLevel(course.getCourse()) ) {
                         courses.add(course);
                         credits += Integer.parseInt(course.getCourse().getNumCredits());
                     }
@@ -215,12 +214,9 @@ public class ProgressSummaryBuilder {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
-                //int credits = 0;
-                //I remember Kevin said he needed credits but it has no use here
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
                     if ( isPassingGrade(course.getGrade()) && (course.getCourse().getId().equals("csci8001") || course.getCourse().getId().equals("csci8002")) ) {
                         courses.add(course);
-                        //credits += Integer.parseInt(course.getCourse().getNumCredits());
                     }
                 }
                 details.setCourses(courses);
@@ -231,7 +227,7 @@ public class ProgressSummaryBuilder {
         });
         
         // MS Plan A COURSE_CREDITS
-        programPHD.addRequirement(new CourseRequirement("COURSE_CREDITS") {
+        programMSA.addRequirement(new CourseRequirement("COURSE_CREDITS") {
             @Override
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
             	final int REQUIRED_TOTAL_CREDITS = 22;
@@ -256,6 +252,33 @@ public class ProgressSummaryBuilder {
                 return result;
             }
         });
+        
+     // MS Plan B PLAN_B_PROJECT
+        programMSB.addRequirement(new CourseRequirement("COURSE_CREDITS") {
+            @Override
+            public RequirementCheckResult metBy(StudentRecord studentRecord) {
+                RequirementCheckResult result = new RequirementCheckResult(this.getName());
+                CheckResultDetails details = new CheckResultDetails();
+                ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
+                for (CourseTaken course: studentRecord.getCoursesTaken()) {
+                    if ( isPassingGrade(course.getGrade()) && course.getCourse().getId().equals("csci8760") ) {
+                        courses.add(course);
+                    }
+                }
+                details.setCourses(courses);
+                result.setDetails(details);
+                result.setPassed(!courses.isEmpty());
+                return result;
+            }
+        });
+        
+        // PHD and MS Plan TOTAL_CREDITS
+        CourseRequirement totalCreditWOThesis = new TotalCreditRequirement("TOTAL_CREDITS", Degree.MS_A);
+        programMSA.addRequirement(totalCreditWOThesis);
+        CourseRequirement totalCreditWO16CS = new TotalCreditRequirement("TOTAL_CREDITS", Degree.PHD);
+        programPHD.addRequirement(totalCreditWO16CS);
+        programMSB.addRequirement(totalCreditWO16CS);
+        programMSC.addRequirement(totalCreditWO16CS);
         
         // Finally put programs into the programs HashMap
         programs.put(Degree.MS_A, programMSA);
