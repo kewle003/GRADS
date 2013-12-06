@@ -185,5 +185,26 @@ public class ProgressSummaryBuilder {
         for (Milestone milestone: phdMilestones) {
             programPHD.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
         }
+        
+        // PHD OUT_OF_DEPARTMENT
+        programPHD.addRequirement(new CourseRequirement("OUT_OF_DEPARTMENT") {
+            @Override
+            public RequirementCheckResult metBy(StudentRecord studentRecord) {
+                RequirementCheckResult result = new RequirementCheckResult(this.getName());
+                CheckResultDetails details = new CheckResultDetails();
+                ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
+                int credits = 0;
+                for (CourseTaken course: studentRecord.getCoursesTaken()) {
+                    if ( isPassingGrade(course.getGrade()) && inCSDepartment(course.getCourse()) && isGraduateLevel(course.getCourse()) ) {
+                        courses.add(course);
+                        credits += Integer.parseInt(course.getCourse().getNumCredits());
+                    }
+                }
+                details.setCourses(courses);
+                result.setDetails(details);
+                result.setPassed(credits >= 6);
+                return result;
+            }
+        });
     }
 }
