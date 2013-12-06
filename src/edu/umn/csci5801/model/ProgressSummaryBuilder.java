@@ -56,57 +56,14 @@ public class ProgressSummaryBuilder {
         Program programMSB = new Program(Degree.MS_B);
         Program programMSC = new Program(Degree.MS_C);
         Program programPHD = new Program(Degree.PHD);
-        
-        GPARequirement msBreadthRequirement = new GPARequirement("BREADTH_REQUIREMENT_MS") {
-            @Override
-            public RequirementCheckResult metBy(StudentRecord studentRecord) {
-                RequirementCheckResult result = new RequirementCheckResult(this.getName());
-                CheckResultDetails details = new CheckResultDetails();
-                ArrayList<CourseTaken> theory = new ArrayList<CourseTaken>();
-                ArrayList<CourseTaken> architecture = new ArrayList<CourseTaken>();
-                ArrayList<CourseTaken> applications = new ArrayList<CourseTaken>();
-                ArrayList<CourseTaken> breadthCourses = new ArrayList<CourseTaken>();
-                for (CourseTaken course : studentRecord.getCoursesTaken() ) {
-                    if ( course.getGrade() != Grade.S && course.getGrade() != Grade.N && course.getGrade() != Grade._ ) {
-                        CourseArea area = course.getCourse().getCourseArea();
-                        switch (area) {
-                        case THEORY_ALGORITHMS:
-                            theory.add(course);
-                            break;
-                        case ARCHITECTURE_SYSTEMS_SOFTWARE:
-                            architecture.add(course);
-                            break;
-                        case APPLICATIONS:
-                            applications.add(course);
-                            break;
-                        default:
-                            break;
-                        }
-                    }
-                }
-                if ( !theory.isEmpty() ) {
-                    breadthCourses.add(getBestCourseTaken(theory));
-                }
-                if ( !architecture.isEmpty() ) {
-                    breadthCourses.add(getBestCourseTaken(architecture));
-                }
-                if ( !applications.isEmpty() ) {
-                    breadthCourses.add(getBestCourseTaken(applications));
-                }
-                double breadthGPA = calculateGPA(breadthCourses);
-                details.setGPA((float)breadthGPA);
-                details.setCourses(breadthCourses);
-                if ( breadthCourses.size() < 3 || breadthGPA < 3.25 ) {
-                    result.setPassed(false);
-                } else {
-                    result.setPassed(true);
-                }
-                result.setDetails(details);
-                return result;
-            }
-        };
+
+        // BREADTH REQUIREMENTS
+        GPARequirement msBreadthRequirement = new BreadthRequirement("BREADTH_REQUIREMENT_MS", Degree.MS_A);
+        // note the above constructor does not differential between different MS Degrees
         programMSA.addRequirement(msBreadthRequirement);
         programMSB.addRequirement(msBreadthRequirement);
         programMSC.addRequirement(msBreadthRequirement);
+        GPARequirement phdBreadthRequirement = new BreadthRequirement("BREADTH_REQUIREMENT_PHD", Degree.PHD);
+        programMSC.addRequirement(phdBreadthRequirement);
     }
 }

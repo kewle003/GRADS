@@ -13,13 +13,14 @@ public abstract class GPARequirement extends Requirement {
 
     // TODO add to design
     // returns CourseTaken with highest grade
-    public static CourseTaken getBestCourseTaken(List<CourseTaken> courses) {
+    public static CourseTaken popBestCourseTaken(List<CourseTaken> courses) {
         CourseTaken best = null;
         for (CourseTaken course: courses) {
             if ( best == null || course.getGrade().numericValue() > best.getGrade().numericValue() ) {
                 best = course;
             }
         }
+        courses.remove(best);
         return best;
     }
     
