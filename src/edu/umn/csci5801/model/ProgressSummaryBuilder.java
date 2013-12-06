@@ -195,6 +195,7 @@ public class ProgressSummaryBuilder {
                 ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
                 int credits = 0;
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
+                	// Kevin, does outofdepartment mean we want !inCSDepartment(course.getCourse()) instead?
                     if ( isPassingGrade(course.getGrade()) && inCSDepartment(course.getCourse()) && isGraduateLevel(course.getCourse()) ) {
                         courses.add(course);
                         credits += Integer.parseInt(course.getCourse().getNumCredits());
@@ -203,6 +204,55 @@ public class ProgressSummaryBuilder {
                 details.setCourses(courses);
                 result.setDetails(details);
                 result.setPassed(credits >= 6);
+                return result;
+            }
+        });
+        
+     // PHD INTRO_TO_RESEARCH
+        programPHD.addRequirement(new CourseRequirement("INTRO_TO_RESEARCH") {
+            @Override
+            public RequirementCheckResult metBy(StudentRecord studentRecord) {
+                RequirementCheckResult result = new RequirementCheckResult(this.getName());
+                CheckResultDetails details = new CheckResultDetails();
+                ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
+                //int credits = 0;
+                //I remember Kevin said he needed credits but it has no use here
+                for (CourseTaken course: studentRecord.getCoursesTaken()) {
+                    if ( isPassingGrade(course.getGrade()) && (course.getCourse().getId().equals("csci8001") || course.getCourse().getId().equals("csci8002")) ) {
+                        courses.add(course);
+                        //credits += Integer.parseInt(course.getCourse().getNumCredits());
+                    }
+                }
+                details.setCourses(courses);
+                result.setDetails(details);
+                result.setPassed(!courses.isEmpty());
+                return result;
+            }
+        });
+        
+        // MS Plan A COURSE_CREDITS
+        programPHD.addRequirement(new CourseRequirement("COURSE_CREDITS") {
+            @Override
+            public RequirementCheckResult metBy(StudentRecord studentRecord) {
+            	final int REQUIRED_TOTAL_CREDITS = 22;
+            	final int REQUIRED_CSCI_CREDITS = 16;
+                RequirementCheckResult result = new RequirementCheckResult(this.getName());
+                CheckResultDetails details = new CheckResultDetails();
+                ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
+                int credits = 0;
+                int creditsCS = 0;
+                for (CourseTaken course: studentRecord.getCoursesTaken()) {
+                    if ( isPassingGrade(course.getGrade()) ) {
+                        courses.add(course);
+                        credits += Integer.parseInt(course.getCourse().getNumCredits());
+                        if ( inCSDepartment(course.getCourse()) ) {
+                            creditsCS += Integer.parseInt(course.getCourse().getNumCredits());
+                        }
+                    }
+                }
+                details.setCourses(courses);
+                result.setDetails(details);
+                result.setPassed(credits >= REQUIRED_TOTAL_CREDITS && creditsCS >= REQUIRED_CSCI_CREDITS);                
                 return result;
             }
         });
