@@ -68,6 +68,7 @@ public class ProgressSummaryBuilder {
         GPARequirement phdBreadthRequirement = new BreadthRequirement("BREADTH_REQUIREMENT_PHD", Degree.PHD);
         programPHD.addRequirement(phdBreadthRequirement);
         
+        // THESIS REQUIREMENTS
         CourseRequirement msThesisRequirement = new CourseRequirement("THESIS_MS") {
             @Override
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
@@ -89,7 +90,6 @@ public class ProgressSummaryBuilder {
             }            
         };
         programMSA.addRequirement(msThesisRequirement);
-        
         CourseRequirement phdThesisRequirement = new CourseRequirement("THESIS_PHD") {
             @Override
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
@@ -112,6 +112,7 @@ public class ProgressSummaryBuilder {
         };
         programPHD.addRequirement(phdThesisRequirement);
         
+        // COLLOQUIUM
         CourseRequirement colloquiumRequirement = new CourseRequirement("COLLOQUIUM") {
             @Override
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
@@ -133,5 +134,56 @@ public class ProgressSummaryBuilder {
         programMSB.addRequirement(colloquiumRequirement);
         programMSC.addRequirement(colloquiumRequirement);
         programPHD.addRequirement(colloquiumRequirement);
+        
+        // MILESTONE REQUIREMENTS
+        Milestone[] phdMilestones = {
+                Milestone.PRELIM_COMMITTEE_APPOINTED,
+                Milestone.WRITTEN_PE_SUBMITTED,
+                Milestone.WRITTEN_PE_APPROVED,
+                Milestone.ORAL_PE_PASSED,
+                Milestone.DPF_SUBMITTED,
+                Milestone.DPF_APPROVED,
+                Milestone.THESIS_COMMITTEE_APPOINTED,
+                Milestone.PROPOSAL_PASSED,
+                Milestone.GRADUATION_PACKET_REQUESTED,
+                Milestone.THESIS_SUBMITTED,
+                Milestone.THESIS_APPROVED,
+                Milestone.DEFENSE_PASSED
+                };
+        Milestone[] msaMilestones = {
+                Milestone.DPF_SUBMITTED,
+                Milestone.DPF_APPROVED,
+                Milestone.THESIS_COMMITTEE_APPOINTED,
+                Milestone.GRADUATION_PACKET_REQUESTED,
+                Milestone.THESIS_SUBMITTED,
+                Milestone.THESIS_APPROVED,
+                Milestone.DEFENSE_PASSED
+                };
+        Milestone[] msbMilestones = {
+                Milestone.DPF_SUBMITTED,
+                Milestone.DPF_APPROVED,
+                Milestone.PROJECT_COMMITTEE_APPOINTED,
+                Milestone.GRADUATION_PACKET_REQUESTED,
+                Milestone.DEFENSE_PASSED
+                };
+        Milestone[] mscMilestones = {
+                Milestone.DPF_SUBMITTED,
+                Milestone.DPF_APPROVED,
+                Milestone.TRACKING_FORM_SUBMITTED,
+                Milestone.TRACKING_FORM_APPROVED,
+                Milestone.GRADUATION_PACKET_REQUESTED
+                };
+        for (Milestone milestone: msaMilestones) {
+            programMSA.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
+        }
+        for (Milestone milestone: msbMilestones) {
+            programMSB.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
+        }
+        for (Milestone milestone: mscMilestones) {
+            programMSC.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
+        }
+        for (Milestone milestone: phdMilestones) {
+            programPHD.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
+        }
     }
 }
