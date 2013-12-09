@@ -74,6 +74,7 @@ public class ProgressSummaryBuilder {
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 int credits = 0;
                 final int REQUIRED_THESIS_CREDITS = 10;
+                List<String> errMsg = new ArrayList<String>();
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 List<CourseTaken> courses = new ArrayList<CourseTaken>();
@@ -84,7 +85,13 @@ public class ProgressSummaryBuilder {
                     }
                 }
                 details.setCourses(courses);
-                result.setPassed(credits >= REQUIRED_THESIS_CREDITS);
+                if (credits >= REQUIRED_THESIS_CREDITS) {
+                    result.setPassed(true);
+                } else {
+                    result.setPassed(false);
+                    errMsg.add("Not enough thesis credits, 10 credits required");
+                    result.setErrorMsgs(errMsg);
+                }
                 result.setDetails(details);
                 return result;
             }            
@@ -95,6 +102,7 @@ public class ProgressSummaryBuilder {
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 int credits = 0;
                 final int REQUIRED_THESIS_CREDITS = 24;
+                List<String> errMsg = new ArrayList<String>();
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 List<CourseTaken> courses = new ArrayList<CourseTaken>();
@@ -105,7 +113,13 @@ public class ProgressSummaryBuilder {
                     }
                 }
                 details.setCourses(courses);
-                result.setPassed(credits >= REQUIRED_THESIS_CREDITS);
+                if (credits >= REQUIRED_THESIS_CREDITS) {
+                    result.setPassed(true);
+                } else {
+                    result.setPassed(false);
+                    errMsg.add("Not enough thesis credits, 24 credits required");
+                    result.setErrorMsgs(errMsg);
+                }
                 result.setDetails(details);
                 return result;
             }            
@@ -119,13 +133,20 @@ public class ProgressSummaryBuilder {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 List<CourseTaken> courses = new ArrayList<CourseTaken>();
+                List<String> errMsg = new ArrayList<String>();
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
                     if ( course.getCourse().getId().equals("csci8970") && isPassingGrade(course.getGrade()) ) {
                         courses.add(course);
                     }
                 }
                 details.setCourses(courses);
-                result.setPassed(!courses.isEmpty());
+                if (!courses.isEmpty()) {
+                    result.setPassed(true);
+                } else {
+                    result.setPassed(false);
+                    errMsg.add("csci8970 has not been taken or has a passing grade");
+                    result.setErrorMsgs(errMsg);
+                }
                 result.setDetails(details);
                 return result;
             }            
@@ -193,6 +214,7 @@ public class ProgressSummaryBuilder {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
+                List<String> errMsg = new ArrayList<String>();
                 int credits = 0;
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
                     if ( isPassingGrade(course.getGrade()) && !inCSDepartment(course.getCourse()) && isGraduateLevel(course.getCourse()) ) {
@@ -202,7 +224,13 @@ public class ProgressSummaryBuilder {
                 }
                 details.setCourses(courses);
                 result.setDetails(details);
-                result.setPassed(credits >= 6);
+                if (credits >= 6) {
+                    result.setPassed(true);
+                } else {
+                    result.setPassed(false);
+                    errMsg.add("Not enough out of department credits taken");
+                    result.setErrorMsgs(errMsg);
+                }
                 return result;
             }
         });
@@ -214,14 +242,35 @@ public class ProgressSummaryBuilder {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
+                List<String> errMsg = new ArrayList<String>();
+                int csci8001Count = 0;
+                int csci8002Count = 0;
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
-                    if ( isPassingGrade(course.getGrade()) && (course.getCourse().getId().equals("csci8001") || course.getCourse().getId().equals("csci8002")) ) {
+                    if ( isPassingGrade(course.getGrade()) && course.getCourse().getId().equals("csci8001")) {
                         courses.add(course);
+                        csci8001Count++;
+                    } else if (isPassingGrade(course.getGrade()) &&  course.getCourse().getId().equals("csci8002")) {
+                        courses.add(course);
+                        csci8002Count++;
                     }
                 }
                 details.setCourses(courses);
                 result.setDetails(details);
-                result.setPassed(!courses.isEmpty());
+                //csci8001 AND csci8002 have been taken
+                if (csci8001Count >= 1) {
+                    if (csci8002Count >= 1) {
+                        result.setPassed(true);
+                    } else {
+                        result.setPassed(false);
+                        errMsg.add("csci8002 has not been taken");
+                    }
+                } else if (csci8002Count >= 1) {
+                    result.setPassed(false);
+                    errMsg.add("csci8001 has not been taken");
+                } else {
+                    result.setPassed(false);
+                    errMsg.add("csci8001 and csci8002 have not been taken");
+                }
                 return result;
             }
         });
@@ -235,6 +284,7 @@ public class ProgressSummaryBuilder {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
+                List<String> errMsg = new ArrayList<String>();
                 int credits = 0;
                 int creditsCS = 0;
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
@@ -248,6 +298,23 @@ public class ProgressSummaryBuilder {
                 }
                 details.setCourses(courses);
                 result.setDetails(details);
+                if (credits >= REQUIRED_TOTAL_CREDITS) {
+                    if (credits >= REQUIRED_CSCI_CREDITS) {
+                        result.setPassed(true);
+                    } else {
+                        result.setPassed(false);
+                        errMsg.add("You do not meed the required credits for CS classes");
+                        result.setErrorMsgs(errMsg);
+                    }
+                } else if (credits >= REQUIRED_CSCI_CREDITS) {
+                    result.setPassed(false);
+                    errMsg.add("You do not meed the required total credits");
+                    result.setErrorMsgs(errMsg);
+                } else {
+                    result.setPassed(false);
+                    errMsg.add("You do not meed the credit requirements");
+                    result.setErrorMsgs(errMsg);
+                }
                 result.setPassed(credits >= REQUIRED_TOTAL_CREDITS && creditsCS >= REQUIRED_CSCI_CREDITS);                
                 return result;
             }
@@ -260,6 +327,7 @@ public class ProgressSummaryBuilder {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
+                List<String> errMsg = new ArrayList<String>();
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
                     if ( isPassingGrade(course.getGrade()) && course.getCourse().getId().equals("csci8760") ) {
                         courses.add(course);
@@ -267,7 +335,13 @@ public class ProgressSummaryBuilder {
                 }
                 details.setCourses(courses);
                 result.setDetails(details);
-                result.setPassed(!courses.isEmpty());
+                if (!courses.isEmpty()) {
+                    result.setPassed(true);
+                } else {
+                    result.setPassed(false);
+                    errMsg.add("You have not taken csci8760");
+                    result.setErrorMsgs(errMsg);
+                }
                 return result;
             }
         });
