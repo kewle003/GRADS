@@ -299,14 +299,14 @@ public class ProgressSummaryBuilder {
                 details.setCourses(courses);
                 result.setDetails(details);
                 if (credits >= REQUIRED_TOTAL_CREDITS) {
-                    if (credits >= REQUIRED_CSCI_CREDITS) {
+                    if (creditsCS >= REQUIRED_CSCI_CREDITS) {
                         result.setPassed(true);
                     } else {
                         result.setPassed(false);
                         errMsg.add("You do not meed the required credits for CS classes");
                         result.setErrorMsgs(errMsg);
                     }
-                } else if (credits >= REQUIRED_CSCI_CREDITS) {
+                } else if (creditsCS >= REQUIRED_CSCI_CREDITS) {
                     result.setPassed(false);
                     errMsg.add("You do not meed the required total credits");
                     result.setErrorMsgs(errMsg);
@@ -314,8 +314,7 @@ public class ProgressSummaryBuilder {
                     result.setPassed(false);
                     errMsg.add("You do not meed the credit requirements");
                     result.setErrorMsgs(errMsg);
-                }
-                result.setPassed(credits >= REQUIRED_TOTAL_CREDITS && creditsCS >= REQUIRED_CSCI_CREDITS);                
+                }              
                 return result;
             }
         });
