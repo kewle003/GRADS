@@ -353,6 +353,66 @@ public class ProgressSummaryBuilder {
         programMSB.addRequirement(totalCreditWO16CS);
         programMSC.addRequirement(totalCreditWO16CS);
         
+     // PHD_LEVEL_COURSES REQUIREMENTS
+        CourseRequirement phdLevelCourses = new CourseRequirement("PHD_LEVEL_COURSES") {
+            @Override
+            public RequirementCheckResult metBy(StudentRecord studentRecord) {
+                int credits = 0;
+                final int REQUIRED_CREDITS = 3;
+                List<String> errMsg = new ArrayList<String>();
+                RequirementCheckResult result = new RequirementCheckResult(this.getName());
+                CheckResultDetails details = new CheckResultDetails();
+                List<CourseTaken> courses = new ArrayList<CourseTaken>();
+                for (CourseTaken course: studentRecord.getCoursesTaken()) {
+                    if ( course.getCourse().getId().startsWith("csci8") && isPassingGrade(course.getGrade()) && Integer.parseInt(course.getCourse().getNumCredits()) >= REQUIRED_CREDITS) {
+                        credits += Integer.parseInt(course.getCourse().getNumCredits());
+                        courses.add(course);
+                    }
+                }
+                details.setCourses(courses);
+                if (!courses.isEmpty() && credits >= REQUIRED_CREDITS) {
+                    result.setPassed(true);
+                } else {
+                    result.setPassed(false);
+                    errMsg.add("You must have at least one csci 8000 level course that has 3 credits");
+                    result.setErrorMsgs(errMsg);
+                }
+                result.setDetails(details);
+                return result;
+            }            
+        };
+        programMSA.addRequirement(phdLevelCourses);
+        programMSB.addRequirement(phdLevelCourses);
+        
+        CourseRequirement phdLevelCoursesPlanC = new CourseRequirement("PHD_LEVEL_COURSES_PLANC") {
+            @Override
+            public RequirementCheckResult metBy(StudentRecord studentRecord) {
+                int credits = 0;
+                final int REQUIRED_CREDITS = 3;
+                List<String> errMsg = new ArrayList<String>();
+                RequirementCheckResult result = new RequirementCheckResult(this.getName());
+                CheckResultDetails details = new CheckResultDetails();
+                List<CourseTaken> courses = new ArrayList<CourseTaken>();
+                for (CourseTaken course: studentRecord.getCoursesTaken()) {
+                    if ( course.getCourse().getId().startsWith("csci8") && isPassingGrade(course.getGrade()) && Integer.parseInt(course.getCourse().getNumCredits()) >= REQUIRED_CREDITS) {
+                        credits += Integer.parseInt(course.getCourse().getNumCredits());
+                        courses.add(course);
+                    }
+                }
+                details.setCourses(courses);
+                if ( courses.size() >= 2 && credits >= 2*REQUIRED_CREDITS) {
+                    result.setPassed(true);
+                } else {
+                    result.setPassed(false);
+                    errMsg.add("You must have at least two csci 8000 level course that have 3 credits each");
+                    result.setErrorMsgs(errMsg);
+                }
+                result.setDetails(details);
+                return result;
+            }            
+        };
+        programMSC.addRequirement(phdLevelCoursesPlanC);
+        
         // Finally put programs into the programs HashMap
         programs.put(Degree.MS_A, programMSA);
         programs.put(Degree.MS_B, programMSB);
