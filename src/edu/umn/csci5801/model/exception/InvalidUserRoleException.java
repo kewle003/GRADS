@@ -1,4 +1,4 @@
-package edu.umn.csci5801.model;
+package edu.umn.csci5801.model.exception;
 
 /**
  * Exception for when the JSON database holds 

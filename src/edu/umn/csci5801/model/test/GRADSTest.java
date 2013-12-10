@@ -14,7 +14,6 @@ import edu.umn.csci5801.model.Degree;
 import edu.umn.csci5801.model.Department;
 import edu.umn.csci5801.model.GRADS;
 import edu.umn.csci5801.model.Grade;
-import edu.umn.csci5801.model.InvalidDataException;
 import edu.umn.csci5801.model.JSONHandler;
 import edu.umn.csci5801.model.Milestone;
 import edu.umn.csci5801.model.MilestoneSet;
@@ -24,6 +23,7 @@ import edu.umn.csci5801.model.Semester;
 import edu.umn.csci5801.model.Student;
 import edu.umn.csci5801.model.StudentRecord;
 import edu.umn.csci5801.model.Term;
+import edu.umn.csci5801.model.exception.InvalidDataException;
 import junit.framework.TestCase;
 
 /**

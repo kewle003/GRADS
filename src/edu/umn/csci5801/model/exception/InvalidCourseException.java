@@ -1,4 +1,4 @@
-package edu.umn.csci5801.model;
+package edu.umn.csci5801.model.exception;
 
 /**
  * This exception is thrown whenever an invalid

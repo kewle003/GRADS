@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.google.gson.Gson;
 
 import edu.umn.csci5801.model.*;
+import edu.umn.csci5801.model.exception.InvalidUserRoleException;
 
 public class JSONHandlerTest extends TestCase {
     private JSONHandler studentRecordJSON = new JSONHandler(

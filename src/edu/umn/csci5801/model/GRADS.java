@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.umn.csci5801.model.exception.InvalidCourseException;
+import edu.umn.csci5801.model.exception.InvalidDataException;
+import edu.umn.csci5801.model.exception.InvalidUserAccessException;
+import edu.umn.csci5801.model.exception.InvalidUserException;
+
 
 /**
  * This is the main class that implements GRADSIntf 

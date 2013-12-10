@@ -15,6 +15,11 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
+import edu.umn.csci5801.model.exception.InvalidDataException;
+import edu.umn.csci5801.model.exception.InvalidUserException;
+import edu.umn.csci5801.model.exception.InvalidUserRoleException;
+import edu.umn.csci5801.model.exception.NoDataFoundException;
+
 /**
  * This will handle all database transactions that GRADS requests
  * 
