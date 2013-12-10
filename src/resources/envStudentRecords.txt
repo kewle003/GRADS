@@ -1028,7 +1028,7 @@
       },
       {
         "course": {
-          "name": "User Interface Design, Implementation and Evaluation",
+          "name": "User Interface Design, Implementation, and Evaluation",
           "id": "csci5115",
           "numCredits": "3"
         },
@@ -1114,6 +1114,18 @@
         "course": {
           "name": "Cryptology And Number Theory",
           "id": "math5248",
+          "numCredits": "3"
+        },
+        "term": {
+          "semester": "SPRING",
+          "year": 2010
+        },
+        "grade": "B"
+      },
+      {
+        "course": {
+          "name": "Pedagogy: Making a Living on Bullshit",
+          "id": "phil5555",
           "numCredits": "3"
         },
         "term": {

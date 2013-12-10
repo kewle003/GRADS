@@ -20,6 +20,7 @@ import edu.umn.csci5801.model.Milestone;
 import edu.umn.csci5801.model.MilestoneSet;
 import edu.umn.csci5801.model.Professor;
 import edu.umn.csci5801.model.ProgressSummary;
+import edu.umn.csci5801.model.RequirementCheckResult;
 import edu.umn.csci5801.model.Semester;
 import edu.umn.csci5801.model.Student;
 import edu.umn.csci5801.model.StudentRecord;
@@ -306,7 +307,42 @@ public class GRADSTest extends TestCase {
     @Test
     public void testAllRequirementsMet() throws Exception{
         g.setUser("0000002");
-        g.generateProgressSummary("0000010");
+        
+        List<String> passingIds = new ArrayList<String>();
+        
+        passingIds.add("0000010");//Passing PhD
+        passingIds.add("0000020");//MS-A
+        passingIds.add("0000030");//MS-B
+        passingIds.add("0000040");//MS-C
+        
+        for(String id : passingIds){
+        	ProgressSummary ps = g.generateProgressSummary(id);
+        	for(RequirementCheckResult req : ps.getRequirementCheckResults()){
+        		if(req.getErrorMsgs() != null && !req.getErrorMsgs().isEmpty()){
+        			fail(id +":"+ps.getStudent().getFirstName()+" "+ps.getStudent().getLastName() + " is not graduating, but should be. List: "+req.getErrorMsgs());
+        			
+        		}
+        	}
+        }
+        List<String> failingIds = new ArrayList<String>();
+        
+        failingIds.add("0000100");
+        failingIds.add("0004000");
+        failingIds.add("0010000");
+        failingIds.add("0100000");
+        
+        for(String id : failingIds){
+        	ProgressSummary ps = g.generateProgressSummary(id);
+        	boolean foundAProblem = false;
+        	for(RequirementCheckResult req : ps.getRequirementCheckResults()){
+        		if(req.getErrorMsgs() != null && !req.getErrorMsgs().isEmpty()){
+        			foundAProblem = true;
+        		}
+        	}
+        	if(!foundAProblem){
+        		fail(id +":"+ps.getStudent().getFirstName()+" "+ps.getStudent().getLastName() + " is graduating, but shouldn't be.");
+        	}
+        }
         
     }
     
