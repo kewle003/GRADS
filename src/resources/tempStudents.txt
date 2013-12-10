@@ -29,7 +29,8 @@
         "course": {
           "name": "Analysis of Numerical Algorithms",
           "id": "csci5302",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -41,7 +42,8 @@
         "course": {
           "name": "Operating Systems",
           "id": "csci5103",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "FALL",
@@ -51,9 +53,10 @@
       },
       {
         "course": {
-          "name": "User Interface Design, Implementation and Evaluation",
+          "name": "User Interface Design, Implementation, and Evaluation",
           "id": "csci5115",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -65,7 +68,8 @@
         "course": {
           "name": "Collaborative and Social Computing",
           "id": "csci5125",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -77,7 +81,8 @@
         "course": {
           "name": "Computer Science Colloquium",
           "id": "csci8970",
-          "numCredits": "1"
+          "numCredits": "1",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -89,7 +94,8 @@
         "course": {
           "name": "Advanced Operating Systems",
           "id": "csci8101",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -101,7 +107,8 @@
         "course": {
           "name": "Understanding the Social Web",
           "id": "csci8117",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "FALL",
@@ -113,7 +120,8 @@
         "course": {
           "name": "Applied Fourier Analysis",
           "id": "math4248",
-          "numCredits": "4"
+          "numCredits": "4",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -125,7 +133,8 @@
         "course": {
           "name": "Theory Of Probability And Statistics I",
           "id": "math5651",
-          "numCredits": "4"
+          "numCredits": "4",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -203,7 +212,8 @@
         "course": {
           "name": "Operating Systems",
           "id": "csci5103",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -215,7 +225,8 @@
         "course": {
           "name": "User Interface Design, Implementation, and Evaluation",
           "id": "csci5115",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "FALL",
@@ -227,7 +238,8 @@
         "course": {
           "name": "Collaborative and Social Computing",
           "id": "csci5125",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -239,7 +251,8 @@
         "course": {
           "name": "Introduction to Computer Security",
           "id": "csci5271",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -307,7 +320,8 @@
         "course": {
           "name": "Analysis of Numerical Algorithms",
           "id": "csci5302",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -319,7 +333,8 @@
         "course": {
           "name": "Operating Systems",
           "id": "csci5103",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "FALL",
@@ -331,7 +346,8 @@
         "course": {
           "name": "Computer Science Colloquium",
           "id": "csci8970",
-          "numCredits": "1"
+          "numCredits": "1",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -343,7 +359,8 @@
         "course": {
           "name": "Plan B Project",
           "id": "csci8760",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -355,7 +372,8 @@
         "course": {
           "name": "Advanced Operating Systems",
           "id": "csci8101",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -367,7 +385,8 @@
         "course": {
           "name": "Understanding the Social Web",
           "id": "csci8117",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "FALL",
@@ -379,7 +398,8 @@
         "course": {
           "name": "Software Engineering I",
           "id": "csci5801",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -391,7 +411,8 @@
         "course": {
           "name": "Software Engineering II",
           "id": "csci5802",
-          "numCredits": "3"
+          "numCredits": "3",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "FALL",
@@ -403,7 +424,8 @@
         "course": {
           "name": "Applied Fourier Analysis",
           "id": "math4248",
-          "numCredits": "4"
+          "numCredits": "4",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",
@@ -415,7 +437,8 @@
         "course": {
           "name": "Theory Of Probability And Statistics I",
           "id": "math5651",
-          "numCredits": "4"
+          "numCredits": "4",
+          "courseArea": "NONE"
         },
         "term": {
           "semester": "SPRING",

@@ -44,7 +44,7 @@ public class Professor extends Person {
         if (getClass() != obj.getClass())
             return false;
         Professor other = (Professor) obj;
-        if (department != other.department)
+        if (department != other.department || !super.equals(other))
             return false;
         return true;
     }

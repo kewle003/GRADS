@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import edu.umn.csci5801.model.Course;
@@ -45,9 +46,9 @@ public class GRADSTest extends TestCase {
     
     @Override
     public void setUp() {
-        tempStudentDatabase = new JSONHandler("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/tempStudents.txt");
-        g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envStudentRecords.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envUsers.txt");
-        tempg = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/tempStudents.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envUsers.txt");
+        tempStudentDatabase = new JSONHandler("/home/sever408/5801/GRADS/src/resources/tempStudents.txt");
+        g = new GRADS("/home/sever408/5801/GRADS/src/resources/envStudentRecords.txt", "/home/sever408/5801/GRADS/src/resources/courses.txt", "/home/sever408/5801/GRADS/src/resources/envUsers.txt");
+        tempg = new GRADS("/home/sever408/5801/GRADS/src/resources/tempStudents.txt", "/home/sever408/5801/GRADS/src/resources/courses.txt", "/home/sever408/5801/GRADS/src/resources/envUsers.txt");
         try {
             originalRecords = tempStudentDatabase.readOutStudentRecords();
         } catch (Exception e) {
@@ -107,6 +108,11 @@ public class GRADSTest extends TestCase {
         albertsProgressSummary.setCommittee(albertsStudentRecord.getCommittee());
         albertsProgressSummary.setNotes(albertsStudentRecord.getNotes());
         
+    }
+    
+    @Before
+    public void beforeEachTest(){
+    	tempStudentDatabase.updateStudentRecords(originalRecords);
     }
 
     
@@ -298,7 +304,9 @@ public class GRADSTest extends TestCase {
      * determining that students are ready to graduate is correct.
      */
     @Test
-    public void testAllRequirementsMetTest() {
+    public void testAllRequirementsMet() throws Exception{
+        g.setUser("0000002");
+        g.generateProgressSummary("0000010");
         
     }
     
@@ -522,7 +530,7 @@ public class GRADSTest extends TestCase {
         //Verify the change occurred
         tempg.updateTranscript("1000000", donnie);
         donnie = tempg.getTranscript("1000000");
-        assertEquals(new Professor("Lou", "Peralman", Department.COMPUTER_SCIENCE), donnie.getCommittee().get(0));
+        assertEquals(new Professor("Lou", "Pearlman", Department.COMPUTER_SCIENCE), donnie.getCommittee().get(0));
         
         //Retrieve Kurt Godel's transcript
         StudentRecord kurt = tempg.getTranscript("0040000");
@@ -748,7 +756,6 @@ public class GRADSTest extends TestCase {
                 }
             }
             for(Object o : theGuts){
-                System.out.println(o.getClass().getName());
                 if( o instanceof Integer || o instanceof String || o instanceof Double || o instanceof Float || o instanceof Character || o instanceof Boolean || o instanceof String){}
                 else{
                     assertTrue(o.equals(o));
@@ -759,17 +766,12 @@ public class GRADSTest extends TestCase {
                     }
                     o.hashCode();
                     if(!classNames.contains(o.getClass().getName())){
-                        System.out.println("recursing");
-                        for(Field f : o.getClass().getDeclaredFields()){
-//                            System.out.println(f);
-                        }
                         fieldsList.add(o.getClass().getDeclaredFields());
                         buddyObjects.add(o);
                         classNames.add(o.getClass().getName());
                     }
                 }
             }
-            System.out.println("Looping!");
         }
     }
     

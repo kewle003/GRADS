@@ -4,7 +4,7 @@ public class Course {
     private String name;
     private String id;
     private String numCredits;
-    private CourseArea courseArea;
+    private CourseArea courseArea = CourseArea.NONE;
 
     public Course() {
     }
@@ -14,7 +14,9 @@ public class Course {
         this.name = name;
         this.id = id;
         this.numCredits = numCredits;
-        this.courseArea = courseArea;
+        if(courseArea!=null){
+        	this.courseArea = courseArea;
+        }
     }
 
     public String getName() {

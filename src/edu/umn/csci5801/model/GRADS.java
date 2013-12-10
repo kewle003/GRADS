@@ -409,7 +409,8 @@ public class GRADS implements GRADSIntf {
             Course course = courseIterator.next().getCourse();
             if (course.getId().matches("csci.*")) {
                 if (courses.containsKey(course.getId())) {
-                    if (!course.equals(courses.get(course.getId()))) {
+                	Course courseInDatabase = courses.get(course.getId());
+                    if (!course.equals(courseInDatabase)) {
                         throw new InvalidCourseException("CourseId: " +course.getId()+ " has invalid data");
                     }
                 } else {

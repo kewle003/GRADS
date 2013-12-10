@@ -32,26 +32,28 @@
     {
             "name": "Developing the Interactive Web",
             "id": "csci5117",
+            "courseArea": "NONE",
             "numCredits": "3"
     },
     {
             "name": "Collaborative and Social Computing",
             "id": "csci5125",
+            "courseArea": "APPLICATIONS",
             "numCredits": "3"
     },
     {
             "name": "e-Public Health: Online Intervention Design",
-            "id": "csci5129",
+            "id": "csci5129", "courseArea": "NONE",
             "numCredits": "3"
     },
     {
             "name": "Advanced Internet Programming",
-            "id": "csci5131",
+            "id": "csci5131", "courseArea": "NONE",
             "numCredits": "3"
     },
     {
             "name": "Real-Time and Embedded Systems",
-            "id": "csci5143",
+            "id": "csci5143", "courseArea": "NONE",
             "numCredits": "3"
     },
     {
@@ -176,7 +178,7 @@
             },
     {
             "name": "Sensing and Estimation in Robotics",
-            "id": "csci5552",
+            "id": "csci5552", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
@@ -229,7 +231,7 @@
             },
     {
             "name": "From GPS and Virtual Globes to Spatial Computing",
-            "id": "csci5715",
+            "id": "csci5715", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
@@ -246,162 +248,162 @@
             },
     {
             "name": "Special Topics in Computer Science",
-            "id": "csci5980",
+            "id": "csci5980", "courseArea": "NONE",
             "numCredits": "1-3"
             },
     {
             "name": "Independent Study",
-            "id": "csci5991",
+            "id": "csci5991", "courseArea": "NONE",
             "numCredits": "1-3"
             },
     {
             "name": "Directed Research",
-            "id": "csci5994",
+            "id": "csci5994", "courseArea": "NONE",
             "numCredits": "1-3"
             },
     {
             "name": "Cirricular Practical Training",
-            "id": "csci5996",
+            "id": "csci5996", "courseArea": "NONE",
             "numCredits": "1"
             },
     {
             "name": "Introduction to Research in Computer Science I",
-            "id": "csci8001",
+            "id": "csci8001", "courseArea": "NONE",
             "numCredits": "1"
             },
     {
             "name": "Introduction to Research in Computer Science II",
-            "id": "csci8002",
+            "id": "csci8002", "courseArea": "NONE",
             "numCredits": "2"
             },
     {
             "name": "Advanced Operating Systems",
-            "id": "csci8101",
+            "id": "csci8101", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Foundations of Distributed Computing",
-            "id": "csci8102",
+            "id": "csci8102", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Understanding the Social Web",
-            "id": "csci8117",
+            "id": "csci8117", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Advanced Compiler Techniques",
-            "id": "csci8161",
+            "id": "csci8161", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Parallel Computer Organization",
-            "id": "csci8205",
+            "id": "csci8205", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Advanced Computer Networks and Their Applications",
-            "id": "csci8211",
+            "id": "csci8211", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Security and Privacy in Computing",
-            "id": "csci8271",
+            "id": "csci8271", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Sparse Matrix Computations",
-            "id": "csci8314",
+            "id": "csci8314", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "FTE: Masters",
-            "id": "csci8333",
+            "id": "csci8333", "courseArea": "NONE",
             "numCredits": "1"
             },
     {
             "name": "Numerical Linear Algebra in Data Exploration",
-            "id": "csci8363",
+            "id": "csci8363", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Computational Geometry and Applications",
-            "id": "csci8442",
+            "id": "csci8442", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "FTE: Doctoral",
-            "id": "csci8444",
+            "id": "csci8444", "courseArea": "NONE",
             "numCredits": "1"
             },
     {
             "name": "Intelligent Agents",
-            "id": "csci8551",
+            "id": "csci8551", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Doctoral Pre-Thesis Credits",
-            "id": "csci8666",
+            "id": "csci8666", "courseArea": "NONE",
             "numCredits": "1-6"
             },
     {
             "name": "Overview of Database Research",
-            "id": "csci8701",
+            "id": "csci8701", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Spatial Databases and Applications",
-            "id": "csci8715",
+            "id": "csci8715", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Databases for Bioinformatics",
-            "id": "csci8715",
+            "id": "csci8715", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Advanced Database Systems",
-            "id": "csci8735",
+            "id": "csci8735", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Plan B Project",
-            "id": "csci8760",
+            "id": "csci8760", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Thesis Credit: Masters",
-            "id": "csci8777",
+            "id": "csci8777", "courseArea": "NONE",
             "numCredits": "1-18"
             },
     {
             "name": "Advanced Software Engineering",
-            "id": "csci8801",
+            "id": "csci8801", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Thesis Credit: Doctoral",
-            "id": "csci8888",
+            "id": "csci8888", "courseArea": "NONE",
             "numCredits": "1-24"
             },
     {
             "name": "Computer Science Colloquium",
-            "id": "csci8970",
+            "id": "csci8970", "courseArea": "NONE",
             "numCredits": "1"
             },
     {
             "name": "Special Advanced Topics in Computer Science",
-            "id": "csci8980",
+            "id": "csci8980", "courseArea": "NONE",
             "numCredits": "3"
             },
     {
             "name": "Independent Study",
-            "id": "csci8991",
+            "id": "csci8991", "courseArea": "NONE",
             "numCredits": "1-3"
             },
     {
             "name": "Directed Research in Computer Science",
-            "id": "csci8994",
+            "id": "csci8994", "courseArea": "NONE",
             "numCredits": "1-3"
     }
 ]
