@@ -82,5 +82,6 @@ public class ProgressSummary {
             List<RequirementCheckResult> requirementCheckResults) {
         this.requirementCheckResults = requirementCheckResults;
     }
+    
 
 }

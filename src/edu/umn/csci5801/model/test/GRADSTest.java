@@ -114,6 +114,7 @@ public class GRADSTest extends TestCase {
     @Before
     public void beforeEachTest(){
     	tempStudentDatabase.updateStudentRecords(originalRecords);
+    	
     }
 
     
@@ -353,7 +354,60 @@ public class GRADSTest extends TestCase {
      * persistently applied.
      */
     @Test
-    public void testSubmittingHypotheticalCourseCompletions() {
+    public void testSubmittingHypotheticalCourseCompletions() throws Exception{
+        tempg.setUser("0000002");
+        
+        List<CourseTaken> c = new ArrayList<CourseTaken>();
+        c.add(new CourseTaken(new Course("Computer Science Colloquium", "csci8970", "1", CourseArea.NONE), new Term(Semester.FALL, 2010), Grade.S));
+        
+        /*
+         * "name": "Computer Science Colloquium",
+            "id": "csci8970", "courseArea": "NONE",
+            "numCredits": "1"
+         */
+        
+        //Add this to Missy Whatsit. She should have colloquial problems.
+        ProgressSummary psSim, psBefore;
+        
+        ArrayList<String> psErrorsBefore = new ArrayList<String>();
+        
+        psBefore = tempg.generateProgressSummary("0000100");
+        for(RequirementCheckResult req : psBefore.getRequirementCheckResults()){
+    		if(req.getErrorMsgs() != null && !req.getErrorMsgs().isEmpty()){
+    			//Accumulate all results from lists
+    			psErrorsBefore.addAll(req.getErrorMsgs());
+    		}
+    	}
+        
+        assertTrue("psErrorsBefore does not contain colloquium error.", psErrorsBefore.contains("csci8970 has not been taken or has a passing grade"));
+        
+        psSim = tempg.simulateCourses("0030000", c);
+        
+        
+        for(RequirementCheckResult req : psSim.getRequirementCheckResults()){
+    		if(req.getErrorMsgs() != null && !req.getErrorMsgs().isEmpty()){
+    			//Search all lists for colloquium error.
+    			if(req.getErrorMsgs().contains("csci8970 has not been taken or has a passing grade")){
+    				fail("The simulation did not produce a summary with a completed colloquium.");
+    			}
+    		}
+    	}
+        
+        ProgressSummary psAfter;
+        ArrayList<String> psErrorsAfter = new ArrayList<String>();
+        
+        psAfter = tempg.generateProgressSummary("0030000");
+        for(RequirementCheckResult req : psAfter.getRequirementCheckResults()){
+    		if(req.getErrorMsgs() != null && !req.getErrorMsgs().isEmpty()){
+    			//Accumulate all results from lists
+    			psErrorsAfter.addAll(req.getErrorMsgs());
+    		}
+    	}
+                
+        while(!psErrorsAfter.isEmpty()){
+        	assertTrue("Unable to find error message: "+psErrorsAfter.get(0), psErrorsBefore.remove(psErrorsAfter.get(0)));
+        	psErrorsAfter.remove(0);        	
+        }
         
     }
     
