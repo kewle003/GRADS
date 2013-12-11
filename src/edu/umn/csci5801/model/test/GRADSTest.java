@@ -223,7 +223,7 @@ public class GRADSTest extends TestCase {
      */
     @Test
     public void testStudentSummaryProvision() throws Exception {
-       /* g.setUser("0000002");
+        g.setUser("0000002");
         ProgressSummary summary = g.generateProgressSummary("0030000");
         assertEquals(albertsProgressSummary.getStudent(), summary.getStudent());
         assertEquals(albertsProgressSummary.getDepartment(), summary.getDepartment());
@@ -232,12 +232,10 @@ public class GRADSTest extends TestCase {
         assertEquals(albertsProgressSummary.getCommittee(), summary.getCommittee());
         assertEquals(albertsProgressSummary.getNotes(), summary.getNotes());
         assertEquals(albertsProgressSummary.getTermBegan(), summary.getTermBegan());
-        */
         //assertEquals(albertsProgressSummary, summary);
         //g.setUser("0030000");
         //summary = g.generateProgressSummary("0030000");
         //assertEquals(albertsProgressSummary, summary);
-      
     }
     
     /**
@@ -249,7 +247,7 @@ public class GRADSTest extends TestCase {
      */
     @Test
     public void testRequirementsDisplay() {
-        
+        fail("Is this a thing, and if so, where?!");
     }
     
     /**
@@ -257,8 +255,21 @@ public class GRADSTest extends TestCase {
      * receive a list of courses completed by a student from the system.
      */
     @Test
-    public void testCompletedCoursesDisplay() {
+    public void testCompletedCoursesDisplay() throws Exception {
+        g.setUser("0000002");
+        StudentRecord sr = g.getTranscript("0010000");
         
+        printStudentRecord(sr);
+        
+        List<CourseTaken> courseList = sr.getCoursesTaken();
+        List<String> courseNames = new ArrayList<String>();
+        for(CourseTaken c : courseList){
+        	courseNames.add(c.getCourse().getId());
+        }
+        
+        assertTrue(courseNames.size() == 2);
+        assertTrue(courseNames.contains("csci5103"));
+        assertTrue(courseNames.contains("csci5115"));
     }
     
     /**
@@ -269,7 +280,7 @@ public class GRADSTest extends TestCase {
     //TODO: There might be no need for this anymore since we have S,N,_ considered in calculation
     @Test
     public void testGPACalculationFaultyData() {
-        
+        fail("Not implemented.");
     }
     
     /**
@@ -279,17 +290,18 @@ public class GRADSTest extends TestCase {
      */
     @Test
     public void testGPACalculation() {
-        
+        fail("Not implemented. Furthermore, can we even test this? Needs transparency.");
     }
     
-    /**
-     * This test makes sure that we retrieve the 
-     * expected information for several student summaries.
-     */
-    @Test
-    public void testRetrievingRelevantInformation() {
-        
-    }
+    //We're doing this. C'mon now.
+//    /**
+//     * This test makes sure that we retrieve the 
+//     * expected information for several student summaries.
+//     */
+//    @Test
+//    public void testRetrievingRelevantInformation() {
+//        
+//    }
     
     /**
      * The purpose of this test is to ensure 
@@ -297,8 +309,14 @@ public class GRADSTest extends TestCase {
      * summaries by a GPC. 
      */
     @Test
-    public void testNoteRetrieval() {
+    public void testNoteRetrieval() throws Exception{
+        g.setUser("0000002");
         
+        ProgressSummary ps = g.generateProgressSummary("0000010");
+        List<String> notes = ps.getNotes();
+        assertTrue(notes.size() == 2);
+        assertTrue(notes.contains("note1"));
+        assertTrue(notes.contains("note2"));
     }
     
     /**
@@ -396,14 +414,18 @@ public class GRADSTest extends TestCase {
         ProgressSummary psAfter;
         ArrayList<String> psErrorsAfter = new ArrayList<String>();
         
-        psAfter = tempg.generateProgressSummary("0030000");
+        psAfter = tempg.generateProgressSummary("0000100");
         for(RequirementCheckResult req : psAfter.getRequirementCheckResults()){
     		if(req.getErrorMsgs() != null && !req.getErrorMsgs().isEmpty()){
     			//Accumulate all results from lists
     			psErrorsAfter.addAll(req.getErrorMsgs());
     		}
     	}
-                
+        
+        System.out.println(psBefore);
+        
+        assertEquals(psBefore.toString(), psAfter.toString());
+        
         while(!psErrorsAfter.isEmpty()){
         	assertTrue("Unable to find error message: "+psErrorsAfter.get(0), psErrorsBefore.remove(psErrorsAfter.get(0)));
         	psErrorsAfter.remove(0);        	
@@ -411,23 +433,6 @@ public class GRADSTest extends TestCase {
         
     }
     
-    /**
-     * The purpose of the Test Case is to check that when a 
-     * GPC makes a change to a student record the student 
-     * record will reflect this change.
-     */
-    //TODO: This might not be a necessary test anymore
-    @Test
-    public void testAmendingStudentRecord() {
-        try {
-            //Set Kate Murry
-           // tempg.setUser("0000002");
-            
-            //Reset the database
-           // tempStudentDatabase.updateStudentRecords(originalRecords);
-        } catch (Exception e) {
-        }       
-    }
     
     /**
      * This test will verify that we can attach 
@@ -865,5 +870,48 @@ public class GRADSTest extends TestCase {
         }
     }
     
+    
+    
+    //HELPERS
+    
+    private void printStudentRecord(StudentRecord sr){
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("Student Record of: ");
+    	sb.append(sr.getStudent().getFirstName()+" "+sr.getStudent().getLastName());
+    	sb.append("\n\n");
+    	sb.append("Department: "+sr.getDepartment().name());
+    	sb.append("\n");
+    	sb.append("Degree Sought: "+sr.getDegreeSought().name());
+    	sb.append("\n");
+    	sb.append("Enrolled: "+sr.getTermBegan().getSemester().name() + " "+sr.getTermBegan().getYear());
+    	sb.append("\n");
+    	sb.append("Advisors:");
+    	for(Professor p : sr.getAdvisors()){
+    		sb.append(" "); sb.append(p.getFirstName()); sb.append(" "); sb.append(p.getLastName()); sb.append(",");
+    	}
+    	sb.deleteCharAt(sb.length()-1); sb.append("\n");
+    	sb.append("Committee:");
+    	for(Professor p : sr.getCommittee()){
+    		sb.append(" "); sb.append(p.getFirstName()); sb.append(" "); sb.append(p.getLastName()); sb.append(",");
+    	}
+    	sb.deleteCharAt(sb.length()-1); sb.append("\n");
+    	sb.append("Courses:");
+    	for(CourseTaken c : sr.getCoursesTaken()){
+    		sb.append(" "); sb.append(c.getCourse().getId());
+    	}
+    	sb.append("\n");
+    	sb.append("Milestones:");
+    	for(MilestoneSet ms : sr.getMilestonesSet()){
+    		sb.append(" "); sb.append(ms.getMilestone().name());
+    	}
+    	sb.append("\n");
+    	sb.append("Notes:\n");
+    	for(String n : sr.getNotes()){
+    		sb.append("  "); sb.append(n); sb.append("\n");
+    	}
+    	sb.append("------ END ------");
+    	
+    	System.out.println(sb);
+    }
     
 }

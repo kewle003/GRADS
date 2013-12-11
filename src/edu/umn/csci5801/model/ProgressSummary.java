@@ -83,5 +83,45 @@ public class ProgressSummary {
         this.requirementCheckResults = requirementCheckResults;
     }
     
+    @Override
+    public String toString(){
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("Progress Summary of: ");
+    	sb.append(student.getFirstName()+" "+student.getLastName());
+    	sb.append("\n\n");
+    	sb.append("Department: "+department.name());
+    	sb.append("\n");
+    	sb.append("Degree Sought: "+degreeSought.name());
+    	sb.append("\n");
+    	sb.append("Enrolled: "+termBegan.getSemester().name() + " "+termBegan.getYear());
+    	sb.append("\n");
+    	sb.append("Advisors:");
+    	for(Professor p : advisors){
+    		sb.append(" "); sb.append(p.getFirstName()); sb.append(" "); sb.append(p.getLastName()); sb.append(",");
+    	}
+    	sb.deleteCharAt(sb.length()-1); sb.append("\n");
+    	sb.append("Committee:");
+    	for(Professor p : committee){
+    		sb.append(" "); sb.append(p.getFirstName()); sb.append(" "); sb.append(p.getLastName()); sb.append(",");
+    	}
+    	sb.deleteCharAt(sb.length()-1); sb.append("\n");
+    	sb.append("Remaining Requirements:\n");
+    	for(RequirementCheckResult req : requirementCheckResults){
+    		if(req.getErrorMsgs() != null){
+    			for(String err : req.getErrorMsgs()){
+    				sb.append(err); sb.append("\n");
+    			}
+    		}
+    	}
+    	sb.append("\n");
+    	sb.append("Notes:\n");
+    	for(String n : notes){
+    		sb.append("  "); sb.append(n); sb.append("\n");
+    	}
+    	sb.append("------ END ------");
+    	
+    	return sb.toString();
+    }
+    
 
 }
