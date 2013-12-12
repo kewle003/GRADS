@@ -56,7 +56,7 @@ public class GRADSTest extends TestCase {
         albertsProgressSummary = new ProgressSummary();
         albertsStudentRecord = new StudentRecord();
         
-        //Set up albertsStudentRecord, just follow the envStudentRecord.txt to set up your own
+        //Set up Albert's Student Record
         albertsStudentRecord.setStudent(new Student("Albert", "Einstein", "0030000"));
         albertsStudentRecord.setDepartment(Department.COMPUTER_SCIENCE);
         albertsStudentRecord.setDegreeSought(Degree.MS_B);
@@ -98,7 +98,7 @@ public class GRADSTest extends TestCase {
         albertsNotes.add("note1");
         albertsStudentRecord.setNotes(albertsNotes);
         
-        //TODO: Finish setting up albert's progress summary
+        //Setup parts of Albert's Progress Summary
         albertsProgressSummary.setStudent(albertsStudentRecord.getStudent());
         albertsProgressSummary.setDepartment(albertsStudentRecord.getDepartment());
         albertsProgressSummary.setDegreeSought(albertsStudentRecord.getDegreeSought());

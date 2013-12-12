@@ -9,19 +9,8 @@ package edu.umn.csci5801.model.exception;
 @SuppressWarnings("serial")
 public class InvalidCourseException extends Exception {
     
-    public InvalidCourseException() {
-        super();
-    }
-    
     public InvalidCourseException(String message) {
         super(message);
     }
     
-    public InvalidCourseException(String message, Throwable cause) {
-        super(message, cause);
-    }
-    
-    public InvalidCourseException(Throwable cause) {
-        super(cause);
-    }
 }

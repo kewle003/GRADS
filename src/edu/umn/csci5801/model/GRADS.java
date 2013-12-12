@@ -25,7 +25,6 @@ public class GRADS implements GRADSIntf {
     private Person currentUser;
     private ProgressSummaryBuilder builder;
     
-    //TODO: Add these to our design document
     private HashMap<String, Course> courses;
     private Database studentRecordDatabase;
     private Database userDatabase;
@@ -153,8 +152,6 @@ public class GRADS implements GRADSIntf {
 
     }
 
-    //TODO: Should just return a copy so user does not
-    //directly affect the underlying StudentRecord
     @Override
     public StudentRecord getTranscript(String userId) throws Exception {
         if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
@@ -162,15 +159,6 @@ public class GRADS implements GRADSIntf {
                 if (studentRecords.get(userId).getDepartment().equals(Department.COMPUTER_SCIENCE)) {
                     StudentRecord record = studentRecords.get(userId);
                     StudentRecord recordToReturn = record.clone();
-//                    recordToReturn.setAdvisors(record.getAdvisors());
-//                    recordToReturn.setCommittee(record.getCommittee());
-//                    recordToReturn.setCoursesTaken(record.getCoursesTaken());
-//                    recordToReturn.setDegreeSought(record.getDegreeSought());
-//                    recordToReturn.setDepartment(record.getDepartment());
-//                    recordToReturn.setMilestonesSet(record.getMilestonesSet());
-//                    recordToReturn.setNotes(record.getNotes());
-//                    recordToReturn.setStudent(record.getStudent());
-//                    recordToReturn.setTermBegan(record.getTermBegan());
                     return recordToReturn;
                 } else {
                     throw new InvalidUserAccessException("You do not have permission to access a student outside your deparment");
@@ -315,7 +303,6 @@ public class GRADS implements GRADSIntf {
      * by GRADS for implementation purposes.
      * @param records - a list of StudentRecord objects
      */
-    //TODO: Add to design
     private void cleanForDatabaseUpdate(List<StudentRecord> records) {
         for (StudentRecord record : records) {
             for (CourseTaken course : record.getCoursesTaken()) {
@@ -358,7 +345,6 @@ public class GRADS implements GRADSIntf {
      * in a student record
      * @param records - a list of StudentRecord objects
      */
-    //TODO: Add to design
     private void setStudentRecordDefaults(List<StudentRecord> records) {
         for (StudentRecord record : records) {
             if (record.getCoursesTaken() == null) {
@@ -425,7 +411,6 @@ public class GRADS implements GRADSIntf {
      * @param listOfCourses - the List<Course> to be verified by GRADS
      * @throws Exception - InvalidCourseException
      */
-    //TODO: Add this to our design...Maybe
     private void validateCSCourses(List<CourseTaken> listOfCourses) throws Exception {
         Iterator<CourseTaken> courseIterator = listOfCourses.iterator();
         while (courseIterator.hasNext()) {
