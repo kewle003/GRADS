@@ -15,7 +15,7 @@ import edu.umn.csci5801.model.Degree;
 import edu.umn.csci5801.model.Department;
 import edu.umn.csci5801.model.GRADS;
 import edu.umn.csci5801.model.Grade;
-import edu.umn.csci5801.model.JSONHandler;
+import edu.umn.csci5801.model.Database;
 import edu.umn.csci5801.model.Milestone;
 import edu.umn.csci5801.model.MilestoneSet;
 import edu.umn.csci5801.model.Professor;
@@ -37,7 +37,7 @@ public class GRADSTest extends TestCase {
     private GRADS g;
     private GRADS tempg;
     private List<StudentRecord> originalRecords;
-    private JSONHandler tempStudentDatabase;
+    private Database tempStudentDatabase;
     private ProgressSummary albertsProgressSummary;
     private StudentRecord albertsStudentRecord;
     
@@ -45,7 +45,7 @@ public class GRADSTest extends TestCase {
     
     @Override
     public void setUp() {
-        tempStudentDatabase = new JSONHandler(GRADS_DIR+"/src/resources/tempStudents.txt");
+        tempStudentDatabase = new Database(GRADS_DIR+"/src/resources/tempStudents.txt");
         g = new GRADS(GRADS_DIR+"/src/resources/envStudentRecords.txt", GRADS_DIR+"/src/resources/courses.txt", GRADS_DIR+"/src/resources/envUsers.txt");
         tempg = new GRADS(GRADS_DIR+"/src/resources/tempStudents.txt", GRADS_DIR+"/src/resources/courses.txt", GRADS_DIR+"/src/resources/envUsers.txt");
         try {

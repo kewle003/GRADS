@@ -27,9 +27,9 @@ public class GRADS implements GRADSIntf {
     
     //TODO: Add these to our design document
     private HashMap<String, Course> courses;
-    private JSONHandler studentRecordDatabase;
-    private JSONHandler userDatabase;
-    private JSONHandler courseDatabase;
+    private Database studentRecordDatabase;
+    private Database userDatabase;
+    private Database courseDatabase;
     private String userDatabaseFile;
     private String studentRecordFile;
     private String courseDatabaseFile;
@@ -57,9 +57,9 @@ public class GRADS implements GRADSIntf {
         List<Person> users = new ArrayList<Person>();
         List<StudentRecord> records = new ArrayList<StudentRecord>();
         List<Course> coursesInDatabase = new ArrayList<Course>();
-        this.studentRecordDatabase = new JSONHandler(studentRecordFile);
-        this.userDatabase = new JSONHandler(userDatabaseFile);
-        this.courseDatabase = new JSONHandler(courseDatabaseFile);
+        this.studentRecordDatabase = new Database(studentRecordFile);
+        this.userDatabase = new Database(userDatabaseFile);
+        this.courseDatabase = new Database(courseDatabaseFile);
         this.students = new HashMap<String, Student>();
         this.studentRecords = new HashMap<String, StudentRecord>();
         this.gpcs = new HashMap<String, GPC>();

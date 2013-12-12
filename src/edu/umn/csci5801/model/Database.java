@@ -25,13 +25,13 @@ import edu.umn.csci5801.model.exception.NoDataFoundException;
  * @author mark
  * 
  */
-public class JSONHandler {
+public class Database {
     private String filename;
 
     /**
      * @param filename - the location of the JSON file we wish to read
      */
-    public JSONHandler(String filename) {
+    public Database(String filename) {
         this.filename = filename;
     }
 
