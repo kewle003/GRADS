@@ -183,7 +183,7 @@ public class ProgressSummaryBuilder {
                 CheckResultDetails details = new CheckResultDetails();
                 List<CourseTaken> courses = new ArrayList<CourseTaken>();
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
-                    if ( course.getCourse().getId().equals("csci8777") && isPassingGrade(course.getGrade()) && isAFGrade(course.getGrade()) ) {
+                    if ( course.getCourse().getId().equals("csci8777") && isPassingGrade(course.getGrade()) ) {
                         credits += Integer.parseInt(course.getCourse().getNumCredits());
                         courses.add(course);
                     }
