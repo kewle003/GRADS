@@ -44,28 +44,4 @@ public class UserData {
         return role;
     }
 
-    // TODO:???
-    @Override
-    public int hashCode() {
-        int result = user.hashCode();
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        UserData other = (UserData) obj;
-        if (user == null) {
-            if (other.getUser() != null)
-                return false;
-        } else if (!other.getUser().equals(user))
-            return false;
-        return true;
-
-    }
 }

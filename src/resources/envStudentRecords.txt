@@ -733,6 +733,15 @@
   },
   {
     "student": {
+      "id": "1010000",
+      "firstName": "Degree",
+      "lastName": "Much"
+    },
+    "department": "COMPUTER_SCIENCE",
+    "degreeSought": "MS_D"
+  },
+  {
+    "student": {
       "id": "0000020",
       "firstName": "Alice",
       "lastName": "Babbage"
@@ -961,6 +970,7 @@
     "department": "COMPUTER_SCIENCE",
     "degreeSought": "PHD",
     "termBegan": {
+      "semester": "SPRING",
       "year": 2013
     },
     "advisors": [
