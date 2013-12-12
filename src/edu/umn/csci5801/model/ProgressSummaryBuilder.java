@@ -51,6 +51,47 @@ public class ProgressSummaryBuilder {
         this.requirements.add(requirement);
     }
     
+    /**
+     * Used to make OVERALL_GPA_*, IN_PROGRAM_GPA_*
+     * @param minGPA minimum GPA required for graduation
+     * @param name name of requirement
+     * @param csonly if true, will only include courses in CS
+     * @return the RequirementCheckResult
+     */
+    private static Requirement makeComprehensiveGPARequirement(final double minGPA, String name, final boolean csonly) {
+        return new GPARequirement(name) {
+            @Override
+            public RequirementCheckResult metBy(StudentRecord studentRecord) {
+                RequirementCheckResult result = new RequirementCheckResult(this.getName());
+                CheckResultDetails details = new CheckResultDetails();
+                List<CourseTaken> courses = new ArrayList<CourseTaken>();
+                List<String> errorMsgs = new ArrayList<String>();
+                
+                for (CourseTaken course: studentRecord.getCoursesTaken()) {
+                    if ( course.getCourse().getId().matches(".*[5-8][0-9][0-9][0-9]") ) {
+                        if ( !csonly || course.getCourse().getId().matches("csci.*") ) {
+                            courses.add(course);
+                        }
+                    }
+                }
+                
+                double calculatedGPA = calculateGPA(courses);
+                details.setGPA((float) calculatedGPA);
+                details.setCourses(courses);
+                
+                result.setDetails(details);
+                boolean passed = calculatedGPA >= minGPA;
+                result.setPassed(passed);
+                if ( !passed ) {
+                    errorMsgs.add("GPA is less than required GPA");
+                }
+                result.setErrorMsgs(errorMsgs);
+                
+                return result;
+            }            
+        };
+    }
+    
     // This function initializes and thus defines the requirements for each program
     // In order to change graduation requirements, changes must be made here.
     private void initializePrograms() {
@@ -155,57 +196,6 @@ public class ProgressSummaryBuilder {
         programMSB.addRequirement(colloquiumRequirement);
         programMSC.addRequirement(colloquiumRequirement);
         programPHD.addRequirement(colloquiumRequirement);
-        
-        // MILESTONE REQUIREMENTS
-        Milestone[] phdMilestones = {
-                Milestone.PRELIM_COMMITTEE_APPOINTED,
-                Milestone.WRITTEN_PE_SUBMITTED,
-                Milestone.WRITTEN_PE_APPROVED,
-                Milestone.ORAL_PE_PASSED,
-                Milestone.DPF_SUBMITTED,
-                Milestone.DPF_APPROVED,
-                Milestone.THESIS_COMMITTEE_APPOINTED,
-                Milestone.PROPOSAL_PASSED,
-                Milestone.GRADUATION_PACKET_REQUESTED,
-                Milestone.THESIS_SUBMITTED,
-                Milestone.THESIS_APPROVED,
-                Milestone.DEFENSE_PASSED
-                };
-        Milestone[] msaMilestones = {
-                Milestone.DPF_SUBMITTED,
-                Milestone.DPF_APPROVED,
-                Milestone.THESIS_COMMITTEE_APPOINTED,
-                Milestone.GRADUATION_PACKET_REQUESTED,
-                Milestone.THESIS_SUBMITTED,
-                Milestone.THESIS_APPROVED,
-                Milestone.DEFENSE_PASSED
-                };
-        Milestone[] msbMilestones = {
-                Milestone.DPF_SUBMITTED,
-                Milestone.DPF_APPROVED,
-                Milestone.PROJECT_COMMITTEE_APPOINTED,
-                Milestone.GRADUATION_PACKET_REQUESTED,
-                Milestone.DEFENSE_PASSED
-                };
-        Milestone[] mscMilestones = {
-                Milestone.DPF_SUBMITTED,
-                Milestone.DPF_APPROVED,
-                Milestone.TRACKING_FORM_SUBMITTED,
-                Milestone.TRACKING_FORM_APPROVED,
-                Milestone.GRADUATION_PACKET_REQUESTED
-                };
-        for (Milestone milestone: msaMilestones) {
-            programMSA.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
-        }
-        for (Milestone milestone: msbMilestones) {
-            programMSB.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
-        }
-        for (Milestone milestone: mscMilestones) {
-            programMSC.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
-        }
-        for (Milestone milestone: phdMilestones) {
-            programPHD.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
-        }
         
         // PHD OUT_OF_DEPARTMENT
         programPHD.addRequirement(new CourseRequirement("OUT_OF_DEPARTMENT") {
@@ -412,6 +402,69 @@ public class ProgressSummaryBuilder {
             }            
         };
         programMSC.addRequirement(phdLevelCoursesPlanC);
+        
+        // OTHER GPA Requirements
+        programPHD.addRequirement(makeComprehensiveGPARequirement(3.45, "OVERALL_GPA_PHD", false));
+        programPHD.addRequirement(makeComprehensiveGPARequirement(3.45, "IN_PROGRAM_GPA_PHD", true));
+        Requirement msOverallGPARequirement = makeComprehensiveGPARequirement(3.25, "OVERALL_GPA_MS", false);
+        Requirement msInProgramGPARequirement = makeComprehensiveGPARequirement(3.25, "IN_PROGRAM_GPA_MS", true);
+        programMSA.addRequirement(msOverallGPARequirement);
+        programMSA.addRequirement(msInProgramGPARequirement);
+        programMSB.addRequirement(msOverallGPARequirement);
+        programMSB.addRequirement(msInProgramGPARequirement);
+        programMSC.addRequirement(msOverallGPARequirement);
+        programMSC.addRequirement(msInProgramGPARequirement);
+        
+        // MILESTONE REQUIREMENTS
+        Milestone[] phdMilestones = {
+                Milestone.PRELIM_COMMITTEE_APPOINTED,
+                Milestone.WRITTEN_PE_SUBMITTED,
+                Milestone.WRITTEN_PE_APPROVED,
+                Milestone.ORAL_PE_PASSED,
+                Milestone.DPF_SUBMITTED,
+                Milestone.DPF_APPROVED,
+                Milestone.THESIS_COMMITTEE_APPOINTED,
+                Milestone.PROPOSAL_PASSED,
+                Milestone.GRADUATION_PACKET_REQUESTED,
+                Milestone.THESIS_SUBMITTED,
+                Milestone.THESIS_APPROVED,
+                Milestone.DEFENSE_PASSED
+                };
+        Milestone[] msaMilestones = {
+                Milestone.DPF_SUBMITTED,
+                Milestone.DPF_APPROVED,
+                Milestone.THESIS_COMMITTEE_APPOINTED,
+                Milestone.GRADUATION_PACKET_REQUESTED,
+                Milestone.THESIS_SUBMITTED,
+                Milestone.THESIS_APPROVED,
+                Milestone.DEFENSE_PASSED
+                };
+        Milestone[] msbMilestones = {
+                Milestone.DPF_SUBMITTED,
+                Milestone.DPF_APPROVED,
+                Milestone.PROJECT_COMMITTEE_APPOINTED,
+                Milestone.GRADUATION_PACKET_REQUESTED,
+                Milestone.DEFENSE_PASSED
+                };
+        Milestone[] mscMilestones = {
+                Milestone.DPF_SUBMITTED,
+                Milestone.DPF_APPROVED,
+                Milestone.TRACKING_FORM_SUBMITTED,
+                Milestone.TRACKING_FORM_APPROVED,
+                Milestone.GRADUATION_PACKET_REQUESTED
+                };
+        for (Milestone milestone: msaMilestones) {
+            programMSA.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
+        }
+        for (Milestone milestone: msbMilestones) {
+            programMSB.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
+        }
+        for (Milestone milestone: mscMilestones) {
+            programMSC.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
+        }
+        for (Milestone milestone: phdMilestones) {
+            programPHD.addRequirement(new MilestoneRequirement(milestone.name(), milestone));
+        }
         
         // Finally put programs into the programs HashMap
         programs.put(Degree.MS_A, programMSA);
