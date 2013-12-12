@@ -41,7 +41,7 @@ public class GRADSTest extends TestCase {
     private ProgressSummary albertsProgressSummary;
     private StudentRecord albertsStudentRecord;
     
-    private static final String GRADS_DIR = "/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS"; // parent of src, does not end in "/" e.g. /root/files/GRADS
+    private static final String GRADS_DIR = "/Users/mark/Documents/workspace/GRADS_Materials"; // parent of src, does not end in "/" e.g. /root/files/GRADS
     
     @Override
     public void setUp() {

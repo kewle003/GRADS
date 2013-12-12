@@ -14,30 +14,12 @@ public class UserData {
     public UserData() {
     }
 
-    public UserData(User user, Department department, Role role) {
-        this.user = user;
-        this.department = department;
-        this.role = role;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public User getUser() {
         return user;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
     public Department getDepartment() {
         return department;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public Role getRole() {
