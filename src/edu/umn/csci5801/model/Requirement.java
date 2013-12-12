@@ -3,6 +3,10 @@ package edu.umn.csci5801.model;
 public abstract class Requirement {
     private String name;
     
+    /**
+     * Construct a new instance, setting the name
+     * @param name
+     */
     public Requirement(String name) {
         this.name = name;
     }
