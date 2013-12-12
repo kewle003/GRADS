@@ -161,16 +161,16 @@ public class GRADS implements GRADSIntf {
             if (studentRecords.containsKey(userId)) {
                 if (studentRecords.get(userId).getDepartment().equals(Department.COMPUTER_SCIENCE)) {
                     StudentRecord record = studentRecords.get(userId);
-                    StudentRecord recordToReturn = new StudentRecord();
-                    recordToReturn.setAdvisors(record.getAdvisors());
-                    recordToReturn.setCommittee(record.getCommittee());
-                    recordToReturn.setCoursesTaken(record.getCoursesTaken());
-                    recordToReturn.setDegreeSought(record.getDegreeSought());
-                    recordToReturn.setDepartment(record.getDepartment());
-                    recordToReturn.setMilestonesSet(record.getMilestonesSet());
-                    recordToReturn.setNotes(record.getNotes());
-                    recordToReturn.setStudent(record.getStudent());
-                    recordToReturn.setTermBegan(record.getTermBegan());
+                    StudentRecord recordToReturn = record.clone();
+//                    recordToReturn.setAdvisors(record.getAdvisors());
+//                    recordToReturn.setCommittee(record.getCommittee());
+//                    recordToReturn.setCoursesTaken(record.getCoursesTaken());
+//                    recordToReturn.setDegreeSought(record.getDegreeSought());
+//                    recordToReturn.setDepartment(record.getDepartment());
+//                    recordToReturn.setMilestonesSet(record.getMilestonesSet());
+//                    recordToReturn.setNotes(record.getNotes());
+//                    recordToReturn.setStudent(record.getStudent());
+//                    recordToReturn.setTermBegan(record.getTermBegan());
                     return recordToReturn;
                 } else {
                     throw new InvalidUserAccessException("You do not have permission to access a student outside your deparment");
@@ -183,8 +183,6 @@ public class GRADS implements GRADSIntf {
         }
     }
 
-    //TODO: Greg says we only have to worry about a GPC changing a studentId
-    //The validateCSCourses() method may not be necessary
     @Override
     public void updateTranscript(String userId, StudentRecord transcript)
             throws Exception {
@@ -262,6 +260,7 @@ public class GRADS implements GRADSIntf {
             throw new InvalidDataException("null userId given!");
         }
     }
+    
 
     @Override
     public ProgressSummary simulateCourses(String userId,
@@ -274,9 +273,8 @@ public class GRADS implements GRADSIntf {
                     if (!studentRecords.get(userId).getDepartment().equals(Department.COMPUTER_SCIENCE)) {
                         throw new InvalidUserAccessException("You do not have permission to access a student outside your deparment");
                     }
-                    //TODO: This directly affects the StudentRecord of the student
-                    //POTENTIAL FIX: Save the original CourseTaken list
-                    StudentRecord recordCopy = studentRecords.get(userId);
+
+                    StudentRecord recordCopy = getTranscript(userId);
                     List<CourseTaken> originalCourses = recordCopy.getCoursesTaken();              
                     Iterator<CourseTaken> newCoursesIterator = courses.iterator();
                     //Add the new courses to the list of already completed courses

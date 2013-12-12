@@ -1,8 +1,9 @@
 package edu.umn.csci5801.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class StudentRecord {
+public class StudentRecord implements Cloneable{
     private Student student;
     private Department department;
     private Degree degreeSought;
@@ -154,6 +155,55 @@ public class StudentRecord {
         } else if (!termBegan.equals(other.termBegan))
             return false;
         return true;
+    }
+    
+    @Override
+    public StudentRecord clone(){
+        StudentRecord other = new StudentRecord();
+        other.setStudent(new Student(new String(this.student.getFirstName()), new String(this.student.getLastName()), this.student.getId()));
+        other.setDepartment(this.getDepartment());
+        other.setDegreeSought(this.getDegreeSought());
+        other.setTermBegan(new Term(this.getTermBegan().getSemester(), this.getTermBegan().getYear()));
+        //advisor list
+        List<Professor> advisors = new ArrayList<Professor>();
+        for(Professor p : this.getAdvisors()){
+            advisors.add(new Professor(new String(p.getFirstName()), new String(p.getLastName()), p.getDepartment()));
+        }
+        other.setAdvisors(advisors);
+        //committee list
+        List<Professor> committee = new ArrayList<Professor>();
+        for(Professor p : this.getCommittee()){
+            committee.add(new Professor(new String(p.getFirstName()), new String(p.getLastName()), p.getDepartment()));
+        }
+        other.setCommittee(committee);
+        //CourseTaken list
+        List<CourseTaken> courses = new ArrayList<CourseTaken>();
+        for(CourseTaken c : this.getCoursesTaken()){
+            Course actualClass = c.getCourse();
+            courses.add(new CourseTaken(
+               new Course(new String(actualClass.getName()), new String(actualClass.getId()), new String(actualClass.getNumCredits()), actualClass.getCourseArea()), 
+               new Term(c.getTerm().getSemester(), c.getTerm().getYear()),
+               c.getGrade()
+                    ));
+            
+        }
+        other.setCoursesTaken(courses);
+        //MilestoneSet list
+        List<MilestoneSet> milestones = new ArrayList<MilestoneSet>();
+        for(MilestoneSet m : this.getMilestonesSet()){
+            milestones.add(new MilestoneSet(m.getMilestone(), new Term(m.getTerm().getSemester(), m.getTerm().getYear())));
+        }
+        other.setMilestonesSet(milestones);
+        //Notes list
+        List<String> notes = new ArrayList<String>();
+            for(String n : this.getNotes()){
+                if(n!=null){
+                    notes.add(new String(n));
+                }
+            }
+        other.setNotes(notes);
+        
+        return other;
     }
 
 }

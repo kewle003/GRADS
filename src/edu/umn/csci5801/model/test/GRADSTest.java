@@ -247,17 +247,6 @@ public class GRADSTest extends TestCase {
         
     }
     
-    /**
-     * The purpose of the Test Case is to verify that 
-     * when a student id is requested with a particular 
-     * requirement area, their corresponding list of course 
-     * requirements will be returned depending on that
-     * particular student’s plan.
-     */
-    @Test
-    public void testRequirementsDisplay() {
-        fail("Is this a thing, and if so, where?!");
-    }
     
     /**
      * The purpose of the Test Case is to check that we 
@@ -281,27 +270,7 @@ public class GRADSTest extends TestCase {
         assertTrue(courseNames.contains("csci5115"));
     }
     
-    /**
-     * The purpose of this test case is to check that the 
-     * system will raise a warning when the calculated GPA 
-     * of the student record is invalid (i.e. contains grades not on the A-F scale).
-     */
-    //TODO: There might be no need for this anymore since we have S,N,_ considered in calculation
-    @Test
-    public void testGPACalculationFaultyData() {
-        fail("Not implemented.");
-    }
-    
-    /**
-     * The purpose of this test case is to check that 
-     * the GPA that is calculated from data in the student 
-     * record matches the GPA that shows up in the student summary.
-     */
-    @Test
-    public void testGPACalculation() {
-        fail("Not implemented. Furthermore, can we even test this? Needs transparency.");
-    }
-    
+
     /**
      * The purpose of this test case is to check that
      * when a student has not declared a major, an exception
@@ -318,15 +287,6 @@ public class GRADSTest extends TestCase {
         } catch (Exception e) {
         }
     }
-    //We're doing this. C'mon now.
-//    /**
-//     * This test makes sure that we retrieve the 
-//     * expected information for several student summaries.
-//     */
-//    @Test
-//    public void testRetrievingRelevantInformation() {
-//        
-//    }
     
     /**
      * The purpose of this test is to ensure 
@@ -424,8 +384,7 @@ public class GRADSTest extends TestCase {
         
         assertTrue("psErrorsBefore does not contain colloquium error.", psErrorsBefore.contains("csci8970 has not been taken or has a passing grade"));
         
-        psSim = tempg.simulateCourses("0030000", c);
-        
+        psSim = tempg.simulateCourses("0000100", c);
         
         for(RequirementCheckResult req : psSim.getRequirementCheckResults()){
     		if(req.getErrorMsgs() != null && !req.getErrorMsgs().isEmpty()){
