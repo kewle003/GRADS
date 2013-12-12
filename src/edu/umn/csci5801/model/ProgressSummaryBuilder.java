@@ -92,6 +92,44 @@ public class ProgressSummaryBuilder {
             }            
         };
     }
+
+    private static Requirement makeComprehensiveCreditRequirement(final int minTotalCredits, final int minCsciCredits, final boolean includeThesis, final boolean mustBeAF, String name) {
+        return new CourseRequirement(name) {
+            @Override
+            public RequirementCheckResult metBy(StudentRecord studentRecord) {
+                RequirementCheckResult result = new RequirementCheckResult(this.getName());
+                CheckResultDetails details = new CheckResultDetails();
+                List<CourseTaken> allCourses = new ArrayList<CourseTaken>();
+                List<CourseTaken> csciCourses = new ArrayList<CourseTaken>();
+                List<String> errorMsgs = new ArrayList<String>();
+                
+                for (CourseTaken course : studentRecord.getCoursesTaken()) {
+                    if ( includeThesis || !(course.getCourse().getId().equals("csci8888") || course.getCourse().getId().equals("8777")) ) {
+                        if ( !mustBeAF || isAFGrade(course.getGrade()) ) {
+                            allCourses.add(course);
+                            if ( inCSDepartment(course.getCourse()) && isGraduateLevel(course.getCourse()) ) {
+                                csciCourses.add(course);
+                            }
+                        }
+                    }
+                }
+                
+                details.setCourses(allCourses);
+                
+                result.setDetails(details);
+                if ( csciCourses.size() < minCsciCredits ) {
+                    errorMsgs.add("Not enough CSCI credits.");
+                }
+                if ( allCourses.size() < minTotalCredits ) {
+                    errorMsgs.add("Not enough total credits");
+                }
+                result.setPassed(errorMsgs.isEmpty());
+                result.setErrorMsgs(errorMsgs);
+                
+                return result;
+            }
+        };
+    }
     
     // This function initializes and thus defines the requirements for each program
     // In order to change graduation requirements, changes must be made here.
@@ -336,13 +374,16 @@ public class ProgressSummaryBuilder {
             }
         });
         
-        // PHD and MS Plan TOTAL_CREDITS
-        CourseRequirement totalCreditWOThesis = new TotalCreditRequirement("TOTAL_CREDITS", Degree.MS_A);
-        programMSA.addRequirement(totalCreditWOThesis);
-        CourseRequirement totalCreditWO16CS = new TotalCreditRequirement("TOTAL_CREDITS", Degree.PHD);
-        programPHD.addRequirement(totalCreditWO16CS);
-        programMSB.addRequirement(totalCreditWO16CS);
-        programMSC.addRequirement(totalCreditWO16CS);
+        // PHD and MS Plan TOTAL_CREDITS/COURSE_CREDITS
+        Requirement phdTotalCreditRequirement = makeComprehensiveCreditRequirement(31, 16, false, false, "TOTAL_CREDITS");
+        programPHD.addRequirement(phdTotalCreditRequirement);
+        Requirement msaTotalCreditRequirement = makeComprehensiveCreditRequirement(31, 0, true, true, "TOTAL_CREDITS");
+        programMSA.addRequirement(msaTotalCreditRequirement);
+        Requirement msaCourseCreditRequirement = makeComprehensiveCreditRequirement(22, 16, false, true, "COURSE_CREDITS");
+        programMSA.addRequirement(msaCourseCreditRequirement);
+        Requirement msbcTotalCreditRequirement = makeComprehensiveCreditRequirement(31, 16, false, true, "TOTAL_CREDITS");
+        programMSB.addRequirement(msbcTotalCreditRequirement);
+        programMSC.addRequirement(msbcTotalCreditRequirement);
         
         // PHD_LEVEL_COURSES REQUIREMENTS
         CourseRequirement phdLevelCourses = new CourseRequirement("PHD_LEVEL_COURSES") {
