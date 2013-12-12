@@ -55,10 +55,10 @@ public class ProgressSummaryBuilder {
      * Used to make OVERALL_GPA_*, IN_PROGRAM_GPA_*
      * @param minGPA minimum GPA required for graduation
      * @param name name of requirement
-     * @param csonly if true, will only include courses in CS
+     * @param csgradonly if true, will only include courses CSCI 5000+
      * @return the RequirementCheckResult
      */
-    private static Requirement makeComprehensiveGPARequirement(final double minGPA, String name, final boolean csonly) {
+    private static Requirement makeComprehensiveGPARequirement(final double minGPA, String name, final boolean csgradonly) {
         return new GPARequirement(name) {
             @Override
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
@@ -67,11 +67,12 @@ public class ProgressSummaryBuilder {
                 List<CourseTaken> courses = new ArrayList<CourseTaken>();
                 List<String> errorMsgs = new ArrayList<String>();
                 
-                for (CourseTaken course: studentRecord.getCoursesTaken()) {
-                    if ( course.getCourse().getId().matches(".*[5-8][0-9][0-9][0-9]") ) {
-                        if ( !csonly || course.getCourse().getId().matches("csci.*") ) {
-                            courses.add(course);
-                        }
+                for (CourseTaken course : studentRecord.getCoursesTaken()) {
+                    if (!csgradonly
+                            || (course.getCourse().getId().matches("csci.*") && course
+                                    .getCourse().getId()
+                                    .matches(".*[5-8][0-9][0-9][0-9]"))) {
+                        courses.add(course);
                     }
                 }
                 
@@ -278,7 +279,7 @@ public class ProgressSummaryBuilder {
                 int credits = 0;
                 int creditsCS = 0;
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
-                    if ( isPassingGrade(course.getGrade()) ) {
+                    if ( isPassingGrade(course.getGrade()) && !course.getCourse().getId().equals("csci8777") && !course.getCourse().getId().equals("csci8888") ) {
                         courses.add(course);
                         credits += Integer.parseInt(course.getCourse().getNumCredits());
                         if ( inCSDepartment(course.getCourse()) && isAFGrade(course.getGrade()) ) {
