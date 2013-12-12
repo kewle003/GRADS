@@ -174,7 +174,7 @@ public class ProgressSummaryBuilder {
         
         // THESIS REQUIREMENTS
         CourseRequirement msThesisRequirement = new CourseRequirement("THESIS_MS") {
-            @Override
+            @Override // Refer to Requirement.metBy
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 int credits = 0;
                 final int REQUIRED_THESIS_CREDITS = 10;
@@ -202,7 +202,7 @@ public class ProgressSummaryBuilder {
         };
         programMSA.addRequirement(msThesisRequirement);
         CourseRequirement phdThesisRequirement = new CourseRequirement("THESIS_PHD") {
-            @Override
+            @Override // Refer to Requirement.metBy
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 int credits = 0;
                 final int REQUIRED_THESIS_CREDITS = 24;
@@ -232,7 +232,7 @@ public class ProgressSummaryBuilder {
         
         // COLLOQUIUM
         CourseRequirement colloquiumRequirement = new CourseRequirement("COLLOQUIUM") {
-            @Override
+            @Override // Refer to Requirement.metBy
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
@@ -262,7 +262,7 @@ public class ProgressSummaryBuilder {
         
         // PHD OUT_OF_DEPARTMENT
         programPHD.addRequirement(new CourseRequirement("OUT_OF_DEPARTMENT") {
-            @Override
+            @Override // Refer to Requirement.metBy
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
@@ -290,7 +290,7 @@ public class ProgressSummaryBuilder {
         
         // PHD INTRO_TO_RESEARCH
         programPHD.addRequirement(new CourseRequirement("INTRO_TO_RESEARCH") {
-            @Override
+            @Override // Refer to Requirement.metBy
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
@@ -330,7 +330,7 @@ public class ProgressSummaryBuilder {
         
         // MS Plan B PLAN_B_PROJECT
         programMSB.addRequirement(new CourseRequirement("COURSE_CREDITS") {
-            @Override
+            @Override // Refer to Requirement.metBy
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
@@ -367,7 +367,7 @@ public class ProgressSummaryBuilder {
         
         // PHD_LEVEL_COURSES REQUIREMENTS
         CourseRequirement phdLevelCourses = new CourseRequirement("PHD_LEVEL_COURSES") {
-            @Override
+            @Override // Refer to Requirement.metBy
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 final int REQUIRED_CREDITS = 3;
                 List<String> errMsg = new ArrayList<String>();
@@ -395,7 +395,7 @@ public class ProgressSummaryBuilder {
         programMSB.addRequirement(phdLevelCourses);
         
         CourseRequirement phdLevelCoursesPlanC = new CourseRequirement("PHD_LEVEL_COURSES_PLANC") {
-            @Override
+            @Override // Refer to Requirement.metBy
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 final int REQUIRED_CREDITS = 3;
                 List<String> errMsg = new ArrayList<String>();

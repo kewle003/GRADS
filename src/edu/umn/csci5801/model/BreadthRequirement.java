@@ -8,11 +8,19 @@ public class BreadthRequirement extends GPARequirement {
     private static double PHD_BREADTH_GPA = 3.45;
     private static double MS_BREADTH_GPA = 3.25;
     
+    /**
+     * Construct a new instance, setting instance variables to parameters
+     * @param name
+     * @param degree
+     */
     public BreadthRequirement(String name, Degree degree) {
         super(name);
         this.degree = degree;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RequirementCheckResult metBy(StudentRecord studentRecord) {
         RequirementCheckResult result = new RequirementCheckResult(this.getName());

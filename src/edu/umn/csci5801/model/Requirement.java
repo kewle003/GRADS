@@ -7,13 +7,18 @@ public abstract class Requirement {
         this.name = name;
     }
     
+    /**
+     * Getter for name
+     * @return name
+     */
     public String getName() {
         return name;
     }
     
-    public void setName(String name) { // TODO fix diagram to reflect this parameter
-        this.name = name;
-    }
-    
+    /**
+     * Generate a RequirementCheckResult based on studentRecord
+     * @param studentRecord
+     * @return the RequirementCheckResult
+     */
     public abstract RequirementCheckResult metBy(StudentRecord studentRecord);
 }

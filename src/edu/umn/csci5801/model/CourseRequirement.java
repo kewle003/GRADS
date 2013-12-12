@@ -2,6 +2,10 @@ package edu.umn.csci5801.model;
 
 public abstract class CourseRequirement extends Requirement {
 
+    /**
+     * Construct a new instance, setting the name
+     * @param name
+     */
     public CourseRequirement(String name) {
         super(name);
     }
