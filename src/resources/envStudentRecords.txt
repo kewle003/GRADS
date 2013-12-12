@@ -921,6 +921,13 @@
         }
       },
       {
+        "milestone": "THESIS_COMMITTEE_APPOINTED",
+        "term": {
+          "semester": "FALL",
+          "year": 2010
+        }
+      },
+      {
         "milestone": "DPF_APPROVED",
         "term": {
           "semester": "FALL",

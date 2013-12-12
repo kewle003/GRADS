@@ -322,7 +322,7 @@ public class GRADSTest extends TestCase {
         for(String id : passingIds){
         	ProgressSummary ps = g.generateProgressSummary(id);
         	for(RequirementCheckResult req : ps.getRequirementCheckResults()){
-        		if(req.getErrorMsgs() != null && !req.getErrorMsgs().isEmpty()){
+        		if(!req.isPassed()){
         			fail(id +":"+ps.getStudent().getFirstName()+" "+ps.getStudent().getLastName() + " is not graduating, but should be. List: "+req.getErrorMsgs());
         			
         		}

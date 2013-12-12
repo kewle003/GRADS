@@ -205,5 +205,46 @@ public class StudentRecord implements Cloneable{
         
         return other;
     }
+    
+    public String toString(){
+        StudentRecord sr = this;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Student Record of: ");
+        sb.append(sr.getStudent().getFirstName()+" "+sr.getStudent().getLastName());
+        sb.append("\n\n");
+        sb.append("Department: "+sr.getDepartment().name());
+        sb.append("\n");
+        sb.append("Degree Sought: "+sr.getDegreeSought().name());
+        sb.append("\n");
+        sb.append("Enrolled: "+sr.getTermBegan().getSemester().name() + " "+sr.getTermBegan().getYear());
+        sb.append("\n");
+        sb.append("Advisors:");
+        for(Professor p : sr.getAdvisors()){
+            sb.append(" "); sb.append(p.getFirstName()); sb.append(" "); sb.append(p.getLastName()); sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1); sb.append("\n");
+        sb.append("Committee:");
+        for(Professor p : sr.getCommittee()){
+            sb.append(" "); sb.append(p.getFirstName()); sb.append(" "); sb.append(p.getLastName()); sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1); sb.append("\n");
+        sb.append("Courses:");
+        for(CourseTaken c : sr.getCoursesTaken()){
+            sb.append(" "); sb.append(c.getCourse().getId());
+        }
+        sb.append("\n");
+        sb.append("Milestones:");
+        for(MilestoneSet ms : sr.getMilestonesSet()){
+            sb.append(" "); sb.append(ms.getMilestone().name());
+        }
+        sb.append("\n");
+        sb.append("Notes:\n");
+        for(String n : sr.getNotes()){
+            sb.append("  "); sb.append(n); sb.append("\n");
+        }
+        sb.append("------ END ------");
+        
+        return sb.toString();
+    }
 
 }

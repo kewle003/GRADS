@@ -30,7 +30,20 @@ public class MilestoneRequirement extends Requirement {
     @Override // Refer to Requirement.metBy
     public RequirementCheckResult metBy(StudentRecord studentRecord) {
         RequirementCheckResult result = new RequirementCheckResult(this.getName());
-        result.setPassed(studentRecord.getMilestonesSet().contains(milestone));
+        List<String> errorMsgs = new ArrayList<String>();
+        boolean milestoneFound = false;
+        for ( MilestoneSet milestoneSet : studentRecord.getMilestonesSet() ) {
+            if ( milestoneSet.getMilestone().equals(milestone) ) {
+                milestoneFound = true;
+                break;
+            }
+        }
+        if ( !milestoneFound ) {
+            errorMsgs.add(milestone.name()+" has not yet been met");
+        }
+        result.setErrorMsgs(errorMsgs);
+        result.setPassed(milestoneFound);
+        
         return result;
     }
 
