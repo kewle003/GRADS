@@ -18,9 +18,6 @@ import edu.umn.csci5801.model.exception.InvalidUserException;
  * @author mark
  *
  */
-//TODO: Currently Greg said we do not have to worry about validating courses
-//If we do we can use my validateCSCourses() method - <Kewley>
-//FIX: I skipped adding MATH gpc's  and users when reading in Users from the database <Kewley>
 public class GRADS implements GRADSIntf {
     private HashMap<String, Student> students;
     private HashMap<String, StudentRecord> studentRecords;
@@ -67,7 +64,6 @@ public class GRADS implements GRADSIntf {
         this.studentRecords = new HashMap<String, StudentRecord>();
         this.gpcs = new HashMap<String, GPC>();
         this.courses = new HashMap<String, Course>();
-        //TODO: KEVIN add this in when ready
         this.builder = new ProgressSummaryBuilder();
 
         
