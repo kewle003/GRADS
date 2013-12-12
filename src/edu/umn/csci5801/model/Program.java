@@ -20,6 +20,10 @@ public class Program {
         return requirements;
     }
     
+    /**
+     * Add requirement to requirements
+     * @param requirement
+     */
     public void addRequirement(Requirement requirement) {
         this.requirements.add(requirement);
     }
