@@ -10,20 +10,8 @@ package edu.umn.csci5801.model.exception;
 @SuppressWarnings("serial")
 public class InvalidUserAccessException extends Exception {
     
-    public InvalidUserAccessException() {
-        super();
-    }
-    
     public InvalidUserAccessException(String message) {
         super(message);
-    }
-    
-    public InvalidUserAccessException(String message, Throwable cause) {
-        super(message, cause);
-    }
-    
-    public InvalidUserAccessException(Throwable cause) {
-        super(cause);
     }
 
 }

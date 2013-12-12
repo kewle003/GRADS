@@ -14,8 +14,7 @@ public abstract class GPARequirement extends Requirement {
         super(name);
     }
 
-    // TODO add to design
-    // returns CourseTaken with highest grade
+
     /**
      * Find the CourseTaken in courses with the highest grade, return and remove it
      * @param courses
@@ -32,7 +31,6 @@ public abstract class GPARequirement extends Requirement {
         return best;
     }
     
-    //TODO: Add in System Crash handling
     /**
      * Calculates the GPA (Grade Point Average) of courses on a 4.0 scale
      * @param courses
