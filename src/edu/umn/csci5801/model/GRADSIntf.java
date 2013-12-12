@@ -125,7 +125,7 @@ public interface GRADSIntf {
      * 
      * @param userId
      *            the student to generate the record for.
-     * @returns the student's progress summary in a data class matching the JSON
+     * @return the student's progress summary in a data class matching the JSON
      *          format.
      * @throws Exception
      *             if the progress summary could not be generated. SEE NOTE IN
@@ -142,7 +142,7 @@ public interface GRADSIntf {
      *            the student to generate the record for.
      * @param courses
      *            a list of the prospective courses.
-     * @returns a map containing the student's hypothetical progress summary
+     * @return a map containing the student's hypothetical progress summary
      * @throws Exception
      *             if the progress summary could not be generated or the courses
      *             are invalid. SEE NOTE IN CLASS HEADER.
