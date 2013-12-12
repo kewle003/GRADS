@@ -66,7 +66,7 @@ public class ProgressSummaryBuilder {
      * @param minGPA minimum GPA required for graduation
      * @param name name of requirement
      * @param csgradonly if true, will only include courses CSCI 5000+
-     * @return the RequirementCheckResult
+     * @return the Requirement
      */
     private static Requirement makeComprehensiveGPARequirement(final double minGPA, String name, final boolean csgradonly) {
         return new GPARequirement(name) {
@@ -110,7 +110,7 @@ public class ProgressSummaryBuilder {
      * @param includeThesis include thesis credits
      * @param mustBeAF require all csci courses to be taken A-F
      * @param name name of requirement
-     * @return the RequirementCheckResult
+     * @return the Requirement
      */
     private static Requirement makeComprehensiveCreditRequirement(final int minTotalCredits, final int minCsciCredits, final boolean includeThesis, final boolean mustBeAF, String name) {
         return new CourseRequirement(name) {
@@ -158,7 +158,7 @@ public class ProgressSummaryBuilder {
      * Used to make BREADTH_REQUIREMENT_*
      * @param name the name of the Requirement
      * @param degree used to determine specifics of the requirement
-     * @return the RequirementCheckResult
+     * @return the Requirement
      */
     private static Requirement makeBreadthRequirement(String name, final Degree degree) {
         return new GPARequirement(name) {

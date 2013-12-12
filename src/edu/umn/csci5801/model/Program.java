@@ -16,10 +16,6 @@ public class Program {
         return this.degree;
     }
     
-    public void setDegree(Degree degree) {
-        this.degree = degree;
-    }
-    
     public List<Requirement> getRequirements() {
         return requirements;
     }
