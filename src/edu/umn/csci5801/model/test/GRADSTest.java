@@ -44,9 +44,15 @@ public class GRADSTest extends TestCase {
     
     @Override
     public void setUp() {
+<<<<<<< HEAD
         tempStudentDatabase = new JSONHandler("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/tempStudents.txt");
         g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envStudentRecords.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envUsers.txt");
         tempg = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/tempStudents.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envUsers.txt");
+=======
+        tempStudentDatabase = new JSONHandler("/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/tempStudents.txt");
+        g = new GRADS("/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/envStudentRecords.txt", "/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/courses.txt", "/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/envUsers.txt");
+        tempg = new GRADS("/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/tempStudents.txt", "/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/courses.txt", "/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/envUsers.txt");
+>>>>>>> 2fd8855a3ac12f8a1a0514565849fa2a7731d2ba
         try {
             originalRecords = tempStudentDatabase.readOutStudentRecords();
         } catch (Exception e) {
