@@ -19,7 +19,6 @@ public class MilestoneRequirement extends Requirement {
     @Override
     public RequirementCheckResult metBy(StudentRecord studentRecord) {
         RequirementCheckResult result = new RequirementCheckResult(this.getName());
-        // TODO add details?
         result.setPassed(studentRecord.getMilestonesSet().contains(milestone));
         return result;
     }

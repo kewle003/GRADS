@@ -119,16 +119,20 @@ public class ProgressSummaryBuilder {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 List<CourseTaken> allCourses = new ArrayList<CourseTaken>();
-                List<CourseTaken> csciCourses = new ArrayList<CourseTaken>();
                 List<String> errorMsgs = new ArrayList<String>();
+                
+                int allCredits = 0;
+                int csciCredits = 0;
                 
                 for (CourseTaken course : studentRecord.getCoursesTaken()) {
                     if ( includeThesis || !(course.getCourse().getId().equals("csci8888") || course.getCourse().getId().equals("8777")) ) {
                         allCourses.add(course);
+                        int credit = Integer.parseInt(course.getCourse().getNumCredits());
+                        allCredits += credit;
                         if (inCSDepartment(course.getCourse())
                                 && isGraduateLevel(course.getCourse())
                                 && (!mustBeAF || isAFGrade(course.getGrade()))) {
-                            csciCourses.add(course);
+                            csciCredits += credit;
                         }
                     }
                 }
@@ -136,10 +140,10 @@ public class ProgressSummaryBuilder {
                 details.setCourses(allCourses);
                 
                 result.setDetails(details);
-                if ( csciCourses.size() < minCsciCredits ) {
+                if ( csciCredits < minCsciCredits ) {
                     errorMsgs.add("Not enough CSCI credits.");
                 }
-                if ( allCourses.size() < minTotalCredits ) {
+                if ( allCredits < minTotalCredits ) {
                     errorMsgs.add("Not enough total credits");
                 }
                 result.setPassed(errorMsgs.isEmpty());
