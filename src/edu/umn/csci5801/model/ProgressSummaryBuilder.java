@@ -5,16 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ProgressSummaryBuilder {
-    private List<Requirement> requirements;
     private HashMap<Degree,Program> programs;
     
+    /**
+     * Constructor initializing list of programs and their requirements
+     */
     public ProgressSummaryBuilder() {
-        this.requirements = new ArrayList<Requirement>();
         this.programs = new HashMap<Degree,Program>();
-        
         initializePrograms();
     }
     
+    /**
+     * Populates the ProgressSummary with studentRecord's basic information and traverses Requirements of the Program corresponding to the studentRecord's degreeSought to generate RequirementCheckResults 
+     * @param studentRecord the StudentRecord from which the ProgressSummary is to be generated
+     * @return the ProgressSummary
+     */
     public ProgressSummary generateProgressSummary(StudentRecord studentRecord) {
         ProgressSummary progressSummary = new ProgressSummary();
         progressSummary.setStudent(studentRecord.getStudent());
@@ -33,22 +38,22 @@ public class ProgressSummaryBuilder {
         return progressSummary;
     }
     
+    /**
+     * getter for programs
+     * @return the list of all Programs
+     */
     public List<Program> getPrograms() {
         List<Program> list = new ArrayList<Program>();
         list.addAll(this.programs.values());
         return list;
     }
     
+    /**
+     * Add a Program to programs
+     * @param program the Program to be added
+     */
     public void addProgram(Program program) {
         this.programs.put(program.getDegree(), program);
-    }
-    
-    public List<Requirement> getRequirements() {
-        return this.requirements;
-    }
-    
-    public void addRequirement(Requirement requirement) {
-        this.requirements.add(requirement);
     }
     
     /**
@@ -140,8 +145,9 @@ public class ProgressSummaryBuilder {
         };
     }
     
-    // This function initializes and thus defines the requirements for each program
-    // In order to change graduation requirements, changes must be made here.
+    /**
+     * Initializes and thus defines the requirements for each program. In order to change graduation requirements, changes must be made here.
+     */
     private void initializePrograms() {
         Program programMSA = new Program(Degree.MS_A);
         Program programMSB = new Program(Degree.MS_B);
