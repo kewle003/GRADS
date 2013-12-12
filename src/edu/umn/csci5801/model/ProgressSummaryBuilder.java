@@ -16,6 +16,11 @@ public class ProgressSummaryBuilder {
     }
     
     public ProgressSummary generateProgressSummary(StudentRecord studentRecord) {
+        //If the current student does not have a declared degree return null
+        if (studentRecord.getDegreeSought() == null) {
+            return null;
+        }
+        
         ProgressSummary progressSummary = new ProgressSummary();
         progressSummary.setStudent(studentRecord.getStudent());
         progressSummary.setDepartment(studentRecord.getDepartment());
@@ -24,7 +29,7 @@ public class ProgressSummaryBuilder {
         progressSummary.setAdvisors(studentRecord.getAdvisors());
         progressSummary.setCommittee(studentRecord.getCommittee());
         progressSummary.setNotes(studentRecord.getNotes());
-        
+
         List<Requirement> requirements = this.programs.get(studentRecord.getDegreeSought()).getRequirements();
         for (Requirement requirement: requirements) {
             progressSummary.addRequirementResult(requirement.metBy(studentRecord));

@@ -173,6 +173,13 @@
   },
   {
     "student": {
+      "id": "1000000",
+      "firstName": "Donnie",
+      "lastName": "Wahlberrg"
+    }
+  },
+  {
+    "student": {
       "id": "0000100",
       "firstName": "Missy",
       "lastName": "Whatsit"
@@ -273,20 +280,6 @@
     "notes": [
       "note1",
       "note2"
-    ]
-  },
-  {
-    "student": {
-      "id": "1000000",
-      "firstName": "Donnie",
-      "lastName": "Wahlberrg"
-    },
-    "committee": [
-      {
-        "department": "COMPUTER_SCIENCE",
-        "firstName": "Lou",
-        "lastName": "Pearlman"
-      }
     ]
   },
   {

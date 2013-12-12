@@ -163,18 +163,22 @@ public class GRADS implements GRADSIntf {
     public StudentRecord getTranscript(String userId) throws Exception {
         if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
             if (studentRecords.containsKey(userId)) {
-                StudentRecord record = studentRecords.get(userId);
-                StudentRecord recordToReturn = new StudentRecord();
-                recordToReturn.setAdvisors(record.getAdvisors());
-                recordToReturn.setCommittee(record.getCommittee());
-                recordToReturn.setCoursesTaken(record.getCoursesTaken());
-                recordToReturn.setDegreeSought(record.getDegreeSought());
-                recordToReturn.setDepartment(record.getDepartment());
-                recordToReturn.setMilestonesSet(record.getMilestonesSet());
-                recordToReturn.setNotes(record.getNotes());
-                recordToReturn.setStudent(record.getStudent());
-                recordToReturn.setTermBegan(record.getTermBegan());
-                return recordToReturn;
+                if (studentRecords.get(userId).getDepartment().equals(Department.COMPUTER_SCIENCE)) {
+                    StudentRecord record = studentRecords.get(userId);
+                    StudentRecord recordToReturn = new StudentRecord();
+                    recordToReturn.setAdvisors(record.getAdvisors());
+                    recordToReturn.setCommittee(record.getCommittee());
+                    recordToReturn.setCoursesTaken(record.getCoursesTaken());
+                    recordToReturn.setDegreeSought(record.getDegreeSought());
+                    recordToReturn.setDepartment(record.getDepartment());
+                    recordToReturn.setMilestonesSet(record.getMilestonesSet());
+                    recordToReturn.setNotes(record.getNotes());
+                    recordToReturn.setStudent(record.getStudent());
+                    recordToReturn.setTermBegan(record.getTermBegan());
+                    return recordToReturn;
+                } else {
+                    throw new InvalidUserAccessException("You do not have permission to access a student outside your deparment");
+                }
             } else {
                 throw new InvalidUserException("UserId: " +userId+ " does not exist in our database");
             }
@@ -190,16 +194,20 @@ public class GRADS implements GRADSIntf {
             throws Exception {
         if (isGPC()) {
             if (userId != null && transcript != null) {
-                if (studentRecords.containsKey(transcript.getStudent().getId())) {
-                    if (transcript.getStudent().getId().equals(userId)) {
-                        validateCSCourses(transcript.getCoursesTaken());
-                        studentRecords.put(userId, transcript);
-                        updateDatabase();
+                if (transcript.getDepartment().equals(Department.COMPUTER_SCIENCE)) {
+                    if (studentRecords.containsKey(transcript.getStudent().getId())) {
+                        if (transcript.getStudent().getId().equals(userId)) {
+                            validateCSCourses(transcript.getCoursesTaken());
+                            studentRecords.put(userId, transcript);
+                            updateDatabase();
+                        } else {
+                            throw new InvalidDataException("UserId: " +userId+ " does not match the transcript provided");
+                        }
                     } else {
-                        throw new InvalidDataException("UserId: " +userId+ " does not match the transcript provided");
+                        throw new InvalidUserException("UserId: " +userId+ " does not exist in the database or you can not change studentId");
                     }
                 } else {
-                    throw new InvalidUserException("UserId: " +userId+ " does not exist in the database or you can not change studentId");
+                    throw new InvalidUserAccessException("You do not have permission to access a student outside your deparment");
                 }
             } else {
                 throw new InvalidDataException("null userId given!");
@@ -214,11 +222,15 @@ public class GRADS implements GRADSIntf {
     public void addNote(String userId, String note) throws Exception {
         if (isGPC()) {
             if (userId != null) {
-                if (studentRecords.containsKey(userId)) {                  
-                    studentRecords.get(userId).getNotes().add(note);
-                    updateDatabase();
+                if (studentRecords.containsKey(userId)) {
+                    if (studentRecords.get(userId).getDepartment().equals(Department.COMPUTER_SCIENCE)) {
+                        studentRecords.get(userId).getNotes().add(note);
+                        updateDatabase();
+                    } else {
+                        throw new InvalidUserAccessException("You do not have permission to access a student outside your deparment");
+                    }
                 } else {
-                    throw new InvalidUserException("UserId: " +userId+ " does not exist in the database");
+                    throw new InvalidUserException("UserId: " +userId+ " does not exist in the database or is not in your department");
                 }
             } else {
                 throw new InvalidDataException("null userId given!");
@@ -228,7 +240,6 @@ public class GRADS implements GRADSIntf {
         }
     }
 
-    //TODO: Add exception if ProgressSummary could not be generated
     @Override
     public ProgressSummary generateProgressSummary(String userId)
             throws Exception {
@@ -236,8 +247,15 @@ public class GRADS implements GRADSIntf {
             //If the user is GPC good, otherwise we just need to check that a student is accessing his/her's student record
             if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
                 if (studentRecords.containsKey(userId)) {
-                    ProgressSummary summary = builder.generateProgressSummary(studentRecords.get(userId));
-                    return summary;
+                    if (studentRecords.get(userId).getDepartment().equals(Department.COMPUTER_SCIENCE)) {
+                        ProgressSummary summary = builder.generateProgressSummary(studentRecords.get(userId));
+                        if (summary == null) {
+                            throw new InvalidDataException("Progress Summary could not be generated");
+                        }
+                        return summary;
+                    } else {
+                        throw new InvalidUserAccessException("You do not have permission to access a student outside your deparment");
+                    }
                 } else {
                     throw new InvalidUserException("UserId: " +userId+ " does not have a student record");
                 }
@@ -257,6 +275,9 @@ public class GRADS implements GRADSIntf {
         
             if (isGPC() || hasAccessToStudentRecord(this.getUser(), userId)) {
                 if (studentRecords.containsKey(userId)) {
+                    if (!studentRecords.get(userId).getDepartment().equals(Department.COMPUTER_SCIENCE)) {
+                        throw new InvalidUserAccessException("You do not have permission to access a student outside your deparment");
+                    }
                     //TODO: This directly affects the StudentRecord of the student
                     //POTENTIAL FIX: Save the original CourseTaken list
                     StudentRecord recordCopy = studentRecords.get(userId);
@@ -316,7 +337,7 @@ public class GRADS implements GRADSIntf {
             }
             
             if (record.getCommittee().isEmpty()) {
-                record.setAdvisors(null);
+                record.setCommittee(null);
             }
             
             if (record.getCoursesTaken().isEmpty()) {
@@ -329,6 +350,10 @@ public class GRADS implements GRADSIntf {
             
             if (record.getNotes().isEmpty()) {
                 record.setNotes(null);
+            }
+            
+            if (record.getDepartment().equals(Department.NONE)) {
+                record.setDepartment(null);
             }
         }
     }
@@ -358,7 +383,7 @@ public class GRADS implements GRADSIntf {
             }
             
             if (record.getCommittee() == null) {
-                record.setAdvisors(new ArrayList<Professor>());
+                record.setCommittee(new ArrayList<Professor>());
             }
             
             if (record.getMilestonesSet() == null) {
@@ -367,6 +392,10 @@ public class GRADS implements GRADSIntf {
             
             if (record.getNotes() == null) {
                 record.setNotes(new ArrayList<String>());
+            }
+            
+            if (record.getDepartment() == null) {
+                record.setDepartment(Department.NONE);
             }
         }
     }

@@ -16,7 +16,6 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import edu.umn.csci5801.model.exception.InvalidDataException;
-import edu.umn.csci5801.model.exception.InvalidUserException;
 import edu.umn.csci5801.model.exception.InvalidUserRoleException;
 import edu.umn.csci5801.model.exception.NoDataFoundException;
 
@@ -41,7 +40,6 @@ public class JSONHandler {
      * database. For now we do not allow MATH majors into our StudentRecords.
      * @return List<StudentRecord> objects
      */
-    //TODO: Instead of throwing an Exception should we just skip adding the MATH majors?
     public List<StudentRecord> readOutStudentRecords() throws Exception {
         List<StudentRecord> studentRecords = null;
         try {
@@ -49,15 +47,10 @@ public class JSONHandler {
                 studentRecords = new Gson().fromJson(new FileReader(new File(
                         filename)), new TypeToken<List<StudentRecord>>() {
                 }.getType());
-                Iterator<StudentRecord> iterator = studentRecords.iterator();
-                while (iterator.hasNext()) {
-                    StudentRecord r = iterator.next();
-                    if (r.getDepartment() != null) {
-                        //Sanity check, we can not allow MATH majors in our student records
-                        if(r.getDepartment().equals(Department.MATH)) {
-                            throw new InvalidUserException("Math majors are not allowed in student records");
-                        }
-                    }
+                
+                //Check if there was data in the JSON
+                if (studentRecords == null) {
+                    throw new NoDataFoundException("No data found in JSON file " +filename);
                 }
             } else {
                 throw new InvalidDataException("filename: " +filename+ " is invalid");
@@ -150,10 +143,10 @@ public class JSONHandler {
                         }
                     }
                 } else {
-                    throw new InvalidDataException("filename: " +filename+ " is invalid");
+                    throw new NoDataFoundException("No data found in JSON file " +filename); 
                 }
             } else {
-                throw new NoDataFoundException("No data found in JSON file " +filename);
+                throw new InvalidDataException("filename: " +filename+ " is invalid");
             }
         } catch (JsonIOException e) {
             e.printStackTrace();
