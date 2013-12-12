@@ -93,6 +93,15 @@ public class ProgressSummaryBuilder {
         };
     }
 
+    /**
+     * Used to make TOTAL_CREDITS and COURSE_CREDITS
+     * @param minTotalCredits credits required (of any kind)
+     * @param minCsciCredits credits required to be CSCI5000+ classes
+     * @param includeThesis include thesis credits
+     * @param mustBeAF require all csci courses to be taken A-F
+     * @param name name of requirement
+     * @return the RequirementCheckResult
+     */
     private static Requirement makeComprehensiveCreditRequirement(final int minTotalCredits, final int minCsciCredits, final boolean includeThesis, final boolean mustBeAF, String name) {
         return new CourseRequirement(name) {
             @Override
@@ -105,11 +114,11 @@ public class ProgressSummaryBuilder {
                 
                 for (CourseTaken course : studentRecord.getCoursesTaken()) {
                     if ( includeThesis || !(course.getCourse().getId().equals("csci8888") || course.getCourse().getId().equals("8777")) ) {
-                        if ( !mustBeAF || isAFGrade(course.getGrade()) ) {
-                            allCourses.add(course);
-                            if ( inCSDepartment(course.getCourse()) && isGraduateLevel(course.getCourse()) ) {
-                                csciCourses.add(course);
-                            }
+                        allCourses.add(course);
+                        if (inCSDepartment(course.getCourse())
+                                && isGraduateLevel(course.getCourse())
+                                && (!mustBeAF || isAFGrade(course.getGrade()))) {
+                            csciCourses.add(course);
                         }
                     }
                 }
@@ -300,50 +309,6 @@ public class ProgressSummaryBuilder {
                     result.setPassed(false);
                     errMsg.add("csci8001 and csci8002 have not been taken");
                 }
-                return result;
-            }
-        });
-        
-        // MS Plan A COURSE_CREDITS
-        programMSA.addRequirement(new CourseRequirement("COURSE_CREDITS") {
-            @Override
-            public RequirementCheckResult metBy(StudentRecord studentRecord) {
-            	final int REQUIRED_TOTAL_CREDITS = 22;
-            	final int REQUIRED_CSCI_CREDITS = 16;
-                RequirementCheckResult result = new RequirementCheckResult(this.getName());
-                CheckResultDetails details = new CheckResultDetails();
-                ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
-                List<String> errMsg = new ArrayList<String>();
-                int credits = 0;
-                int creditsCS = 0;
-                for (CourseTaken course: studentRecord.getCoursesTaken()) {
-                    if ( isPassingGrade(course.getGrade()) && !course.getCourse().getId().equals("csci8777") && !course.getCourse().getId().equals("csci8888") ) {
-                        courses.add(course);
-                        credits += Integer.parseInt(course.getCourse().getNumCredits());
-                        if ( inCSDepartment(course.getCourse()) && isAFGrade(course.getGrade()) ) {
-                            creditsCS += Integer.parseInt(course.getCourse().getNumCredits());
-                        }
-                    }
-                }
-                details.setCourses(courses);
-                result.setDetails(details);
-                if (credits >= REQUIRED_TOTAL_CREDITS) {
-                    if (creditsCS >= REQUIRED_CSCI_CREDITS) {
-                        result.setPassed(true);
-                    } else {
-                        result.setPassed(false);
-                        errMsg.add("You do not meed the required credits for CS classes");
-                        result.setErrorMsgs(errMsg);
-                    }
-                } else if (creditsCS >= REQUIRED_CSCI_CREDITS) {
-                    result.setPassed(false);
-                    errMsg.add("You do not meed the required total credits");
-                    result.setErrorMsgs(errMsg);
-                } else {
-                    result.setPassed(false);
-                    errMsg.add("You do not meed the credit requirements");
-                    result.setErrorMsgs(errMsg);
-                }              
                 return result;
             }
         });
