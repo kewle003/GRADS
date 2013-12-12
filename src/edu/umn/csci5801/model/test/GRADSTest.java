@@ -41,11 +41,13 @@ public class GRADSTest extends TestCase {
     private ProgressSummary albertsProgressSummary;
     private StudentRecord albertsStudentRecord;
     
+    private static final String GRADS_DIR = "/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS"; // parent of src, does not end in "/" e.g. /root/files/GRADS
+    
     @Override
     public void setUp() {
-        tempStudentDatabase = new JSONHandler("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/tempStudents.txt");
-        g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envStudentRecords.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envUsers.txt");
-        tempg = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/tempStudents.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envUsers.txt");
+        tempStudentDatabase = new JSONHandler(GRADS_DIR+"/src/resources/tempStudents.txt");
+        g = new GRADS(GRADS_DIR+"/src/resources/envStudentRecords.txt", GRADS_DIR+"/src/resources/courses.txt", GRADS_DIR+"/src/resources/envUsers.txt");
+        tempg = new GRADS(GRADS_DIR+"/src/resources/tempStudents.txt", GRADS_DIR+"/src/resources/courses.txt", GRADS_DIR+"/src/resources/envUsers.txt");
         try {
             originalRecords = tempStudentDatabase.readOutStudentRecords();
         } catch (Exception e) {
