@@ -169,6 +169,7 @@ public class ProgressSummaryBuilder {
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
+                List<String> errorMsgs = new ArrayList<String>();
                 
                 ArrayList<CourseTaken> theory = new ArrayList<CourseTaken>();
                 ArrayList<CourseTaken> architecture = new ArrayList<CourseTaken>();
@@ -222,11 +223,26 @@ public class ProgressSummaryBuilder {
                 details.setGPA((float)breadthGPA);
                 details.setCourses(breadthCourses);
                 
+                int minBreadthCourses;
+                double minBreadthGPA;
                 if ( degree == Degree.PHD ) {
-                    result.setPassed(!( breadthCourses.size() < 5 || breadthGPA < PHD_BREADTH_GPA ));
+                    minBreadthCourses = 5;
+                    minBreadthGPA = PHD_BREADTH_GPA;
                 } else {
-                    result.setPassed(!( breadthCourses.size() < 3 || breadthGPA < MS_BREADTH_GPA ));
+                    minBreadthCourses = 3;
+                    minBreadthGPA = MS_BREADTH_GPA;
                 }
+                
+                if ( breadthCourses.size() < minBreadthCourses ) {
+                    errorMsgs.add("Not enough courses to meet Breadth Requirement");
+                }
+                if ( breadthGPA < minBreadthGPA ) {
+                    errorMsgs.add("Insufficient GPA to meet Breadth Requirement");
+                }
+                
+                result.setPassed(errorMsgs.isEmpty());
+                result.setErrorMsgs(errorMsgs);
+                
                 result.setDetails(details);
                 return result;
             }
@@ -403,6 +419,7 @@ public class ProgressSummaryBuilder {
                     result.setPassed(false);
                     errMsg.add("csci8001 and csci8002 have not been taken");
                 }
+                result.setErrorMsgs(errMsg);
                 return result;
             }
         });
