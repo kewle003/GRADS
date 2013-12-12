@@ -25,7 +25,6 @@ import edu.umn.csci5801.model.Semester;
 import edu.umn.csci5801.model.Student;
 import edu.umn.csci5801.model.StudentRecord;
 import edu.umn.csci5801.model.Term;
-import edu.umn.csci5801.model.exception.InvalidDataException;
 import junit.framework.TestCase;
 
 /**
@@ -44,15 +43,9 @@ public class GRADSTest extends TestCase {
     
     @Override
     public void setUp() {
-<<<<<<< HEAD
         tempStudentDatabase = new JSONHandler("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/tempStudents.txt");
         g = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envStudentRecords.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envUsers.txt");
         tempg = new GRADS("/Users/mark/Documents/workspace/GRADS_Materials/src/resources/tempStudents.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/courses.txt", "/Users/mark/Documents/workspace/GRADS_Materials/src/resources/envUsers.txt");
-=======
-        tempStudentDatabase = new JSONHandler("/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/tempStudents.txt");
-        g = new GRADS("/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/envStudentRecords.txt", "/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/courses.txt", "/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/envUsers.txt");
-        tempg = new GRADS("/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/tempStudents.txt", "/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/courses.txt", "/Users/kviratyosin/Documents/umtc13-14/fall/csci5801/project/workspace/GRADS/src/resources/envUsers.txt");
->>>>>>> 2fd8855a3ac12f8a1a0514565849fa2a7731d2ba
         try {
             originalRecords = tempStudentDatabase.readOutStudentRecords();
         } catch (Exception e) {
@@ -123,8 +116,8 @@ public class GRADSTest extends TestCase {
     
     /**
      * The purpose of this test case is to verify
-     * that when a user id that does not exists in
-     * the database logs in, they will be blocked
+     * that when a user id that does not exist in
+     * the database logs in, they will be blocked from GRADS
      */
     @Test
     public void testInvalidLogin() {
@@ -139,7 +132,7 @@ public class GRADSTest extends TestCase {
     
     /**
      * The purpose of this test case is to verify that
-     * when a null user logs in they will be blocked
+     * when a null user logs in, they will be blocked from GRADS
      */
     @Test
     public void testNullLogin() {
@@ -580,7 +573,7 @@ public class GRADSTest extends TestCase {
      * The purpose of this test is to verify
      * that when a GPC accidentally gives an invalid
      * credit to a class, GRADS will block this change
-     * from happening
+     * from happening and notify the GPC
      * @throws Exception 
      */
     @Test
@@ -688,8 +681,9 @@ public class GRADSTest extends TestCase {
     
     /**
      * The purpose of this test is to verify that when a GPC
-     * tries to modify a studentId on their transcript an
-     * InvalidUserException will be thrown
+     * tries to modify a student id on the corresponding student
+     * record an error message will be returned indicating the GPC
+     * can not modify a student id
      * @throws Exception 
      */
     @Test
@@ -710,9 +704,9 @@ public class GRADSTest extends TestCase {
     
     /**
      * The purpose of this test is to verify that when
-     * a GPC accidentally puts in another studentId
-     * when updating the transcript, an InvalidDataException
-     * will be thrown
+     * a GPC accidentally puts in another student id
+     * when updating a student record an error message
+     * will be returned notifying the GPC
      */
     @Test
     public void testUpdateTranscriptInvalidId() throws Exception{
@@ -731,8 +725,8 @@ public class GRADSTest extends TestCase {
     
     /**
      * The purpose of this test is to verify that when
-     * a GPC enters a null user id an InvalidDataException
-     * will be thrown
+     * a GPC enters a null user id an error message will
+     * be returned notifying the GPC
      */
     @Test
     public void testUpdateTranscriptNullId() throws Exception{
@@ -753,7 +747,7 @@ public class GRADSTest extends TestCase {
     /**
      * The purpose of this test is to verify that
      * a student will not be allowed to modify their
-     * transcript
+     * student record
      * @throws Exception 
      */
     @Test
@@ -775,7 +769,8 @@ public class GRADSTest extends TestCase {
     /**
      * The purpose of the Test Case is to verify that 
      * when a GPC through the interface makes a request 
-     * to view the list of student ids.
+     * to view the list of student ids in the databae 
+     * will be returned
      * @throws Exception 
      */
     @Test
@@ -813,8 +808,8 @@ public class GRADSTest extends TestCase {
     
     /**
      * This test will verify that when a student tries
-     * to retrieve a list of student id's an InvalidUserAccessException
-     * will be thrown
+     * to retrieve a list of student id's an error message
+     * will be returned notifying the student.
      */
     @Test
     public void testGetStudentIDsInvalidUserAccess() {
@@ -830,8 +825,14 @@ public class GRADSTest extends TestCase {
         }
     }
     
+    /**
+     * The purpose of this test is to test the equals
+     * and hashcode method that the TA's provided in each
+     * class that are never used
+     * @throws Exception
+     */
     @Test
-    public void testCodeCoverageIsStupid() throws Exception{
+    public void testHashCodeEquals() throws Exception{
         tempg.setUser("0000002");
         StudentRecord sr = tempg.getTranscript("0000100");
         
