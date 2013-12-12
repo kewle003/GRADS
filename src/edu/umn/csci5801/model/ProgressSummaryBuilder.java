@@ -70,7 +70,7 @@ public class ProgressSummaryBuilder {
      */
     private static Requirement makeComprehensiveGPARequirement(final double minGPA, String name, final boolean csgradonly) {
         return new GPARequirement(name) {
-            @Override
+            @Override // Refer to Requirement.metBy
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
@@ -114,7 +114,7 @@ public class ProgressSummaryBuilder {
      */
     private static Requirement makeComprehensiveCreditRequirement(final int minTotalCredits, final int minCsciCredits, final boolean includeThesis, final boolean mustBeAF, String name) {
         return new CourseRequirement(name) {
-            @Override
+            @Override // Refer to Requirement.metBy 
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
@@ -155,6 +155,85 @@ public class ProgressSummaryBuilder {
     }
     
     /**
+     * Used to make BREADTH_REQUIREMENT_*
+     * @param name the name of the Requirement
+     * @param degree used to determine specifics of the requirement
+     * @return the RequirementCheckResult
+     */
+    private static Requirement makeBreadthRequirement(String name, final Degree degree) {
+        return new GPARequirement(name) {
+            private double PHD_BREADTH_GPA = 3.45;
+            private double MS_BREADTH_GPA = 3.25;
+            
+            @Override // Refer to Requirement.metBy
+            public RequirementCheckResult metBy(StudentRecord studentRecord) {
+                RequirementCheckResult result = new RequirementCheckResult(this.getName());
+                CheckResultDetails details = new CheckResultDetails();
+                
+                ArrayList<CourseTaken> theory = new ArrayList<CourseTaken>();
+                ArrayList<CourseTaken> architecture = new ArrayList<CourseTaken>();
+                ArrayList<CourseTaken> applications = new ArrayList<CourseTaken>();
+                ArrayList<CourseTaken> breadthCourses = new ArrayList<CourseTaken>();
+                
+                for (CourseTaken course : studentRecord.getCoursesTaken() ) {
+                    if ( course.getGrade() != Grade.S && course.getGrade() != Grade.N && course.getGrade() != Grade._ ) {
+                        CourseArea area = course.getCourse().getCourseArea();
+                        switch (area) {
+                        case THEORY_ALGORITHMS:
+                            theory.add(course);
+                            break;
+                        case ARCHITECTURE_SYSTEMS_SOFTWARE:
+                            architecture.add(course);
+                            break;
+                        case APPLICATIONS:
+                            applications.add(course);
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                }
+                
+                if ( !theory.isEmpty() ) {
+                    breadthCourses.add(popBestCourseTaken(theory));
+                }
+                if ( !architecture.isEmpty() ) {
+                    breadthCourses.add(popBestCourseTaken(architecture));
+                }
+                if ( !applications.isEmpty() ) {
+                    breadthCourses.add(popBestCourseTaken(applications));
+                }
+                
+                if ( degree == Degree.PHD ) {
+                    // merge all remaining breadth courses
+                    ArrayList<CourseTaken> remainingCourses = new ArrayList<CourseTaken>();
+                    remainingCourses.addAll(theory);
+                    remainingCourses.addAll(architecture);
+                    remainingCourses.addAll(applications);
+                    // get best two courses if possible
+                    for ( int i = 0 ;i < 2; i++ ) {
+                        if ( !remainingCourses.isEmpty() ) {
+                            breadthCourses.add(popBestCourseTaken(remainingCourses));
+                        }
+                    }
+                }
+                
+                double breadthGPA = calculateGPA(breadthCourses);
+                details.setGPA((float)breadthGPA);
+                details.setCourses(breadthCourses);
+                
+                if ( degree == Degree.PHD ) {
+                    result.setPassed(!( breadthCourses.size() < 5 || breadthGPA < PHD_BREADTH_GPA ));
+                } else {
+                    result.setPassed(!( breadthCourses.size() < 3 || breadthGPA < MS_BREADTH_GPA ));
+                }
+                result.setDetails(details);
+                return result;
+            }
+        };
+    }
+    
+    /**
      * Initializes and thus defines the requirements for each program. In order to change graduation requirements, changes must be made here.
      */
     private void initializePrograms() {
@@ -164,12 +243,12 @@ public class ProgressSummaryBuilder {
         Program programPHD = new Program(Degree.PHD);
 
         // BREADTH REQUIREMENTS
-        GPARequirement msBreadthRequirement = new BreadthRequirement("BREADTH_REQUIREMENT_MS", Degree.MS_A);
+        Requirement msBreadthRequirement = makeBreadthRequirement("BREADTH_REQUIREMENT_MS", Degree.MS_A);
         // note the above constructor does not differential between different MS Degrees
         programMSA.addRequirement(msBreadthRequirement);
         programMSB.addRequirement(msBreadthRequirement);
         programMSC.addRequirement(msBreadthRequirement);
-        GPARequirement phdBreadthRequirement = new BreadthRequirement("BREADTH_REQUIREMENT_PHD", Degree.PHD);
+        Requirement phdBreadthRequirement = makeBreadthRequirement("BREADTH_REQUIREMENT_PHD", Degree.PHD);
         programPHD.addRequirement(phdBreadthRequirement);
         
         // THESIS REQUIREMENTS
