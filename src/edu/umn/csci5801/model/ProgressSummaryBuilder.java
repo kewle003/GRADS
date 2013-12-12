@@ -120,7 +120,7 @@ public class ProgressSummaryBuilder {
                 CheckResultDetails details = new CheckResultDetails();
                 List<CourseTaken> courses = new ArrayList<CourseTaken>();
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
-                    if ( course.getCourse().getId().equals("csci8777") && isPassingGrade(course.getGrade()) ) {
+                    if ( course.getCourse().getId().equals("csci8777") && isPassingGrade(course.getGrade()) && isAFGrade(course.getGrade()) ) {
                         credits += Integer.parseInt(course.getCourse().getNumCredits());
                         courses.add(course);
                     }
@@ -225,7 +225,7 @@ public class ProgressSummaryBuilder {
             }
         });
         
-     // PHD INTRO_TO_RESEARCH
+        // PHD INTRO_TO_RESEARCH
         programPHD.addRequirement(new CourseRequirement("INTRO_TO_RESEARCH") {
             @Override
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
@@ -281,7 +281,7 @@ public class ProgressSummaryBuilder {
                     if ( isPassingGrade(course.getGrade()) ) {
                         courses.add(course);
                         credits += Integer.parseInt(course.getCourse().getNumCredits());
-                        if ( inCSDepartment(course.getCourse()) ) {
+                        if ( inCSDepartment(course.getCourse()) && isAFGrade(course.getGrade()) ) {
                             creditsCS += Integer.parseInt(course.getCourse().getNumCredits());
                         }
                     }
@@ -309,7 +309,7 @@ public class ProgressSummaryBuilder {
             }
         });
         
-     // MS Plan B PLAN_B_PROJECT
+        // MS Plan B PLAN_B_PROJECT
         programMSB.addRequirement(new CourseRequirement("COURSE_CREDITS") {
             @Override
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
@@ -318,7 +318,7 @@ public class ProgressSummaryBuilder {
                 ArrayList<CourseTaken> courses = new ArrayList<CourseTaken>();
                 List<String> errMsg = new ArrayList<String>();
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
-                    if ( isPassingGrade(course.getGrade()) && course.getCourse().getId().equals("csci8760") ) {
+                    if ( isPassingGrade(course.getGrade()) && isAFGrade(course.getGrade()) && course.getCourse().getId().equals("csci8760") ) {
                         courses.add(course);
                     }
                 }
@@ -343,24 +343,22 @@ public class ProgressSummaryBuilder {
         programMSB.addRequirement(totalCreditWO16CS);
         programMSC.addRequirement(totalCreditWO16CS);
         
-     // PHD_LEVEL_COURSES REQUIREMENTS
+        // PHD_LEVEL_COURSES REQUIREMENTS
         CourseRequirement phdLevelCourses = new CourseRequirement("PHD_LEVEL_COURSES") {
             @Override
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
-                int credits = 0;
                 final int REQUIRED_CREDITS = 3;
                 List<String> errMsg = new ArrayList<String>();
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 List<CourseTaken> courses = new ArrayList<CourseTaken>();
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
-                    if ( course.getCourse().getId().startsWith("csci8") && isPassingGrade(course.getGrade()) && Integer.parseInt(course.getCourse().getNumCredits()) >= REQUIRED_CREDITS) {
-                        credits += Integer.parseInt(course.getCourse().getNumCredits());
+                    if ( course.getCourse().getId().startsWith("csci8") && isPassingGrade(course.getGrade()) && isAFGrade(course.getGrade()) && Integer.parseInt(course.getCourse().getNumCredits()) >= REQUIRED_CREDITS) {
                         courses.add(course);
                     }
                 }
                 details.setCourses(courses);
-                if (!courses.isEmpty() && credits >= REQUIRED_CREDITS) {
+                if (!courses.isEmpty() ) {
                     result.setPassed(true);
                 } else {
                     result.setPassed(false);
@@ -377,20 +375,18 @@ public class ProgressSummaryBuilder {
         CourseRequirement phdLevelCoursesPlanC = new CourseRequirement("PHD_LEVEL_COURSES_PLANC") {
             @Override
             public RequirementCheckResult metBy(StudentRecord studentRecord) {
-                int credits = 0;
                 final int REQUIRED_CREDITS = 3;
                 List<String> errMsg = new ArrayList<String>();
                 RequirementCheckResult result = new RequirementCheckResult(this.getName());
                 CheckResultDetails details = new CheckResultDetails();
                 List<CourseTaken> courses = new ArrayList<CourseTaken>();
                 for (CourseTaken course: studentRecord.getCoursesTaken()) {
-                    if ( course.getCourse().getId().startsWith("csci8") && isPassingGrade(course.getGrade()) && Integer.parseInt(course.getCourse().getNumCredits()) >= REQUIRED_CREDITS) {
-                        credits += Integer.parseInt(course.getCourse().getNumCredits());
+                    if ( course.getCourse().getId().startsWith("csci8") && isPassingGrade(course.getGrade()) && isAFGrade(course.getGrade()) && Integer.parseInt(course.getCourse().getNumCredits()) >= REQUIRED_CREDITS) {
                         courses.add(course);
                     }
                 }
                 details.setCourses(courses);
-                if ( courses.size() >= 2 && credits >= 2*REQUIRED_CREDITS) {
+                if ( courses.size() >= 2 ) {
                     result.setPassed(true);
                 } else {
                     result.setPassed(false);
